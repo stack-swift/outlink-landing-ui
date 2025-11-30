@@ -5,8 +5,7 @@
   "types": "dist/index.d.ts",
   "files": ["dist"],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format cjs,esm --sourcemap",
-    "prepare": "npm run build"
+    "build": "tsup src/index.ts --dts --format cjs,esm --sourcemap"
   },
   "dependencies": {
     "@heroui/react": "^2.8.5",
