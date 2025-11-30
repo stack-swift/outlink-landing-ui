@@ -1,14 +1,8 @@
 {
   "name": "outlink-landing-ui",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "dependencies": {
     "@heroui/react": "^2.8.5",
     "@iconify/react": "^6.0.2",
