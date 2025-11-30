@@ -7,10 +7,10 @@ import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { ModernAudioPlayer } from "../src/modern-audio-player";
+import { ModernAudioPlayer } from "./modern-audio-player";
 import { CTACardWithMechanisms } from "./ctr-mechanisms/cta-card-with-mechanisms";
 import { AgeConfirmationModal } from "./ctr-mechanisms/age-confirmation-modal";
-import type { Link, LandingPageSettings } from "../src/types";
+import type { Link, LandingPageSettings } from "./types";
 
 interface LandingPageViewerProps {
   link: Link;
