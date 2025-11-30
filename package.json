@@ -1,12 +1,9 @@
 {
   "name": "outlink-landing-ui",
   "version": "1.0.0",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "main": "dist/index.js",         
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts --dts --format cjs,esm --sourcemap",
     "prepare": "npm run build"
