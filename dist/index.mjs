@@ -15198,7 +15198,7 @@ function LandingPageViewer({
                   {
                     href: "/",
                     className: "text-sm text-default-400 hover:text-default-600 transition-colors",
-                    children: "Create your profiles"
+                    children: "Create your profile"
                   }
                 )
               }
