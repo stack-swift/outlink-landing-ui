@@ -603,7 +603,7 @@ export function LandingPageViewer({
               href="/"
               className="text-sm text-default-400 hover:text-default-600 transition-colors"
             >
-              Create your profileeee
+              Create your profile
             </a>
           </motion.div>
           </div>
