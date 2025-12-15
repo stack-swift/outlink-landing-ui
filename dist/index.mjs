@@ -1,5 +1,5 @@
 // src/landing-page-viewer.tsx
-import { useState as useState16 } from "react";
+import { useState as useState15 } from "react";
 
 // node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -14587,7 +14587,6 @@ function CTACardWithMechanisms({
 }
 
 // src/ctr-mechanisms/age-confirmation-modal.tsx
-import { useState as useState15 } from "react";
 import { Icon as Icon9 } from "@iconify/react";
 import { motion as motion9 } from "framer-motion";
 import { Fragment as Fragment9, jsx as jsx28, jsxs as jsxs17 } from "react/jsx-runtime";
@@ -14597,16 +14596,7 @@ function AgeConfirmationModal({
   onCancel,
   children
 }) {
-  const [step, setStep] = useState15(1);
-  const handleFirstConfirm = () => {
-    setStep(2);
-  };
-  const handleFinalConfirm = () => {
-    setStep(1);
-    onConfirm();
-  };
   const handleCancel = () => {
-    setStep(1);
     onCancel();
   };
   if (!isOpen) {
@@ -14614,7 +14604,7 @@ function AgeConfirmationModal({
   }
   return /* @__PURE__ */ jsxs17("div", { className: "relative overflow-hidden rounded-xl", children: [
     /* @__PURE__ */ jsx28("div", { className: "pointer-events-none opacity-30", children }),
-    /* @__PURE__ */ jsx28("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: step === 1 ? /* @__PURE__ */ jsxs17(
+    /* @__PURE__ */ jsx28("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ jsxs17(
       motion9.div,
       {
         initial: { y: 10, opacity: 0 },
@@ -14639,7 +14629,7 @@ function AgeConfirmationModal({
               {
                 size: "sm",
                 color: "primary",
-                onPress: handleFirstConfirm,
+                onPress: onConfirm,
                 className: "font-bold shadow-lg",
                 children: "I'm 18+"
               }
@@ -14657,49 +14647,6 @@ function AgeConfirmationModal({
           ] })
         ]
       }
-    ) : /* @__PURE__ */ jsxs17(
-      motion9.div,
-      {
-        initial: { scale: 0.9, opacity: 0 },
-        animate: { scale: 1, opacity: 1 },
-        className: "text-center space-y-1.5",
-        children: [
-          /* @__PURE__ */ jsx28(
-            Icon9,
-            {
-              icon: "solar:verified-check-bold-duotone",
-              width: 36,
-              className: "text-success mx-auto drop-shadow-lg"
-            }
-          ),
-          /* @__PURE__ */ jsxs17("div", { className: "space-y-0.5", children: [
-            /* @__PURE__ */ jsx28("p", { className: "text-white font-semibold text-sm drop-shadow-md", children: "Confirm Age" }),
-            /* @__PURE__ */ jsx28("p", { className: "text-white/90 text-xs drop-shadow-sm leading-tight", children: "Click to confirm you're 18+" })
-          ] }),
-          /* @__PURE__ */ jsxs17("div", { className: "flex gap-2 pt-1", children: [
-            /* @__PURE__ */ jsx28(
-              button_default,
-              {
-                size: "sm",
-                color: "success",
-                onPress: handleFinalConfirm,
-                className: "font-bold shadow-lg",
-                children: "Yes, Confirm"
-              }
-            ),
-            /* @__PURE__ */ jsx28(
-              button_default,
-              {
-                size: "sm",
-                variant: "bordered",
-                onPress: () => setStep(1),
-                className: "font-bold shadow-lg bg-white/10 text-white border-white/20",
-                children: "Back"
-              }
-            )
-          ] })
-        ]
-      }
     ) })
   ] });
 }
@@ -14712,7 +14659,7 @@ function LandingPageViewer({
   onButtonClick,
   isPreview = false
 }) {
-  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = useState16(null);
+  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = useState15(null);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#18181b",

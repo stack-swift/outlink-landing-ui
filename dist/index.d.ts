@@ -90,7 +90,7 @@ interface AgeConfirmationModalProps {
     isOpen: boolean;
     onConfirm: () => void;
     onCancel: () => void;
-    children?: React.ReactNode;
+    children: React.ReactNode;
 }
 declare function AgeConfirmationModal({ isOpen, onConfirm, onCancel, children, }: AgeConfirmationModalProps): react_jsx_runtime.JSX.Element;
 

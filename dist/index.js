@@ -56,7 +56,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 
 // src/landing-page-viewer.tsx
-var import_react80 = require("react");
+var import_react79 = require("react");
 
 // node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -11938,7 +11938,7 @@ Chip.displayName = "HeroUI.Chip";
 var chip_default = Chip;
 
 // src/landing-page-viewer.tsx
-var import_react81 = require("@iconify/react");
+var import_react80 = require("@iconify/react");
 var import_framer_motion14 = require("framer-motion");
 
 // src/modern-audio-player.tsx
@@ -14644,8 +14644,7 @@ function CTACardWithMechanisms({
 }
 
 // src/ctr-mechanisms/age-confirmation-modal.tsx
-var import_react78 = require("react");
-var import_react79 = require("@iconify/react");
+var import_react78 = require("@iconify/react");
 var import_framer_motion13 = require("framer-motion");
 var import_jsx_runtime28 = require("react/jsx-runtime");
 function AgeConfirmationModal({
@@ -14654,16 +14653,7 @@ function AgeConfirmationModal({
   onCancel,
   children
 }) {
-  const [step, setStep] = (0, import_react78.useState)(1);
-  const handleFirstConfirm = () => {
-    setStep(2);
-  };
-  const handleFinalConfirm = () => {
-    setStep(1);
-    onConfirm();
-  };
   const handleCancel = () => {
-    setStep(1);
     onCancel();
   };
   if (!isOpen) {
@@ -14671,7 +14661,7 @@ function AgeConfirmationModal({
   }
   return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "relative overflow-hidden rounded-xl", children: [
     /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "pointer-events-none opacity-30", children }),
-    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: step === 1 ? /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
       import_framer_motion13.motion.div,
       {
         initial: { y: 10, opacity: 0 },
@@ -14679,7 +14669,7 @@ function AgeConfirmationModal({
         className: "text-center space-y-1.5",
         children: [
           /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-            import_react79.Icon,
+            import_react78.Icon,
             {
               icon: "solar:shield-warning-bold-duotone",
               width: 36,
@@ -14696,7 +14686,7 @@ function AgeConfirmationModal({
               {
                 size: "sm",
                 color: "primary",
-                onPress: handleFirstConfirm,
+                onPress: onConfirm,
                 className: "font-bold shadow-lg",
                 children: "I'm 18+"
               }
@@ -14714,49 +14704,6 @@ function AgeConfirmationModal({
           ] })
         ]
       }
-    ) : /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(
-      import_framer_motion13.motion.div,
-      {
-        initial: { scale: 0.9, opacity: 0 },
-        animate: { scale: 1, opacity: 1 },
-        className: "text-center space-y-1.5",
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-            import_react79.Icon,
-            {
-              icon: "solar:verified-check-bold-duotone",
-              width: 36,
-              className: "text-success mx-auto drop-shadow-lg"
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "space-y-0.5", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("p", { className: "text-white font-semibold text-sm drop-shadow-md", children: "Confirm Age" }),
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("p", { className: "text-white/90 text-xs drop-shadow-sm leading-tight", children: "Click to confirm you're 18+" })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "flex gap-2 pt-1", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-              button_default,
-              {
-                size: "sm",
-                color: "success",
-                onPress: handleFinalConfirm,
-                className: "font-bold shadow-lg",
-                children: "Yes, Confirm"
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-              button_default,
-              {
-                size: "sm",
-                variant: "bordered",
-                onPress: () => setStep(1),
-                className: "font-bold shadow-lg bg-white/10 text-white border-white/20",
-                children: "Back"
-              }
-            )
-          ] })
-        ]
-      }
     ) })
   ] });
 }
@@ -14769,7 +14716,7 @@ function LandingPageViewer({
   onButtonClick,
   isPreview = false
 }) {
-  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react80.useState)(null);
+  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react79.useState)(null);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#18181b",
@@ -14861,7 +14808,7 @@ function LandingPageViewer({
                   }
                 )
               ] }) : /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                import_react81.Icon,
+                import_react80.Icon,
                 {
                   icon: "solar:user-bold-duotone",
                   className: "w-24 h-24 text-default-300"
@@ -14891,7 +14838,7 @@ function LandingPageViewer({
                       }
                     ),
                     settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_jsx_runtime29.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                      import_react81.Icon,
+                      import_react80.Icon,
                       {
                         icon: "solar:verified-check-bold",
                         className: "text-primary",
@@ -14903,7 +14850,7 @@ function LandingPageViewer({
                         size: "sm",
                         color: "primary",
                         variant: "flat",
-                        startContent: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react81.Icon, { icon: "solar:verified-check-bold", width: 16 }),
+                        startContent: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react80.Icon, { icon: "solar:verified-check-bold", width: 16 }),
                         children: "Verified"
                       }
                     ) })
@@ -14939,7 +14886,7 @@ function LandingPageViewer({
                         style: { borderColor: themeColors.background },
                         showFallback: true,
                         fallback: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                          import_react81.Icon,
+                          import_react80.Icon,
                           {
                             icon: "solar:user-bold-duotone",
                             className: "w-20 h-20 text-default-500"
@@ -14969,7 +14916,7 @@ function LandingPageViewer({
                       }
                     ),
                     settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_jsx_runtime29.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                      import_react81.Icon,
+                      import_react80.Icon,
                       {
                         icon: "solar:verified-check-bold",
                         className: "text-primary",
@@ -14981,7 +14928,7 @@ function LandingPageViewer({
                         size: "sm",
                         color: "primary",
                         variant: "flat",
-                        startContent: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react81.Icon, { icon: "solar:verified-check-bold", width: 16 }),
+                        startContent: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react80.Icon, { icon: "solar:verified-check-bold", width: 16 }),
                         children: "Verified"
                       }
                     ) })
@@ -15012,7 +14959,7 @@ function LandingPageViewer({
                     size: "sm",
                     variant: "flat",
                     className: "hover:scale-110 transition-transform",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react81.Icon, { icon: social.icon, width: 20 })
+                    children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_react80.Icon, { icon: social.icon, width: 20 })
                   },
                   index
                 ))
@@ -15130,7 +15077,7 @@ function LandingPageViewer({
                     /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "text-center w-full relative z-10", children: [
                       card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "mb-2", children: [
                         /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                          import_react81.Icon,
+                          import_react80.Icon,
                           {
                             icon: card2.style.logo_icon,
                             width: 36,
@@ -15230,7 +15177,7 @@ function LandingPageViewer({
                           link.description && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
                         ] }),
                         /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                          import_react81.Icon,
+                          import_react80.Icon,
                           {
                             icon: "solar:arrow-right-line-duotone",
                             width: 24,
