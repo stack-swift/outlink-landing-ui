@@ -36,6 +36,10 @@ interface LandingPageSettings {
     id: string;
     link_id: string;
     avatar_url: string | null;
+    /** Optional short header video clip (MP4/WebM) that can play in the hero area. */
+    header_video_url?: string | null;
+    /** Where to focus the header video inside the hero area. */
+    header_video_focus?: "top" | "center" | "bottom";
     display_name: string | null;
     bio: string | null;
     background_color: string;
@@ -53,7 +57,7 @@ interface LandingPageSettings {
     show_follower_count: boolean;
     follower_count: number;
     show_domain_handle: boolean;
-    profile_display_mode: "full" | "avatar";
+    profile_display_mode: "full" | "avatar" | "video";
     voice_note_url: string | null;
 }
 interface Link {
