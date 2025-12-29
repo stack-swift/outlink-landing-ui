@@ -10055,7 +10055,22 @@ function LandingPageViewer({
     return "h-[320px] md:h-[320px]";
   })();
   return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "min-h-screen flex items-center justify-center relative overflow-hidden", children: [
-    settings.avatar_url && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+    isVideoMode && settings.header_video_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+      "video",
+      {
+        className: "hidden md:block absolute inset-0 z-0 w-full h-full object-cover",
+        src: settings.header_video_url,
+        autoPlay: true,
+        loop: true,
+        muted: true,
+        playsInline: true,
+        "aria-hidden": "true",
+        style: {
+          filter: "blur(80px) brightness(0.4)",
+          transform: "scale(1.1)"
+        }
+      }
+    ) : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
       "div",
       {
         className: "hidden md:block absolute inset-0 z-0",
@@ -10067,7 +10082,7 @@ function LandingPageViewer({
           transform: "scale(1.1)"
         }
       }
-    ),
+    ) : null,
     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
       "div",
       {
@@ -10146,7 +10161,7 @@ function LandingPageViewer({
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                   "div",
                   {
-                    className: "absolute inset-x-0 bottom-0 h-48 pointer-events-none",
+                    className: "absolute inset-x-0 bottom-0 h-32 pointer-events-none",
                     style: {
                       background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
                     }
@@ -10440,83 +10455,89 @@ function LandingPageViewer({
                       onPress: handleCardClick,
                       className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                       style: getCardStyle(),
-                      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(card_body_default, { className: "p-6 min-h-[120px] flex items-center justify-center relative", children: [
-                        card2.style.type === "video" && card2.style.background_video && (() => {
-                          const fit = card2.style.background_fit || "fill";
-                          const focus = card2.style.background_focus || "top";
-                          const baseClasses = "absolute inset-0 w-full h-full opacity-60";
-                          const fitClass = fit === "fit" ? "object-contain" : "object-cover";
-                          let focusClass = "";
-                          if (fit === "fill") {
-                            if (focus === "top")
-                              focusClass = "object-top";
-                            else if (focus === "bottom")
-                              focusClass = "object-bottom";
-                            else focusClass = "object-center";
-                          }
-                          return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            "video",
-                            {
-                              src: card2.style.background_video,
-                              autoPlay: true,
-                              loop: true,
-                              muted: true,
-                              playsInline: true,
-                              className: `${baseClasses} ${fitClass} ${focusClass}`
-                            }
-                          );
-                        })(),
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                          card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mb-2", children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                              import_react50.Icon,
-                              {
-                                icon: card2.style.logo_icon,
-                                width: 36,
-                                style: {
-                                  color: card2.style.logo_color || "#fff",
-                                  filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
-                                },
-                                className: "mx-auto"
+                      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                        card_body_default,
+                        {
+                          className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
+                          children: [
+                            card2.style.type === "video" && card2.style.background_video && (() => {
+                              const fit = card2.style.background_fit || "fill";
+                              const focus = card2.style.background_focus || "top";
+                              const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                              const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                              let focusClass = "";
+                              if (fit === "fill") {
+                                if (focus === "top")
+                                  focusClass = "object-top";
+                                else if (focus === "bottom")
+                                  focusClass = "object-bottom";
+                                else focusClass = "object-center";
                               }
-                            ),
-                            card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                              "p",
-                              {
-                                className: "font-bold text-lg mt-1",
-                                style: {
-                                  color: card2.style.logo_color || "#fff",
-                                  textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
-                                },
-                                children: [
-                                  card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "mr-1", children: card2.style.prefix_text }),
-                                  card2.style.logo_name
-                                ]
-                              }
-                            )
-                          ] }),
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            "h3",
-                            {
-                              className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
-                              style: {
-                                textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
-                              },
-                              children: card2.title
-                            }
-                          ),
-                          card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            "p",
-                            {
-                              className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
-                              style: {
-                                textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
-                              },
-                              children: card2.description
-                            }
-                          )
-                        ] })
-                      ] })
+                              return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "video",
+                                {
+                                  src: card2.style.background_video,
+                                  autoPlay: true,
+                                  loop: true,
+                                  muted: true,
+                                  playsInline: true,
+                                  className: `${baseClasses} ${fitClass} ${focusClass}`
+                                }
+                              );
+                            })(),
+                            /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
+                              card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mb-2", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  import_react50.Icon,
+                                  {
+                                    icon: card2.style.logo_icon,
+                                    width: 36,
+                                    style: {
+                                      color: card2.style.logo_color || "#fff",
+                                      filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
+                                    },
+                                    className: "mx-auto"
+                                  }
+                                ),
+                                card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                                  "p",
+                                  {
+                                    className: "font-bold text-lg mt-1",
+                                    style: {
+                                      color: card2.style.logo_color || "#fff",
+                                      textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
+                                    },
+                                    children: [
+                                      card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "mr-1", children: card2.style.prefix_text }),
+                                      card2.style.logo_name
+                                    ]
+                                  }
+                                )
+                              ] }),
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "h3",
+                                {
+                                  className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                  style: {
+                                    textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
+                                  },
+                                  children: card2.title
+                                }
+                              ),
+                              card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "p",
+                                {
+                                  className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                  style: {
+                                    textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
+                                  },
+                                  children: card2.description
+                                }
+                              )
+                            ] })
+                          ]
+                        }
+                      )
                     }
                   );
                   const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(

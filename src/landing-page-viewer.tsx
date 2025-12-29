@@ -193,7 +193,7 @@ export function LandingPageViewer({
                   </div>
                   {/* Gradient overlay to blend into page background */}
                   <div
-                    className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
+                    className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
                     style={{
                       background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
                     }}
