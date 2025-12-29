@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
@@ -16,7 +16,7 @@ interface LandingPageViewerProps {
   link: Link;
   settings: LandingPageSettings;
   onButtonClick?: () => void;
-  isPreview?: boolean; // When true, disables analytics and navigation
+  isPreview?: boolean; // When true, disables navigation
   isFreePlan?: boolean; // When true, show free-plan promo badge + footer
 }
 
@@ -66,20 +66,9 @@ export function LandingPageViewer({
       onButtonClick();
     }
 
-    // Skip analytics and navigation in preview mode
+    // Skip navigation in preview mode
     if (isPreview) return;
 
-    // Track analytics
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        link_id: link.id,
-        event_type: "click",
-      }),
-    }).catch(console.error);
-
-    // Redirect to destination (only if we have a valid URL)
     if (!link.destination_url) return;
     window.location.href = link.destination_url;
   };
@@ -94,62 +83,6 @@ export function LandingPageViewer({
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();
-
-  // Track view + time-on-page
-  useEffect(() => {
-    if (isPreview) return;
-
-    const startTime = Date.now();
-    const linkId = link.id;
-
-    // Track a single view event on initial load
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        link_id: linkId,
-        event_type: "view",
-      }),
-    }).catch(() => {
-      // Swallow errors – analytics should never block rendering
-    });
-
-    const sendSessionEnd = () => {
-      const durationSec = Math.round((Date.now() - startTime) / 1000);
-      if (durationSec <= 0) return;
-
-      const payload = JSON.stringify({
-        link_id: linkId,
-        event_type: "session_end",
-        page_load_time: durationSec,
-      });
-
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon("/api/analytics/track", payload);
-      } else {
-        fetch("/api/analytics/track", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-          keepalive: true,
-        }).catch(() => {});
-      }
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        sendSessionEnd();
-      }
-    };
-
-    window.addEventListener("pagehide", sendSessionEnd);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener("pagehide", sendSessionEnd);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [isPreview, link.id]);
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
@@ -527,38 +460,16 @@ export function LandingPageViewer({
                         // Skip everything in preview mode
                         if (isPreview) return;
 
-                        // Check if 18+ confirmation is required
+                        // Age gate
                         if (card.require_18plus) {
                           setShowingAgeConfirmationFor(card.id);
                           return;
                         }
 
-                        // Track analytics
-                        fetch("/api/analytics/track", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            link_id: link.id,
-                            event_type: "click",
-                          }),
-                        }).catch(console.error);
-
-                        // Redirect to destination
                         window.location.href = card.url;
                       };
 
                       const handleAgeConfirm = () => {
-                        // Track analytics
-                        fetch("/api/analytics/track", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            link_id: link.id,
-                            event_type: "click",
-                          }),
-                        }).catch(console.error);
-
-                        // Redirect to destination
                         window.location.href = card.url;
                       };
 
@@ -577,7 +488,8 @@ export function LandingPageViewer({
                             {/* Video Background */}
                             {card.style.type === "video" &&
                               card.style.background_video && (() => {
-                                const fit = card.style.background_fit || "fill";
+                                const fit =
+                                  card.style.background_fit || "fill";
                                 const focus =
                                   card.style.background_focus || "top";
 
@@ -701,7 +613,7 @@ export function LandingPageViewer({
                         <CTACardWithMechanisms
                           card={card}
                           onReveal={() => {
-                            // onReveal just reveals the card, doesn't trigger navigation
+                            // just reveal, no navigation
                           }}
                         >
                           {renderCardContent()}

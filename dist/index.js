@@ -14714,7 +14714,8 @@ function LandingPageViewer({
   link,
   settings,
   onButtonClick,
-  isPreview = false
+  isPreview = false,
+  isFreePlan = false
 }) {
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react79.useState)(null);
   const isLightMode = settings.theme_mode === "light";
@@ -14748,14 +14749,6 @@ function LandingPageViewer({
       onButtonClick();
     }
     if (isPreview) return;
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        link_id: link.id,
-        event_type: "click"
-      })
-    }).catch(console.error);
     if (!link.destination_url) return;
     window.location.href = link.destination_url;
   };
@@ -14767,51 +14760,6 @@ function LandingPageViewer({
     if (isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
   })();
-  (0, import_react79.useEffect)(() => {
-    if (isPreview) return;
-    const startTime = Date.now();
-    const linkId = link.id;
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        link_id: linkId,
-        event_type: "view"
-      })
-    }).catch(() => {
-    });
-    const sendSessionEnd = () => {
-      const durationSec = Math.round((Date.now() - startTime) / 1e3);
-      if (durationSec <= 0) return;
-      const payload = JSON.stringify({
-        link_id: linkId,
-        event_type: "session_end",
-        page_load_time: durationSec
-      });
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon("/api/analytics/track", payload);
-      } else {
-        fetch("/api/analytics/track", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-          keepalive: true
-        }).catch(() => {
-        });
-      }
-    };
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") {
-        sendSessionEnd();
-      }
-    };
-    window.addEventListener("pagehide", sendSessionEnd);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => {
-      window.removeEventListener("pagehide", sendSessionEnd);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [isPreview, link.id]);
   return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "min-h-screen flex items-center justify-center relative overflow-hidden", children: [
     settings.avatar_url && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
       "div",
@@ -14832,6 +14780,23 @@ function LandingPageViewer({
         className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto flex flex-col",
         style: { backgroundColor: themeColors.background },
         children: [
+          isFreePlan && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+            "a",
+            {
+              href: "https://outlink.bio",
+              target: "_blank",
+              rel: "noreferrer",
+              className: "absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg",
+              children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                "img",
+                {
+                  src: "/logo2.svg",
+                  alt: "Outlink",
+                  className: "h-5 w-5"
+                }
+              )
+            }
+          ),
           isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
             import_framer_motion14.motion.div,
             {
@@ -15166,25 +15131,9 @@ function LandingPageViewer({
                       setShowingAgeConfirmationFor(card2.id);
                       return;
                     }
-                    fetch("/api/analytics/track", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        link_id: link.id,
-                        event_type: "click"
-                      })
-                    }).catch(console.error);
                     window.location.href = card2.url;
                   };
                   const handleAgeConfirm = () => {
-                    fetch("/api/analytics/track", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        link_id: link.id,
-                        event_type: "click"
-                      })
-                    }).catch(console.error);
                     window.location.href = card2.url;
                   };
                   const handleAgeCancel = () => {
@@ -15198,17 +15147,31 @@ function LandingPageViewer({
                       className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                       style: getCardStyle(),
                       children: /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(card_body_default, { className: "p-6 min-h-[120px] flex items-center justify-center relative", children: [
-                        card2.style.type === "video" && card2.style.background_video && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
-                          "video",
-                          {
-                            src: card2.style.background_video,
-                            autoPlay: true,
-                            loop: true,
-                            muted: true,
-                            playsInline: true,
-                            className: "absolute inset-0 w-full h-full object-cover opacity-60"
+                        card2.style.type === "video" && card2.style.background_video && (() => {
+                          const fit = card2.style.background_fit || "fill";
+                          const focus = card2.style.background_focus || "top";
+                          const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                          const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                          let focusClass = "";
+                          if (fit === "fill") {
+                            if (focus === "top")
+                              focusClass = "object-top";
+                            else if (focus === "bottom")
+                              focusClass = "object-bottom";
+                            else focusClass = "object-center";
                           }
-                        ),
+                          return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                            "video",
+                            {
+                              src: card2.style.background_video,
+                              autoPlay: true,
+                              loop: true,
+                              muted: true,
+                              playsInline: true,
+                              className: `${baseClasses} ${fitClass} ${focusClass}`
+                            }
+                          );
+                        })(),
                         /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "text-center w-full relative z-10", children: [
                           card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { className: "mb-2", children: [
                             /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
@@ -15334,13 +15297,40 @@ function LandingPageViewer({
                     initial: { opacity: 0 },
                     animate: { opacity: 1 },
                     transition: { delay: 0.8, duration: 0.3 },
-                    className: "mt-8 pb-8 text-center",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                    className: "mt-8 pb-8 flex justify-center",
+                    children: isFreePlan ? /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
                       "a",
                       {
                         href: "/",
-                        className: "text-sm text-default-400 hover:text-default-600 transition-colors",
-                        children: "Create your profile"
+                        className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white",
+                        children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { className: "inline-flex h-6 w-6 items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                            "img",
+                            {
+                              src: "/logo2.svg",
+                              alt: "Outlink logo",
+                              className: "h-4 w-4"
+                            }
+                          ) }),
+                          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { children: "Build your own premium page with Outlink" })
+                        ]
+                      }
+                    ) : /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
+                      "a",
+                      {
+                        href: "/",
+                        className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
+                        children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                            "img",
+                            {
+                              src: "/logo2.svg",
+                              alt: "Outlink logo",
+                              className: "h-4 w-4"
+                            }
+                          ),
+                          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("span", { children: "Powered by Outlink" })
+                        ]
                       }
                     )
                   }

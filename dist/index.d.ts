@@ -76,8 +76,9 @@ interface LandingPageViewerProps {
     settings: LandingPageSettings;
     onButtonClick?: () => void;
     isPreview?: boolean;
+    isFreePlan?: boolean;
 }
-declare function LandingPageViewer({ link, settings, onButtonClick, isPreview, }: LandingPageViewerProps): react_jsx_runtime.JSX.Element;
+declare function LandingPageViewer({ link, settings, onButtonClick, isPreview, isFreePlan, }: LandingPageViewerProps): react_jsx_runtime.JSX.Element;
 
 interface ModernAudioPlayerProps {
     src: string;
