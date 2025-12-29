@@ -68,7 +68,6 @@ export function LandingPageViewer({
 
     // Skip navigation in preview mode
     if (isPreview) return;
-
     if (!link.destination_url) return;
     window.location.href = link.destination_url;
   };
@@ -87,7 +86,21 @@ export function LandingPageViewer({
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Blurred background for desktop - only shows on larger screens */}
-      {settings.avatar_url && (
+      {isVideoMode && settings.header_video_url ? (
+        <video
+          className="hidden md:block absolute inset-0 z-0 w-full h-full object-cover"
+          src={settings.header_video_url}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+          style={{
+            filter: "blur(80px) brightness(0.4)",
+            transform: "scale(1.1)",
+          }}
+        />
+      ) : settings.avatar_url ? (
         <div
           className="hidden md:block absolute inset-0 z-0"
           style={{
@@ -98,7 +111,7 @@ export function LandingPageViewer({
             transform: "scale(1.1)",
           }}
         />
-      )}
+      ) : null}
 
       {/* Mobile-sized container */}
       <div
@@ -484,7 +497,13 @@ export function LandingPageViewer({
                           className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
                           style={getCardStyle()}
                         >
-                          <CardBody className="p-6 min-h-[120px] flex items-center justify-center relative">
+                          <CardBody
+                            className={`p-6 flex items-center justify-center relative ${
+                              card.ctr_mechanisms
+                                ? "min-h-[150px] md:min-h-[140px]"
+                                : "min-h-[120px]"
+                            }`}
+                          >
                             {/* Video Background */}
                             {card.style.type === "video" &&
                               card.style.background_video && (() => {

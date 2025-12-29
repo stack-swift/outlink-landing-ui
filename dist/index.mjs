@@ -9524,7 +9524,7 @@ function ScarcityBadge({
     {
       initial: { opacity: 0, scale: 0.8 },
       animate: { opacity: 1, scale: 1 },
-      className: "absolute top-2 left-1/2 -translate-x-1/2 z-[10]",
+      className: "absolute top-2 left-2 z-[10]",
       children: /* @__PURE__ */ jsx14(
         chip_default,
         {
