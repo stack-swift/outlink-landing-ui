@@ -17,6 +17,7 @@ interface LandingPageViewerProps {
   settings: LandingPageSettings;
   onButtonClick?: () => void;
   isPreview?: boolean; // When true, disables analytics and navigation
+  isFreePlan?: boolean; // When true, show free-plan promo badge + footer
 }
 
 export function LandingPageViewer({
@@ -24,6 +25,7 @@ export function LandingPageViewer({
   settings,
   onButtonClick,
   isPreview = false,
+  isFreePlan = false,
 }: LandingPageViewerProps) {
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] =
     useState<string | null>(null);
@@ -93,7 +95,7 @@ export function LandingPageViewer({
     return "h-[320px] md:h-[320px]";
   })();
 
-  // Track view + time-on-page more precisely
+  // Track view + time-on-page
   useEffect(() => {
     if (isPreview) return;
 
@@ -170,6 +172,21 @@ export function LandingPageViewer({
         className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto flex flex-col"
         style={{ backgroundColor: themeColors.background }}
       >
+        {isFreePlan && (
+          <a
+            href="https://outlink.bio"
+            target="_blank"
+            rel="noreferrer"
+            className="absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
+          >
+            <img
+              src="/logo2.svg"
+              alt="Outlink"
+              className="h-5 w-5"
+            />
+          </a>
+        )}
+
         {/* Hero area for Full Display & Video Header modes */}
         {isFullMode || isVideoMode ? (
           <motion.div
@@ -218,34 +235,32 @@ export function LandingPageViewer({
                     </div>
                   );
                 })()
-              : settings.avatar_url
-              ? (
-                  <>
-                    {/* Profile Image Container */}
-                    <div className="relative w-full h-full overflow-hidden">
-                      <img
-                        src={settings.avatar_url}
-                        alt={settings.display_name || link.title || "Profile"}
-                        className="w-full h-full object-cover object-center"
-                      />
-                    </div>
-                    {/* Gradient overlay to blend into page background */}
-                    <div
-                      className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
-                      style={{
-                        background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
-                      }}
-                    />
-                  </>
-                )
-              : (
-                  <div className="w-full h-full bg-default-100 flex items-center justify-center">
-                    <Icon
-                      icon="solar:user-bold-duotone"
-                      className="w-24 h-24 text-default-300"
+              : settings.avatar_url ? (
+                <>
+                  {/* Profile Image Container */}
+                  <div className="relative w-full h-full overflow-hidden">
+                    <img
+                      src={settings.avatar_url}
+                      alt={settings.display_name || link.title || "Profile"}
+                      className="w-full h-full object-cover object-center"
                     />
                   </div>
-                )}
+                  {/* Gradient overlay to blend into page background */}
+                  <div
+                    className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
+                    style={{
+                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
+                    }}
+                  />
+                </>
+              ) : (
+                <div className="w-full h-full bg-default-100 flex items-center justify-center">
+                  <Icon
+                    icon="solar:user-bold-duotone"
+                    className="w-24 h-24 text-default-300"
+                  />
+                </div>
+              )}
           </motion.div>
         ) : (
           /* Avatar Mode - Circular Profile Picture */
@@ -259,7 +274,7 @@ export function LandingPageViewer({
         >
           <div className="w-full max-w-md">
             <div className="flex flex-col items-center gap-4">
-              {/* Name and Verification - Show for hero modes in dark area */}
+              {/* Name and Verification - Hero modes */}
               {(isFullMode || isVideoMode) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -343,7 +358,7 @@ export function LandingPageViewer({
                 </motion.div>
               )}
 
-              {/* Name and Verification - Avatar mode only */}
+              {/* Name and Verification - Avatar mode */}
               {mode === "avatar" && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -422,7 +437,7 @@ export function LandingPageViewer({
                   </motion.div>
                 )}
 
-              {/* Follower Count - Simple Text */}
+              {/* Follower Count */}
               {settings.show_follower_count &&
                 settings.follower_count > 0 && (
                   <motion.div
@@ -514,7 +529,6 @@ export function LandingPageViewer({
 
                         // Check if 18+ confirmation is required
                         if (card.require_18plus) {
-                          // Show age confirmation overlay
                           setShowingAgeConfirmationFor(card.id);
                           return;
                         }
@@ -549,7 +563,6 @@ export function LandingPageViewer({
                       };
 
                       const handleAgeCancel = () => {
-                        // Just close the overlay, don't track as confirmed
                         setShowingAgeConfirmationFor(null);
                       };
 
@@ -563,26 +576,48 @@ export function LandingPageViewer({
                           <CardBody className="p-6 min-h-[120px] flex items-center justify-center relative">
                             {/* Video Background */}
                             {card.style.type === "video" &&
-                              card.style.background_video && (
-                                <video
-                                  src={card.style.background_video}
-                                  autoPlay
-                                  loop
-                                  muted
-                                  playsInline
-                                  className="absolute inset-0 w-full h-full object-cover opacity-60"
-                                />
-                              )}
+                              card.style.background_video && (() => {
+                                const fit = card.style.background_fit || "fill";
+                                const focus =
+                                  card.style.background_focus || "top";
 
+                                const baseClasses =
+                                  "absolute inset-0 w-full h-full opacity-60";
+                                const fitClass =
+                                  fit === "fit"
+                                    ? "object-contain"
+                                    : "object-cover";
+                                let focusClass = "";
+
+                                if (fit === "fill") {
+                                  if (focus === "top")
+                                    focusClass = "object-top";
+                                  else if (focus === "bottom")
+                                    focusClass = "object-bottom";
+                                  else focusClass = "object-center";
+                                }
+
+                                return (
+                                  <video
+                                    src={card.style.background_video}
+                                    autoPlay
+                                    loop
+                                    muted
+                                    playsInline
+                                    className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                  />
+                                );
+                              })()}
                             <div className="text-center w-full relative z-10">
-                              {/* Logo Style - Now works with all background types */}
+                              {/* Logo Style */}
                               {card.style.logo_icon && (
                                 <div className="mb-2">
                                   <Icon
                                     icon={card.style.logo_icon}
                                     width={36}
                                     style={{
-                                      color: card.style.logo_color || "#fff",
+                                      color:
+                                        card.style.logo_color || "#fff",
                                       filter:
                                         card.style.type === "image" ||
                                         card.style.type === "video"
@@ -661,13 +696,12 @@ export function LandingPageViewer({
                         </Card>
                       );
 
-                      // First render card with CTR mechanisms (these reveal first)
+                      // First render card with CTR mechanisms
                       const cardWithMechanisms = card.ctr_mechanisms ? (
                         <CTACardWithMechanisms
                           card={card}
                           onReveal={() => {
                             // onReveal just reveals the card, doesn't trigger navigation
-                            // The actual click will trigger navigation via renderCardContent's onPress
                           }}
                         >
                           {renderCardContent()}
@@ -676,7 +710,7 @@ export function LandingPageViewer({
                         renderCardContent()
                       );
 
-                      // Then wrap with age confirmation if user clicked and needs verification
+                      // Then wrap with age confirmation if needed
                       const finalContent =
                         showingAgeConfirmationFor === card.id && !isPreview ? (
                           <AgeConfirmationModal
@@ -747,14 +781,35 @@ export function LandingPageViewer({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8, duration: 0.3 }}
-                className="mt-8 pb-8 text-center"
+                className="mt-8 pb-8 flex justify-center"
               >
-                <a
-                  href="/"
-                  className="text-sm text-default-400 hover:text-default-600 transition-colors"
-                >
-                  Create your profile
-                </a>
+                {isFreePlan ? (
+                  <a
+                    href="/"
+                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white"
+                  >
+                    <span className="inline-flex h-6 w-6 items-center justify-center">
+                      <img
+                        src="/logo2.svg"
+                        alt="Outlink logo"
+                        className="h-4 w-4"
+                      />
+                    </span>
+                    <span>Build your own premium page with Outlink</span>
+                  </a>
+                ) : (
+                  <a
+                    href="/"
+                    className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
+                  >
+                    <img
+                      src="/logo2.svg"
+                      alt="Outlink logo"
+                      className="h-4 w-4"
+                    />
+                    <span>Powered by Outlink</span>
+                  </a>
+                )}
               </motion.div>
             </div>
           </div>

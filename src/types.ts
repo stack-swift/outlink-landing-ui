@@ -13,10 +13,16 @@ export interface CTACardStyle {
   background_gradient?: { start: string; end: string } | null;
   background_image?: string | null;
   background_video?: string | null;
+
+  // Brand/logo
   logo_icon?: string | null;
   logo_name?: string | null;
   logo_color?: string | null;
   prefix_text?: string | null;
+
+  // Video framing (for type === "video")
+  background_fit?: "fill" | "fit"; // fill = cover, fit = contain
+  background_focus?: "top" | "center" | "bottom";
 }
 
 export interface CTACard {

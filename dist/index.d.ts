@@ -20,6 +20,8 @@ interface CTACardStyle {
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
+    background_fit?: "fill" | "fit";
+    background_focus?: "top" | "center" | "bottom";
 }
 interface CTACard {
     id: string;
