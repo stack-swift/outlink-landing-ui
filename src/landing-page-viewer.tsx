@@ -27,18 +27,13 @@ function isRedditFlow(): boolean {
   return params.has("r");
 }
 
-// Helper: for whitehat + Reddit, send navigation through /reddit-escape
+// Helper: for Reddit, send navigation through /reddit-escape (live mode only)
 function wrapUrlForNavigation(
   url: string | null | undefined,
-  linkType: Link["link_type"],
   isPreview: boolean | undefined,
 ): string {
   if (!url) return "";
-  // Only change behavior when:
-  // - not in preview
-  // - link is whitehat
-  // - Reddit flag (?r=1) is present
-  if (!isPreview && linkType === "whitehat" && isRedditFlow()) {
+  if (!isPreview && isRedditFlow()) {
     return `/reddit-escape?target=${encodeURIComponent(url)}`;
   }
   return url;
@@ -94,12 +89,7 @@ export function LandingPageViewer({
     if (isPreview) return;
     if (!link.destination_url) return;
 
-    const target = wrapUrlForNavigation(
-      link.destination_url,
-      link.link_type,
-      isPreview,
-    );
-
+    const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
     window.location.href = target;
   };
@@ -508,7 +498,6 @@ export function LandingPageViewer({
 
                         const navUrl = wrapUrlForNavigation(
                           card.url,
-                          link.link_type,
                           isPreview,
                         );
                         if (!navUrl) return;
@@ -518,7 +507,6 @@ export function LandingPageViewer({
                       const handleAgeConfirm = () => {
                         const navUrl = wrapUrlForNavigation(
                           card.url,
-                          link.link_type,
                           isPreview,
                         );
                         if (!navUrl) return;

@@ -9947,6 +9947,18 @@ function AgeConfirmationModal({
 
 // src/landing-page-viewer.tsx
 import { Fragment as Fragment8, jsx as jsx20, jsxs as jsxs15 } from "react/jsx-runtime";
+function isRedditFlow() {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.has("r");
+}
+function wrapUrlForNavigation(url, isPreview) {
+  if (!url) return "";
+  if (!isPreview && isRedditFlow()) {
+    return `/reddit-escape?target=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
 function LandingPageViewer({
   link,
   settings,
@@ -9987,7 +9999,9 @@ function LandingPageViewer({
     }
     if (isPreview) return;
     if (!link.destination_url) return;
-    window.location.href = link.destination_url;
+    const target = wrapUrlForNavigation(link.destination_url, isPreview);
+    if (!target) return;
+    window.location.href = target;
   };
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
@@ -10039,14 +10053,7 @@ function LandingPageViewer({
               target: "_blank",
               rel: "noreferrer",
               className: "absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg",
-              children: /* @__PURE__ */ jsx20(
-                "img",
-                {
-                  src: "/logo2.svg",
-                  alt: "Outlink",
-                  className: "h-5 w-5"
-                }
-              )
+              children: /* @__PURE__ */ jsx20("img", { src: "/logo2.svg", alt: "Outlink", className: "h-5 w-5" })
             }
           ),
           isFullMode || isVideoMode ? /* @__PURE__ */ jsx20(
@@ -10383,10 +10390,20 @@ function LandingPageViewer({
                       setShowingAgeConfirmationFor(card2.id);
                       return;
                     }
-                    window.location.href = card2.url;
+                    const navUrl = wrapUrlForNavigation(
+                      card2.url,
+                      isPreview
+                    );
+                    if (!navUrl) return;
+                    window.location.href = navUrl;
                   };
                   const handleAgeConfirm = () => {
-                    window.location.href = card2.url;
+                    const navUrl = wrapUrlForNavigation(
+                      card2.url,
+                      isPreview
+                    );
+                    if (!navUrl) return;
+                    window.location.href = navUrl;
                   };
                   const handleAgeCancel = () => {
                     setShowingAgeConfirmationFor(null);
