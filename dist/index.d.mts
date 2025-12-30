@@ -69,6 +69,7 @@ interface Link {
     destination_url: string | null;
     domain?: string | null;
     path?: string | null;
+    link_type?: "whitehat" | "greyhat" | "blackhat" | null;
 }
 
 interface LandingPageViewerProps {

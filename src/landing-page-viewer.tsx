@@ -20,6 +20,30 @@ interface LandingPageViewerProps {
   isFreePlan?: boolean; // When true, show free-plan promo badge + footer
 }
 
+// Helper: detect Reddit flow via ?r=1
+function isRedditFlow(): boolean {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.has("r");
+}
+
+// Helper: for whitehat + Reddit, send navigation through /reddit-escape
+function wrapUrlForNavigation(
+  url: string | null | undefined,
+  linkType: Link["link_type"],
+  isPreview: boolean | undefined,
+): string {
+  if (!url) return "";
+  // Only change behavior when:
+  // - not in preview
+  // - link is whitehat
+  // - Reddit flag (?r=1) is present
+  if (!isPreview && linkType === "whitehat" && isRedditFlow()) {
+    return `/reddit-escape?target=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
 export function LandingPageViewer({
   link,
   settings,
@@ -69,7 +93,15 @@ export function LandingPageViewer({
     // Skip navigation in preview mode
     if (isPreview) return;
     if (!link.destination_url) return;
-    window.location.href = link.destination_url;
+
+    const target = wrapUrlForNavigation(
+      link.destination_url,
+      link.link_type,
+      isPreview,
+    );
+
+    if (!target) return;
+    window.location.href = target;
   };
 
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
@@ -125,11 +157,7 @@ export function LandingPageViewer({
             rel="noreferrer"
             className="absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg"
           >
-            <img
-              src="/logo2.svg"
-              alt="Outlink"
-              className="h-5 w-5"
-            />
+            <img src="/logo2.svg" alt="Outlink" className="h-5 w-5" />
           </a>
         )}
 
@@ -170,7 +198,6 @@ export function LandingPageViewer({
                       </>
                     );
                   }
-
                   // Video mode but no clip yet – show placeholder
                   return (
                     <div className="w-full h-full bg-default-100 flex items-center justify-center">
@@ -182,31 +209,31 @@ export function LandingPageViewer({
                   );
                 })()
               : settings.avatar_url ? (
-                <>
-                  {/* Profile Image Container */}
-                  <div className="relative w-full h-full overflow-hidden">
-                    <img
-                      src={settings.avatar_url}
-                      alt={settings.display_name || link.title || "Profile"}
-                      className="w-full h-full object-cover object-center"
+                  <>
+                    {/* Profile Image Container */}
+                    <div className="relative w-full h-full overflow-hidden">
+                      <img
+                        src={settings.avatar_url}
+                        alt={settings.display_name || link.title || "Profile"}
+                        className="w-full h-full object-cover object-center"
+                      />
+                    </div>
+                    {/* Gradient overlay to blend into page background */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+                      style={{
+                        background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
+                      }}
+                    />
+                  </>
+                ) : (
+                  <div className="w-full h-full bg-default-100 flex items-center justify-center">
+                    <Icon
+                      icon="solar:user-bold-duotone"
+                      className="w-24 h-24 text-default-300"
                     />
                   </div>
-                  {/* Gradient overlay to blend into page background */}
-                  <div
-                    className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
-                    style={{
-                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
-                    }}
-                  />
-                </>
-              ) : (
-                <div className="w-full h-full bg-default-100 flex items-center justify-center">
-                  <Icon
-                    icon="solar:user-bold-duotone"
-                    className="w-24 h-24 text-default-300"
-                  />
-                </div>
-              )}
+                )}
           </motion.div>
         ) : (
           /* Avatar Mode - Circular Profile Picture */
@@ -479,11 +506,23 @@ export function LandingPageViewer({
                           return;
                         }
 
-                        window.location.href = card.url;
+                        const navUrl = wrapUrlForNavigation(
+                          card.url,
+                          link.link_type,
+                          isPreview,
+                        );
+                        if (!navUrl) return;
+                        window.location.href = navUrl;
                       };
 
                       const handleAgeConfirm = () => {
-                        window.location.href = card.url;
+                        const navUrl = wrapUrlForNavigation(
+                          card.url,
+                          link.link_type,
+                          isPreview,
+                        );
+                        if (!navUrl) return;
+                        window.location.href = navUrl;
                       };
 
                       const handleAgeCancel = () => {
@@ -506,12 +545,12 @@ export function LandingPageViewer({
                           >
                             {/* Video Background */}
                             {card.style.type === "video" &&
-                              card.style.background_video && (() => {
+                              card.style.background_video &&
+                              (() => {
                                 const fit =
                                   card.style.background_fit || "fill";
                                 const focus =
                                   card.style.background_focus || "top";
-
                                 const baseClasses =
                                   "absolute inset-0 w-full h-full opacity-60";
                                 const fitClass =
@@ -519,7 +558,6 @@ export function LandingPageViewer({
                                     ? "object-contain"
                                     : "object-cover";
                                 let focusClass = "";
-
                                 if (fit === "fill") {
                                   if (focus === "top")
                                     focusClass = "object-top";
@@ -527,7 +565,6 @@ export function LandingPageViewer({
                                     focusClass = "object-bottom";
                                   else focusClass = "object-center";
                                 }
-
                                 return (
                                   <video
                                     src={card.style.background_video}
@@ -539,6 +576,7 @@ export function LandingPageViewer({
                                   />
                                 );
                               })()}
+
                             <div className="text-center w-full relative z-10">
                               {/* Logo Style */}
                               {card.style.logo_icon && (

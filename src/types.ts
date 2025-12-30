@@ -86,4 +86,6 @@ export interface Link {
   destination_url: string | null;
   domain?: string | null;
   path?: string | null;
+  // Used by LandingPageViewer to customize behavior (e.g. Reddit handling)
+  link_type?: "whitehat" | "greyhat" | "blackhat" | null;
 }
