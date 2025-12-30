@@ -10016,6 +10016,18 @@ function wrapUrlForNavigation(url, isPreview) {
   }
   return url;
 }
+function trackClick(linkId, isPreview) {
+  if (!linkId || isPreview || typeof window === "undefined") return;
+  fetch("/api/analytics/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      link_id: linkId,
+      event_type: "click"
+    })
+  }).catch(() => {
+  });
+}
 function LandingPageViewer({
   link,
   settings,
@@ -10056,6 +10068,7 @@ function LandingPageViewer({
     }
     if (isPreview) return;
     if (!link.destination_url) return;
+    trackClick(link.id, isPreview);
     const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
     window.location.href = target;
@@ -10447,6 +10460,7 @@ function LandingPageViewer({
                       setShowingAgeConfirmationFor(card2.id);
                       return;
                     }
+                    trackClick(link.id, isPreview);
                     const navUrl = wrapUrlForNavigation(
                       card2.url,
                       isPreview
@@ -10455,6 +10469,7 @@ function LandingPageViewer({
                     window.location.href = navUrl;
                   };
                   const handleAgeConfirm = () => {
+                    trackClick(link.id, isPreview);
                     const navUrl = wrapUrlForNavigation(
                       card2.url,
                       isPreview

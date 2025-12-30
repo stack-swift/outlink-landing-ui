@@ -39,6 +39,22 @@ function wrapUrlForNavigation(
   return url;
 }
 
+// Helper: send click event to analytics
+function trackClick(linkId: string | undefined, isPreview: boolean | undefined) {
+  if (!linkId || isPreview || typeof window === "undefined") return;
+
+  fetch("/api/analytics/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      link_id: linkId,
+      event_type: "click",
+    }),
+  }).catch(() => {
+    // ignore analytics errors
+  });
+}
+
 export function LandingPageViewer({
   link,
   settings,
@@ -88,6 +104,9 @@ export function LandingPageViewer({
     // Skip navigation in preview mode
     if (isPreview) return;
     if (!link.destination_url) return;
+
+    // record click
+    trackClick(link.id, isPreview);
 
     const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
@@ -496,6 +515,9 @@ export function LandingPageViewer({
                           return;
                         }
 
+                        // record click
+                        trackClick(link.id, isPreview);
+
                         const navUrl = wrapUrlForNavigation(
                           card.url,
                           isPreview,
@@ -505,6 +527,9 @@ export function LandingPageViewer({
                       };
 
                       const handleAgeConfirm = () => {
+                        // record click
+                        trackClick(link.id, isPreview);
+
                         const navUrl = wrapUrlForNavigation(
                           card.url,
                           isPreview,
