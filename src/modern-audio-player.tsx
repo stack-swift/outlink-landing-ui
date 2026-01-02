@@ -29,8 +29,9 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
     // Initialize WaveSurfer with theme-aware colors
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
-      waveColor: isLightMode ? "rgba(59, 130, 246, 0.15)" : "rgba(59, 130, 246, 0.2)",
-      progressColor: "rgb(59, 130, 246)", // Solid blue to match verified badge
+      // Use brand pink as the primary accent color
+      waveColor: isLightMode ? "rgba(236, 72, 153, 0.15)" : "rgba(236, 72, 153, 0.2)",
+      progressColor: "rgb(236, 72, 153)",
       cursorColor: "transparent",
       barWidth: 2,
       barGap: 2,
@@ -117,7 +118,8 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
         whileTap={{ scale: 0.95 }}
         onClick={togglePlay}
         disabled={isLoading}
-        className="flex-shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        // Use fixed brand pink for the play button instead of theme primary
+        className="flex-shrink-0 w-10 h-10 rounded-full bg-[#ec4899] flex items-center justify-center hover:bg-[#db2777] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
