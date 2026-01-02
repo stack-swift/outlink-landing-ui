@@ -66,9 +66,9 @@ export function BlurOverlay({
           </div>
           <Button
             size="sm"
-            color="primary"
+            // Brand pink for reveal button
             onPress={handleReveal}
-            className="font-bold shadow-lg"
+            className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
             startContent={<Icon icon="solar:eye-linear" width={16} />}
           >
             Reveal Now

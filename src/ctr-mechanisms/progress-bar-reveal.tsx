@@ -63,7 +63,11 @@ export function ProgressBarReveal({
             <Progress
               value={progress}
               className="w-full"
+              // Brand pink progress bar
               color="primary"
+              classNames={{
+                indicator: "bg-[#ec4899]",
+              }}
               size="md"
             />
             <p className="text-white/80 text-xs drop-shadow-sm">

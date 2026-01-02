@@ -59,16 +59,20 @@ export function ClickToReveal({
           </div>
           <Button
             size="md"
-            color="primary"
+            // Use brand pink for the primary CTA
             onPress={handleClick}
-            className="font-bold shadow-lg"
+            className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
           >
             Tap to Unlock ({clickCount}/{clicksRequired})
           </Button>
           <Progress
             value={progress}
             className="max-w-[200px]"
+            // Brand pink progress bar
             color="primary"
+            classNames={{
+              indicator: "bg-[#ec4899]",
+            }}
             size="sm"
           />
         </motion.div>

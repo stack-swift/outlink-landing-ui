@@ -47,8 +47,12 @@ export function AccessCodeModal({
               This content is protected. Enter the access code to continue.
             </p>
             {hint && (
-              <p className="text-sm text-primary">
-                <Icon icon="solar:info-circle-bold" width={16} className="inline mr-1" />
+              <p className="text-sm" style={{ color: "#ec4899" }}>
+                <Icon
+                  icon="solar:info-circle-bold"
+                  width={16}
+                  className="inline mr-1"
+                />
                 Hint: {hint}
               </p>
             )}
@@ -73,10 +77,10 @@ export function AccessCodeModal({
         </ModalBody>
         <ModalFooter>
           <Button
-            color="primary"
             onPress={handleSubmit}
             isDisabled={!inputValue}
             fullWidth
+            className="bg-[#ec4899] hover:bg-[#db2777] text-white"
           >
             Unlock
           </Button>

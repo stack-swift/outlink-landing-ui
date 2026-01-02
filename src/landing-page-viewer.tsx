@@ -276,18 +276,19 @@ export function LandingPageViewer({
                         {settings.verified_badge_style === "solid" ? (
                           <Icon
                             icon="solar:verified-check-bold"
-                            className="text-primary"
                             width={24}
+                            style={{ color: "#ec4899" }}
                           />
                         ) : (
                           <Chip
                             size="sm"
-                            color="primary"
                             variant="flat"
+                            className="bg-[#ec4899]/10 text-[#ec4899]"
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
+                                style={{ color: "#ec4899" }}
                               />
                             }
                           >
@@ -360,18 +361,19 @@ export function LandingPageViewer({
                         {settings.verified_badge_style === "solid" ? (
                           <Icon
                             icon="solar:verified-check-bold"
-                            className="text-primary"
                             width={24}
+                            style={{ color: "#ec4899" }}
                           />
                         ) : (
                           <Chip
                             size="sm"
-                            color="primary"
                             variant="flat"
+                            className="bg-[#ec4899]/10 text-[#ec4899]"
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
+                                style={{ color: "#ec4899" }}
                               />
                             }
                           >

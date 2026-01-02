@@ -56,9 +56,8 @@ export function AgeConfirmationModal({
           <div className="flex gap-2 pt-1">
             <Button
               size="sm"
-              color="primary"
               onPress={onConfirm}
-              className="font-bold shadow-lg"
+              className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
             >
               I'm 18+
             </Button>

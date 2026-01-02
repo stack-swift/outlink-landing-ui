@@ -53,7 +53,7 @@ export function CTACardWithMechanisms({
       ${mechanisms.visual_effects.pulse_animation ? "animate-pulse" : ""}
       ${
         mechanisms.visual_effects.glow_effect
-          ? "shadow-lg shadow-primary/50"
+          ? "shadow-lg shadow-[rgba(236,72,153,0.5)]"
           : ""
       }
     `.trim();
