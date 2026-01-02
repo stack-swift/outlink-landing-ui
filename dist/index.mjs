@@ -9410,9 +9410,8 @@ function ClickToReveal({
             button_default,
             {
               size: "md",
-              color: "primary",
               onPress: handleClick,
-              className: "font-bold shadow-lg",
+              className: "font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white",
               children: [
                 "Tap to Unlock (",
                 clickCount,
@@ -9428,6 +9427,9 @@ function ClickToReveal({
               value: progress2,
               className: "max-w-[200px]",
               color: "primary",
+              classNames: {
+                indicator: "bg-[#ec4899]"
+              },
               size: "sm"
             }
           )
@@ -9626,9 +9628,8 @@ function BlurOverlay({
                 button_default,
                 {
                   size: "sm",
-                  color: "primary",
                   onPress: handleReveal,
-                  className: "font-bold shadow-lg",
+                  className: "font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white",
                   startContent: /* @__PURE__ */ jsx15(Icon5, { icon: "solar:eye-linear", width: 16 }),
                   children: "Reveal Now"
                 }
@@ -9695,6 +9696,9 @@ function ProgressBarReveal({
             value: progress2,
             className: "w-full",
             color: "primary",
+            classNames: {
+              indicator: "bg-[#ec4899]"
+            },
             size: "md"
           }
         ),
@@ -9779,7 +9783,7 @@ function CTACardWithMechanisms({
   if (((_a = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _a.pulse_animation) || ((_b = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _b.glow_effect)) {
     const className = `
       ${mechanisms.visual_effects.pulse_animation ? "animate-pulse" : ""}
-      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-primary/50" : ""}
+      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-[rgba(236,72,153,0.5)]" : ""}
     `.trim();
     content = /* @__PURE__ */ jsx18(
       motion8.div,
@@ -9922,9 +9926,8 @@ function AgeConfirmationModal({
               button_default,
               {
                 size: "sm",
-                color: "primary",
                 onPress: onConfirm,
-                className: "font-bold shadow-lg",
+                className: "font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white",
                 children: "I'm 18+"
               }
             ),
@@ -10169,20 +10172,21 @@ function LandingPageViewer({
                           Icon9,
                           {
                             icon: "solar:verified-check-bold",
-                            className: "text-primary",
-                            width: 24
+                            width: 24,
+                            style: { color: "#ec4899" }
                           }
                         ) : /* @__PURE__ */ jsx20(
                           chip_default,
                           {
                             size: "sm",
-                            color: "primary",
                             variant: "flat",
+                            className: "bg-[#ec4899]/10 text-[#ec4899]",
                             startContent: /* @__PURE__ */ jsx20(
                               Icon9,
                               {
                                 icon: "solar:verified-check-bold",
-                                width: 16
+                                width: 16,
+                                style: { color: "#ec4899" }
                               }
                             ),
                             children: "Verified"
@@ -10260,20 +10264,21 @@ function LandingPageViewer({
                           Icon9,
                           {
                             icon: "solar:verified-check-bold",
-                            className: "text-primary",
-                            width: 24
+                            width: 24,
+                            style: { color: "#ec4899" }
                           }
                         ) : /* @__PURE__ */ jsx20(
                           chip_default,
                           {
                             size: "sm",
-                            color: "primary",
                             variant: "flat",
+                            className: "bg-[#ec4899]/10 text-[#ec4899]",
                             startContent: /* @__PURE__ */ jsx20(
                               Icon9,
                               {
                                 icon: "solar:verified-check-bold",
-                                width: 16
+                                width: 16,
+                                style: { color: "#ec4899" }
                               }
                             ),
                             children: "Verified"
