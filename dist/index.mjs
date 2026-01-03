@@ -10065,10 +10065,10 @@ function LandingPageViewer({
           isFreePlan && /* @__PURE__ */ jsx20(
             "a",
             {
-              href: "https://outlink.bio",
+              href: "https://www.outlink.bio/",
               target: "_blank",
               rel: "noreferrer",
-              className: "absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-orange-400 shadow-lg",
+              className: "absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-lg",
               children: /* @__PURE__ */ jsx20("img", { src: "/logo2.svg", alt: "Outlink", className: "h-5 w-5" })
             }
           ),
@@ -10596,7 +10596,9 @@ function LandingPageViewer({
                     children: isFreePlan ? /* @__PURE__ */ jsxs15(
                       "a",
                       {
-                        href: "/",
+                        href: "https://www.outlink.bio/",
+                        target: "_blank",
+                        rel: "noreferrer",
                         className: "inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white",
                         children: [
                           /* @__PURE__ */ jsx20("span", { className: "inline-flex h-6 w-6 items-center justify-center", children: /* @__PURE__ */ jsx20(
@@ -10613,7 +10615,9 @@ function LandingPageViewer({
                     ) : /* @__PURE__ */ jsxs15(
                       "a",
                       {
-                        href: "/",
+                        href: "https://www.outlink.bio/",
+                        target: "_blank",
+                        rel: "noreferrer",
                         className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
                         children: [
                           /* @__PURE__ */ jsx20(
