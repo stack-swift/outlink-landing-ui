@@ -65,6 +65,9 @@ export interface LandingPageSettings {
   social_links: SocialLink[];
   cta_cards: CTACard[];
 
+  // Gallery images (optional; empty/undefined = no gallery)
+  gallery_images?: string[];
+
   // Badges / meta
   verified_badge: boolean;
   verified_badge_style: "chip" | "solid";

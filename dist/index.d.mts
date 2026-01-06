@@ -54,6 +54,7 @@ interface LandingPageSettings {
     button_color: string;
     social_links: SocialLink[];
     cta_cards: CTACard[];
+    gallery_images?: string[];
     verified_badge: boolean;
     verified_badge_style: "chip" | "solid";
     show_follower_count: boolean;
