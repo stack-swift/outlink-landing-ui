@@ -10120,7 +10120,17 @@ function LandingPageViewer({
               target: "_blank",
               rel: "noreferrer",
               className: "absolute inset-x-0 top-0 z-20",
-              children: /* @__PURE__ */ jsx20("div", { className: "w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 text-center shadow-md", children: /* @__PURE__ */ jsx20("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }) })
+              children: /* @__PURE__ */ jsxs15("div", { className: "w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
+                /* @__PURE__ */ jsx20("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
+                /* @__PURE__ */ jsx20(
+                  Icon9,
+                  {
+                    icon: "solar:arrow-right-linear",
+                    width: 12,
+                    className: "text-white"
+                  }
+                )
+              ] })
             }
           ),
           isFullMode || isVideoMode ? /* @__PURE__ */ jsx20(

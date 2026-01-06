@@ -253,10 +253,15 @@ export function LandingPageViewer({
     rel="noreferrer"
     className="absolute inset-x-0 top-0 z-20"
   >
-    <div className="w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 text-center shadow-md">
+    <div className="w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2">
       <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
         Claim your domain
       </span>
+      <Icon
+        icon="solar:arrow-right-linear"
+        width={12}
+        className="text-white"
+      />
     </div>
   </a>
 )}
