@@ -40,7 +40,7 @@ export function ClickToReveal({
 
   return (
     <div className="relative overflow-hidden rounded-xl">
-      <div className="absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl">
+   <div className="absolute inset-0 bg-black/10 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl">
         <motion.div
           animate={clickCount > 0 ? { scale: [1, 1.1, 1] } : {}}
           transition={{ duration: 0.3 }}

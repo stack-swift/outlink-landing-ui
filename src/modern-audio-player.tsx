@@ -29,8 +29,9 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
     // Initialize WaveSurfer with theme-aware colors
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
-      // Use brand pink as the primary accent color
-      waveColor: isLightMode ? "rgba(236, 72, 153, 0.15)" : "rgba(236, 72, 153, 0.2)",
+      waveColor: isLightMode
+        ? "rgba(236, 72, 153, 0.15)"
+        : "rgba(236, 72, 153, 0.25)",
       progressColor: "rgb(236, 72, 153)",
       cursorColor: "transparent",
       barWidth: 2,

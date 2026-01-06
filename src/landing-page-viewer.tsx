@@ -82,11 +82,11 @@ export function LandingPageViewer({
 
   // Theme-aware colors
   const themeColors = {
-    background: isLightMode ? "#FFFFFF" : "#18181b",
+    background: isLightMode ? "#FFFFFF" : "#000000",
     textPrimary: isLightMode ? "#18181b" : "#ffffff",
     textSecondary: isLightMode ? "#64748b" : "#94a3b8",
-    cardBg: isLightMode ? "#f8fafc" : "#27272a",
-    border: isLightMode ? "#e2e8f0" : "#3f3f46",
+    cardBg: isLightMode ? "#f8fafc" : "#111111", // optional: slightly above black
+    border: isLightMode ? "#e2e8f0" : "#27272a",
   };
 
   const getButtonVariant = () => {
@@ -495,31 +495,34 @@ export function LandingPageViewer({
                   style={{ order: getSectionOrder("social_block") }}
                 >
                   {/* Social Links */}
-                  {settings.social_links &&
-                    settings.social_links.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3, duration: 0.3 }}
-                        className="flex flex-wrap items-center justify-center gap-2"
-                      >
-                        {settings.social_links.map((social, index) => (
-                          <Button
-                            key={index}
-                            as="a"
-                            href={social.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            isIconOnly
-                            size="sm"
-                            variant="flat"
-                            className="hover:scale-110 transition-transform"
-                          >
-                            <Icon icon={social.icon} width={20} />
-                          </Button>
-                        ))}
-                      </motion.div>
-                    )}
+                  {settings.social_links && settings.social_links.length > 0 && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.3, duration: 0.3 }}
+    className="flex flex-wrap items-center justify-center gap-3"
+  >
+    {settings.social_links.map((social, index) => (
+      <Button
+        key={index}
+        as="a"
+        href={social.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        isIconOnly
+        size="sm"
+        variant="light" // no background
+        className="hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0"
+      >
+        <Icon
+          icon={social.icon}
+          width={20}
+          color={isLightMode ? "#ec4899" : "#e5e7eb"} // pink in light mode, neutral in dark
+        />
+      </Button>
+    ))}
+  </motion.div>
+)}
 
                   {/* Follower Count */}
                   {settings.show_follower_count &&
@@ -1023,8 +1026,8 @@ export function LandingPageViewer({
                                 onClick={() => setActiveGalleryIndex(dotIndex)}
                                 className={`h-1.5 rounded-full transition-all ${
                                   dotIndex === index
-                                    ? "w-4 bg-white"
-                                    : "w-1.5 bg-white/40"
+                                  ? "w-4 bg-[#ec4899]"       
+                                  : "w-1.5 bg-[#ec4899]/40"   
                                 }`}
                               />
                             ))}

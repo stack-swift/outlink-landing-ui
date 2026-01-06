@@ -9022,8 +9022,7 @@ function ModernAudioPlayer({ src, theme = "dark" }) {
     isDestroyedRef.current = false;
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
-      // Use brand pink as the primary accent color
-      waveColor: isLightMode ? "rgba(236, 72, 153, 0.15)" : "rgba(236, 72, 153, 0.2)",
+      waveColor: isLightMode ? "rgba(236, 72, 153, 0.15)" : "rgba(236, 72, 153, 0.25)",
       progressColor: "rgb(236, 72, 153)",
       cursorColor: "transparent",
       barWidth: 2,
@@ -9382,7 +9381,7 @@ function ClickToReveal({
     return /* @__PURE__ */ jsx12(Fragment2, { children });
   }
   return /* @__PURE__ */ jsxs9("div", { className: "relative overflow-hidden rounded-xl", children: [
-    /* @__PURE__ */ jsx12("div", { className: "absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl", children: /* @__PURE__ */ jsxs9(
+    /* @__PURE__ */ jsx12("div", { className: "absolute inset-0 bg-black/10 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl", children: /* @__PURE__ */ jsxs9(
       motion2.div,
       {
         animate: clickCount > 0 ? { scale: [1, 1.1, 1] } : {},
@@ -9468,7 +9467,7 @@ function CountdownReveal({
     return /* @__PURE__ */ jsx13(Fragment3, { children });
   }
   return /* @__PURE__ */ jsxs10("div", { className: "relative overflow-hidden rounded-xl", children: [
-    /* @__PURE__ */ jsx13("div", { className: "absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ jsxs10(
+    /* @__PURE__ */ jsx13("div", { className: "absolute inset-0  bg-black/10 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ jsxs10(
       motion3.div,
       {
         animate: { scale: [1, 1.05, 1] },
@@ -9548,10 +9547,10 @@ function ScarcityBadge({
       children: /* @__PURE__ */ jsx14(
         chip_default,
         {
-          color: "success",
+          color: "default",
           variant: "solid",
           size: "sm",
-          className: "font-semibold",
+          className: "font-semibold bg-[#ec4899] text-white border-none",
           startContent: /* @__PURE__ */ jsx14("span", { className: "flex items-center", children: /* @__PURE__ */ jsx14(
             motion4.span,
             {
@@ -9679,30 +9678,27 @@ function ProgressBarReveal({
     return /* @__PURE__ */ jsx16(Fragment6, { children });
   }
   return /* @__PURE__ */ jsxs12("div", { className: "relative overflow-hidden rounded-xl", children: [
-    /* @__PURE__ */ jsx16("div", { className: "absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl", children: /* @__PURE__ */ jsxs12(motion6.div, { className: "text-center space-y-2 w-full max-w-[250px]", children: [
+    /* @__PURE__ */ jsx16("div", { className: "absolute rounded-xl inset-0 backdrop-blur-sm bg-black/40 z-[5] flex items-center justify-center px-3 py-3", children: /* @__PURE__ */ jsxs12(motion6.div, { className: "text-center space-y-1 w-full max-w-[210px] mx-auto", children: [
       /* @__PURE__ */ jsx16(
         Icon6,
         {
           icon: "solar:hourglass-bold-duotone",
-          width: 40,
+          width: 32,
           className: "text-white mx-auto drop-shadow-lg"
         }
       ),
-      /* @__PURE__ */ jsxs12("div", { className: "space-y-2", children: [
-        /* @__PURE__ */ jsx16("p", { className: "text-white font-semibold text-base drop-shadow-md", children: message }),
+      /* @__PURE__ */ jsxs12("div", { className: "space-y-1", children: [
+        /* @__PURE__ */ jsx16("p", { className: "text-white font-semibold text-sm drop-shadow-md", children: message }),
         /* @__PURE__ */ jsx16(
           progress_default,
           {
             value: progress2,
-            className: "w-full",
+            className: "w-[150px] mx-auto",
             color: "primary",
-            classNames: {
-              indicator: "bg-[#ec4899]"
-            },
-            size: "md"
+            size: "sm"
           }
         ),
-        /* @__PURE__ */ jsxs12("p", { className: "text-white/80 text-xs drop-shadow-sm", children: [
+        /* @__PURE__ */ jsxs12("p", { className: "text-white/80 text-[11px] drop-shadow-sm", children: [
           Math.round(progress2),
           "% loaded..."
         ] })
@@ -9987,11 +9983,12 @@ function LandingPageViewer({
   const galleryTouchStartX = useRef5(null);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
-    background: isLightMode ? "#FFFFFF" : "#18181b",
+    background: isLightMode ? "#FFFFFF" : "#000000",
     textPrimary: isLightMode ? "#18181b" : "#ffffff",
     textSecondary: isLightMode ? "#64748b" : "#94a3b8",
-    cardBg: isLightMode ? "#f8fafc" : "#27272a",
-    border: isLightMode ? "#e2e8f0" : "#3f3f46"
+    cardBg: isLightMode ? "#f8fafc" : "#111111",
+    // optional: slightly above black
+    border: isLightMode ? "#e2e8f0" : "#27272a"
   };
   const getButtonVariant = () => {
     switch (settings.button_style) {
@@ -10371,7 +10368,7 @@ function LandingPageViewer({
                           initial: { opacity: 0 },
                           animate: { opacity: 1 },
                           transition: { delay: 0.3, duration: 0.3 },
-                          className: "flex flex-wrap items-center justify-center gap-2",
+                          className: "flex flex-wrap items-center justify-center gap-3",
                           children: settings.social_links.map((social, index) => /* @__PURE__ */ jsx20(
                             button_default,
                             {
@@ -10381,9 +10378,16 @@ function LandingPageViewer({
                               rel: "noopener noreferrer",
                               isIconOnly: true,
                               size: "sm",
-                              variant: "flat",
-                              className: "hover:scale-110 transition-transform",
-                              children: /* @__PURE__ */ jsx20(Icon9, { icon: social.icon, width: 20 })
+                              variant: "light",
+                              className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
+                              children: /* @__PURE__ */ jsx20(
+                                Icon9,
+                                {
+                                  icon: social.icon,
+                                  width: 20,
+                                  color: isLightMode ? "#ec4899" : "#e5e7eb"
+                                }
+                              )
                             },
                             index
                           ))
@@ -10800,7 +10804,7 @@ function LandingPageViewer({
                           {
                             type: "button",
                             onClick: () => setActiveGalleryIndex(dotIndex),
-                            className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-white" : "w-1.5 bg-white/40"}`
+                            className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#ec4899]" : "w-1.5 bg-[#ec4899]/40"}`
                           },
                           `${url}-${dotIndex}`
                         )) })

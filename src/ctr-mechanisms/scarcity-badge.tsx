@@ -54,23 +54,23 @@ export function ScarcityBadge({
           animate={{ opacity: 1, scale: 1 }}
           className="absolute top-2 right-2 z-[10]"
         >
-          <Chip
-            color="success"
-            variant="solid"
-            size="sm"
-            className="font-semibold"
-            startContent={
-              <span className="flex items-center">
-                <motion.span
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="inline-block w-2 h-2 rounded-full bg-white mr-1"
-                />
-              </span>
-            }
-          >
-            {getDisplayMessage()}
-          </Chip>
+           <Chip
+  color="default"
+  variant="solid"
+  size="sm"
+  className="font-semibold bg-[#ec4899] text-white border-none"
+  startContent={
+    <span className="flex items-center">
+      <motion.span
+        animate={{ opacity: [1, 0.3, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+        className="inline-block w-2 h-2 rounded-full bg-white mr-1"
+      />
+    </span>
+  }
+>
+  {getDisplayMessage()}
+</Chip>
         </motion.div>
       )}
     </>

@@ -51,26 +51,24 @@ export function ProgressBarReveal({
 
   return (
     <div className="relative overflow-hidden rounded-xl">
-      <div className="absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-4 rounded-xl">
-        <motion.div className="text-center space-y-2 w-full max-w-[250px]">
+      <div className="absolute rounded-xl inset-0 backdrop-blur-sm bg-black/40 z-[5] flex items-center justify-center px-3 py-3">
+        <motion.div className="text-center space-y-1 w-full max-w-[210px] mx-auto">
           <Icon
             icon="solar:hourglass-bold-duotone"
-            width={40}
+            width={32}
             className="text-white mx-auto drop-shadow-lg"
           />
-          <div className="space-y-2">
-            <p className="text-white font-semibold text-base drop-shadow-md">{message}</p>
+          <div className="space-y-1">
+            <p className="text-white font-semibold text-sm drop-shadow-md">
+              {message}
+            </p>
             <Progress
               value={progress}
-              className="w-full"
-              // Brand pink progress bar
+              className="w-[150px] mx-auto"
               color="primary"
-              classNames={{
-                indicator: "bg-[#ec4899]",
-              }}
-              size="md"
+              size="sm"
             />
-            <p className="text-white/80 text-xs drop-shadow-sm">
+            <p className="text-white/80 text-[11px] drop-shadow-sm">
               {Math.round(progress)}% loaded...
             </p>
           </div>

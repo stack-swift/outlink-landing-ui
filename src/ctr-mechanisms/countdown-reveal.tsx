@@ -40,7 +40,7 @@ export function CountdownReveal({
 
   return (
     <div className="relative overflow-hidden rounded-xl">
-      <div className="absolute inset-0 backdrop-blur-md bg-black/60 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl">
+     <div className="absolute inset-0  bg-black/10 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl">
         <motion.div
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 1, repeat: Infinity }}
