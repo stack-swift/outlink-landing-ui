@@ -10176,15 +10176,8 @@ function LandingPageViewer({
               href: "https://www.outlink.bio/",
               target: "_blank",
               rel: "noreferrer",
-              className: "hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20",
-              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "px-2 py-4 rounded-l-xl shadow-lg bg-gradient-to-b from-pink-500 to-orange-400", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                "span",
-                {
-                  className: "text-[10px] tracking-[0.25em] text-white uppercase",
-                  style: { writingMode: "vertical-rl", textOrientation: "mixed" },
-                  children: "Page built with outlink"
-                }
-              ) })
+              className: "absolute inset-x-0 top-0 z-20",
+              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 text-center shadow-md", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }) })
             }
           ),
           isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(

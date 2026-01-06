@@ -247,22 +247,19 @@ export function LandingPageViewer({
 >
   {/* Free-plan vertical ribbon ad on the right edge (desktop only) */}
   {isFreePlan && (
-    <a
-      href="https://www.outlink.bio/"
-      target="_blank"
-      rel="noreferrer"
-      className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20"
-    >
-      <div className="px-2 py-4 rounded-l-xl shadow-lg bg-gradient-to-b from-pink-500 to-orange-400">
-        <span
-          className="text-[10px] tracking-[0.25em] text-white uppercase"
-          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-        >
-          Page built with outlink
-        </span>
-      </div>
-    </a>
-  )}
+  <a
+    href="https://www.outlink.bio/"
+    target="_blank"
+    rel="noreferrer"
+    className="absolute inset-x-0 top-0 z-20"
+  >
+    <div className="w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 text-center shadow-md">
+      <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
+        Claim your domain
+      </span>
+    </div>
+  </a>
+)}
         {/* Hero area for Full Display & Video Header modes */}
         {isFullMode || isVideoMode ? (
           <motion.div
