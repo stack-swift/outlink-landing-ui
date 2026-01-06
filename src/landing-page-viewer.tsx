@@ -118,8 +118,8 @@ export function LandingPageViewer({
   const isVideoMode = mode === "video";
 
   const heroHeightClass = (() => {
-    if (isVideoMode) return "h-[520px] md:h-[520px]";
-    if (isFullMode) return "h-[420px] md:h-[420px]";
+     // Align video and full-image headers to the same height for visual consistency
+     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();

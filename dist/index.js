@@ -10080,8 +10080,7 @@ function LandingPageViewer({
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
   const heroHeightClass = (() => {
-    if (isVideoMode) return "h-[520px] md:h-[520px]";
-    if (isFullMode) return "h-[420px] md:h-[420px]";
+    if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
   })();
   return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "min-h-screen flex items-center justify-center relative overflow-hidden", children: [
