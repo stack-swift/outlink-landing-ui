@@ -66,6 +66,9 @@ export function ProgressBarReveal({
               value={progress}
               className="w-[150px] mx-auto"
               color="primary"
+              classNames={{
+                indicator: "bg-[#ec4899]",
+              }}
               size="sm"
             />
             <p className="text-white/80 text-[11px] drop-shadow-sm">

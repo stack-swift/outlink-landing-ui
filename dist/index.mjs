@@ -9695,6 +9695,9 @@ function ProgressBarReveal({
             value: progress2,
             className: "w-[150px] mx-auto",
             color: "primary",
+            classNames: {
+              indicator: "bg-[#ec4899]"
+            },
             size: "sm"
           }
         ),
