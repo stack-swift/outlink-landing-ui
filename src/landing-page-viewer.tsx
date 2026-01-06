@@ -240,21 +240,29 @@ export function LandingPageViewer({
       ) : null}
 
       {/* Mobile-sized container */}
-      <div
-        className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-        style={{ backgroundColor: themeColors.background }}
-      >
-        {isFreePlan && (
-          <a
-            href="https://www.outlink.bio/"
-            target="_blank"
-            rel="noreferrer"
-            className="absolute left-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-lg"
-          >
-            <img src="/logo2.svg" alt="Outlink" className="h-5 w-5" />
-          </a>
-        )}
-
+      {/* Mobile-sized container */}
+<div
+  className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+  style={{ backgroundColor: themeColors.background }}
+>
+  {/* Free-plan vertical ribbon ad on the right edge (desktop only) */}
+  {isFreePlan && (
+    <a
+      href="https://www.outlink.bio/"
+      target="_blank"
+      rel="noreferrer"
+      className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-20"
+    >
+      <div className="px-2 py-4 rounded-l-xl shadow-lg bg-gradient-to-b from-pink-500 to-orange-400">
+        <span
+          className="text-[10px] tracking-[0.25em] text-white uppercase"
+          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+        >
+          Page built with outlink
+        </span>
+      </div>
+    </a>
+  )}
         {/* Hero area for Full Display & Video Header modes */}
         {isFullMode || isVideoMode ? (
           <motion.div
@@ -1040,49 +1048,26 @@ export function LandingPageViewer({
               )}
 
               {/* Branding / Powered by Outlink – part of layout */}
-              {isSectionEnabled("branding") && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.3 }}
-                  className={`${getSectionSpacingClass(
-                    "branding"
-                  )} pb-8 flex justify-center`}
-                  style={{ order: getSectionOrder("branding") }}
-                >
-                  {isFreePlan ? (
-                    <a
-                      href="https://www.outlink.bio/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white"
-                    >
-                      <span className="inline-flex h-6 w-6 items-center justify-center">
-                        <img
-                          src="/logo2.svg"
-                          alt="Outlink logo"
-                          className="h-4 w-4"
-                        />
-                      </span>
-                      <span>Build your own premium page with Outlink</span>
-                    </a>
-                  ) : (
-                    <a
-                      href="https://www.outlink.bio/"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
-                    >
-                      <img
-                        src="/logo2.svg"
-                        alt="Outlink logo"
-                        className="h-4 w-4"
-                      />
-                      <span>Powered by Outlink</span>
-                    </a>
-                  )}
-                </motion.div>
-              )}
+   {/* Branding / Powered by Outlink – part of layout */}
+{isSectionEnabled("branding") && (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.8, duration: 0.3 }}
+    className={`${getSectionSpacingClass("branding")} pb-8 flex justify-center`}
+    style={{ order: getSectionOrder("branding") }}
+  >
+    <a
+      href="https://www.outlink.bio/"
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
+    >
+      <img src="/logo2.svg" alt="Outlink logo" className="h-4 w-4" />
+      <span>Powered by outlink</span>
+    </a>
+  </motion.div>
+)}
             </div>
           </div>
         </div>
