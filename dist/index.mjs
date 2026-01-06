@@ -10074,7 +10074,7 @@ function LandingPageViewer({
     /* @__PURE__ */ jsxs15(
       "div",
       {
-        className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto flex flex-col",
+        className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
         style: { backgroundColor: themeColors.background },
         children: [
           isFreePlan && /* @__PURE__ */ jsx20(
