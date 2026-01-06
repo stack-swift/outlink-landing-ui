@@ -40,7 +40,10 @@ function wrapUrlForNavigation(
 }
 
 // Helper: send click event to analytics
-function trackClick(linkId: string | undefined, isPreview: boolean | undefined) {
+function trackClick(
+  linkId: string | undefined,
+  isPreview: boolean | undefined,
+) {
   if (!linkId || isPreview || typeof window === "undefined") return;
 
   fetch("/api/analytics/track", {
@@ -110,6 +113,7 @@ export function LandingPageViewer({
 
     const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
+
     window.location.href = target;
   };
 
@@ -118,8 +122,8 @@ export function LandingPageViewer({
   const isVideoMode = mode === "video";
 
   const heroHeightClass = (() => {
-     // Align video and full-image headers to the same height for visual consistency
-     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
+    // Align video and full-image headers to the same height for visual consistency
+    if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();
@@ -207,6 +211,7 @@ export function LandingPageViewer({
                       </>
                     );
                   }
+
                   // Video mode but no clip yet – show placeholder
                   return (
                     <div className="w-full h-full bg-default-100 flex items-center justify-center">
@@ -517,7 +522,6 @@ export function LandingPageViewer({
                           return;
                         }
 
-                        // record click
                         trackClick(link.id, isPreview);
 
                         const navUrl = wrapUrlForNavigation(
@@ -529,7 +533,6 @@ export function LandingPageViewer({
                       };
 
                       const handleAgeConfirm = () => {
-                        // record click
                         trackClick(link.id, isPreview);
 
                         const navUrl = wrapUrlForNavigation(
@@ -566,6 +569,7 @@ export function LandingPageViewer({
                                   card.style.background_fit || "fill";
                                 const focus =
                                   card.style.background_focus || "top";
+
                                 const baseClasses =
                                   "absolute inset-0 w-full h-full opacity-60";
                                 const fitClass =
@@ -573,6 +577,7 @@ export function LandingPageViewer({
                                     ? "object-contain"
                                     : "object-cover";
                                 let focusClass = "";
+
                                 if (fit === "fill") {
                                   if (focus === "top")
                                     focusClass = "object-top";
@@ -580,6 +585,7 @@ export function LandingPageViewer({
                                     focusClass = "object-bottom";
                                   else focusClass = "object-center";
                                 }
+
                                 return (
                                   <video
                                     src={card.style.background_video}
