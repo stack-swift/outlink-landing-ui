@@ -1,15 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import { Avatar } from "@heroui/avatar";
 import { Card, CardBody } from "@heroui/card";
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+
 import { ModernAudioPlayer } from "./modern-audio-player";
 import { CTACardWithMechanisms } from "./ctr-mechanisms/cta-card-with-mechanisms";
 import { AgeConfirmationModal } from "./ctr-mechanisms/age-confirmation-modal";
+
 import type { Link, LandingPageSettings } from "./types";
 
 interface LandingPageViewerProps {
@@ -68,6 +71,11 @@ export function LandingPageViewer({
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] =
     useState<string | null>(null);
 
+  // Gallery state
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const galleryTouchStartX = useRef<number | null>(null);
+
   const isLightMode = settings.theme_mode === "light";
 
   // Theme-aware colors
@@ -120,6 +128,26 @@ export function LandingPageViewer({
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
+
+  // Normalised gallery images from settings (optional feature)
+  const rawGallery = (settings as any).gallery_images;
+  const galleryImages: string[] = Array.isArray(rawGallery)
+    ? rawGallery.slice(0, 6)
+    : [];
+  const hasGallery = galleryImages.length > 0;
+
+  // Close gallery lightbox on Escape
+  useEffect(() => {
+    if (!lightboxUrl) return;
+
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxUrl(null);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxUrl]);
 
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
@@ -465,6 +493,34 @@ export function LandingPageViewer({
                 </motion.div>
               )}
 
+              {/* Gallery lightbox */}
+              {lightboxUrl && (
+                <div
+                  className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80"
+                  onClick={() => setLightboxUrl(null)}
+                >
+                  <div
+                    className="max-w-3xl max-h-[90vh] px-4"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <img
+                      src={lightboxUrl}
+                      alt="Gallery full view"
+                      className="w-full h-full object-contain rounded-2xl"
+                    />
+                    <div className="mt-3 flex justify-center">
+                      <button
+                        type="button"
+                        className="px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white"
+                        onClick={() => setLightboxUrl(null)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Bio */}
               {settings.bio && (
                 <motion.p
@@ -529,6 +585,7 @@ export function LandingPageViewer({
                           isPreview,
                         );
                         if (!navUrl) return;
+
                         window.location.href = navUrl;
                       };
 
@@ -540,6 +597,7 @@ export function LandingPageViewer({
                           isPreview,
                         );
                         if (!navUrl) return;
+
                         window.location.href = navUrl;
                       };
 
@@ -616,6 +674,7 @@ export function LandingPageViewer({
                                     }}
                                     className="mx-auto"
                                   />
+
                                   {card.style.logo_name && (
                                     <p
                                       className="font-bold text-lg mt-1"
@@ -660,6 +719,7 @@ export function LandingPageViewer({
                               >
                                 {card.title}
                               </h3>
+
                               {card.description && (
                                 <p
                                   className={`text-sm mt-1 ${
@@ -763,6 +823,135 @@ export function LandingPageViewer({
                       </div>
                     </CardBody>
                   </Card>
+                </motion.div>
+              )}
+
+              {/* Gallery – carousel with focused center card and side previews (always under CTAs) */}
+              {hasGallery && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.3 }}
+                  className="w-full mt-6"
+                >
+                  {(() => {
+                    const total = galleryImages.length;
+                    if (total === 0) return null;
+
+                    const index = Math.min(activeGalleryIndex, total - 1);
+
+                    const goPrev = () => {
+                      if (total <= 1) return;
+                      setActiveGalleryIndex(
+                        (prev) => (prev - 1 + total) % total,
+                      );
+                    };
+
+                    const goNext = () => {
+                      if (total <= 1) return;
+                      setActiveGalleryIndex((prev) => (prev + 1) % total);
+                    };
+
+                    const handleTouchStart = (
+                      e: React.TouchEvent<HTMLDivElement>,
+                    ) => {
+                      galleryTouchStartX.current = e.touches[0].clientX;
+                    };
+
+                    const handleTouchEnd = (
+                      e: React.TouchEvent<HTMLDivElement>,
+                    ) => {
+                      if (galleryTouchStartX.current == null) return;
+                      const deltaX =
+                        e.changedTouches[0].clientX -
+                        galleryTouchStartX.current;
+                      const threshold = 40;
+                      if (deltaX > threshold) {
+                        goPrev();
+                      } else if (deltaX < -threshold) {
+                        goNext();
+                      }
+                      galleryTouchStartX.current = null;
+                    };
+
+                    return (
+                      <>
+                        <div
+                          className="relative w-full flex items-center justify-center"
+                          onTouchStart={handleTouchStart}
+                          onTouchEnd={handleTouchEnd}
+                        >
+                          <div className="relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center">
+                            {(() => {
+                              const cards = [];
+                              // Show up to 5 cards: two to the left, center, two to the right
+                              for (let offset = -2; offset <= 2; offset++) {
+                                const imgIndex =
+                                  (index + offset + total) % total;
+                                const url = galleryImages[imgIndex];
+                                const absOffset = Math.abs(offset);
+                                const isActive = offset === 0;
+                                const translateX = offset * 120; // percentage shift
+                                const scale = isActive ? 1 : 0.85;
+                                const opacity = isActive ? 1 : 0.35;
+                                const blur = isActive ? "none" : "blur(3px)";
+                                const zIndex = 20 - absOffset;
+
+                                cards.push(
+                                  <div
+                                    key={`${url}-${imgIndex}`}
+                                    className="absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out"
+                                    style={{
+                                      width: "13rem",
+                                      height: "17rem",
+                                      transform: `translateX(${translateX}%) scale(${scale})`,
+                                      opacity,
+                                      filter: blur,
+                                      zIndex,
+                                    }}
+                                    onClick={() => {
+                                      if (isActive) {
+                                        setLightboxUrl(url);
+                                      } else {
+                                        setActiveGalleryIndex(imgIndex);
+                                      }
+                                    }}
+                                  >
+                                    <img
+                                      src={url}
+                                      alt={`Gallery ${imgIndex + 1}`}
+                                      className="w-full h-full object-cover"
+                                      loading="lazy"
+                                    />
+                                  </div>,
+                                );
+                              }
+                              return cards;
+                            })()}
+                          </div>
+                        </div>
+
+                        {total > 1 && (
+                          <div className="mt-3 flex justify-center gap-1.5">
+                            {galleryImages.map((url, dotIndex) => (
+                              <button
+                                key={`${url}-${dotIndex}`}
+                                type="button"
+                                onClick={() =>
+                                  setActiveGalleryIndex(dotIndex)
+                                }
+                                className={`h-1.5 rounded-full transition-all ${
+                                  dotIndex === index
+                                    ? "w-4 bg-white"
+                                    : "w-1.5 bg-white/40"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </motion.div>
               )}
 

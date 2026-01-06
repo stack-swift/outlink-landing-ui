@@ -1,5 +1,5 @@
 // src/landing-page-viewer.tsx
-import { useState as useState11 } from "react";
+import { useState as useState11, useEffect as useEffect8, useRef as useRef5 } from "react";
 
 // node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs
 import { jsx, jsxs } from "react/jsx-runtime";
@@ -9982,6 +9982,9 @@ function LandingPageViewer({
   isFreePlan = false
 }) {
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = useState11(null);
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState11(0);
+  const [lightboxUrl, setLightboxUrl] = useState11(null);
+  const galleryTouchStartX = useRef5(null);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#18181b",
@@ -10022,6 +10025,19 @@ function LandingPageViewer({
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
+  const rawGallery = settings.gallery_images;
+  const galleryImages = Array.isArray(rawGallery) ? rawGallery.slice(0, 6) : [];
+  const hasGallery = galleryImages.length > 0;
+  useEffect8(() => {
+    if (!lightboxUrl) return;
+    const handler = (e) => {
+      if (e.key === "Escape") {
+        setLightboxUrl(null);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxUrl]);
   const heroHeightClass = (() => {
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
@@ -10367,6 +10383,39 @@ function LandingPageViewer({
                     )
                   }
                 ),
+                lightboxUrl && /* @__PURE__ */ jsx20(
+                  "div",
+                  {
+                    className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
+                    onClick: () => setLightboxUrl(null),
+                    children: /* @__PURE__ */ jsxs15(
+                      "div",
+                      {
+                        className: "max-w-3xl max-h-[90vh] px-4",
+                        onClick: (e) => e.stopPropagation(),
+                        children: [
+                          /* @__PURE__ */ jsx20(
+                            "img",
+                            {
+                              src: lightboxUrl,
+                              alt: "Gallery full view",
+                              className: "w-full h-full object-contain rounded-2xl"
+                            }
+                          ),
+                          /* @__PURE__ */ jsx20("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ jsx20(
+                            "button",
+                            {
+                              type: "button",
+                              className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
+                              onClick: () => setLightboxUrl(null),
+                              children: "Close"
+                            }
+                          ) })
+                        ]
+                      }
+                    )
+                  }
+                ),
                 settings.bio && /* @__PURE__ */ jsx20(
                   motion10.p,
                   {
@@ -10584,6 +10633,111 @@ function LandingPageViewer({
                       )
                     }
                   )
+                ),
+                hasGallery && /* @__PURE__ */ jsx20(
+                  motion10.div,
+                  {
+                    initial: { opacity: 0, y: 10 },
+                    animate: { opacity: 1, y: 0 },
+                    transition: { delay: 0.7, duration: 0.3 },
+                    className: "w-full mt-6",
+                    children: (() => {
+                      const total = galleryImages.length;
+                      if (total === 0) return null;
+                      const index = Math.min(activeGalleryIndex, total - 1);
+                      const goPrev = () => {
+                        if (total <= 1) return;
+                        setActiveGalleryIndex(
+                          (prev) => (prev - 1 + total) % total
+                        );
+                      };
+                      const goNext = () => {
+                        if (total <= 1) return;
+                        setActiveGalleryIndex((prev) => (prev + 1) % total);
+                      };
+                      const handleTouchStart = (e) => {
+                        galleryTouchStartX.current = e.touches[0].clientX;
+                      };
+                      const handleTouchEnd = (e) => {
+                        if (galleryTouchStartX.current == null) return;
+                        const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
+                        const threshold = 40;
+                        if (deltaX > threshold) {
+                          goPrev();
+                        } else if (deltaX < -threshold) {
+                          goNext();
+                        }
+                        galleryTouchStartX.current = null;
+                      };
+                      return /* @__PURE__ */ jsxs15(Fragment8, { children: [
+                        /* @__PURE__ */ jsx20(
+                          "div",
+                          {
+                            className: "relative w-full flex items-center justify-center",
+                            onTouchStart: handleTouchStart,
+                            onTouchEnd: handleTouchEnd,
+                            children: /* @__PURE__ */ jsx20("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
+                              const cards = [];
+                              for (let offset = -2; offset <= 2; offset++) {
+                                const imgIndex = (index + offset + total) % total;
+                                const url = galleryImages[imgIndex];
+                                const absOffset = Math.abs(offset);
+                                const isActive = offset === 0;
+                                const translateX = offset * 120;
+                                const scale = isActive ? 1 : 0.85;
+                                const opacity = isActive ? 1 : 0.35;
+                                const blur = isActive ? "none" : "blur(3px)";
+                                const zIndex = 20 - absOffset;
+                                cards.push(
+                                  /* @__PURE__ */ jsx20(
+                                    "div",
+                                    {
+                                      className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
+                                      style: {
+                                        width: "13rem",
+                                        height: "17rem",
+                                        transform: `translateX(${translateX}%) scale(${scale})`,
+                                        opacity,
+                                        filter: blur,
+                                        zIndex
+                                      },
+                                      onClick: () => {
+                                        if (isActive) {
+                                          setLightboxUrl(url);
+                                        } else {
+                                          setActiveGalleryIndex(imgIndex);
+                                        }
+                                      },
+                                      children: /* @__PURE__ */ jsx20(
+                                        "img",
+                                        {
+                                          src: url,
+                                          alt: `Gallery ${imgIndex + 1}`,
+                                          className: "w-full h-full object-cover",
+                                          loading: "lazy"
+                                        }
+                                      )
+                                    },
+                                    `${url}-${imgIndex}`
+                                  )
+                                );
+                              }
+                              return cards;
+                            })() })
+                          }
+                        ),
+                        total > 1 && /* @__PURE__ */ jsx20("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ jsx20(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => setActiveGalleryIndex(dotIndex),
+                            className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-white" : "w-1.5 bg-white/40"}`
+                          },
+                          `${url}-${dotIndex}`
+                        )) })
+                      ] });
+                    })()
+                  }
                 ),
                 /* @__PURE__ */ jsx20(
                   motion10.div,

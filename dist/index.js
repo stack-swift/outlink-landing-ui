@@ -10039,6 +10039,9 @@ function LandingPageViewer({
   isFreePlan = false
 }) {
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react49.useState)(null);
+  const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react49.useState)(0);
+  const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
+  const galleryTouchStartX = (0, import_react49.useRef)(null);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#18181b",
@@ -10079,6 +10082,19 @@ function LandingPageViewer({
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
+  const rawGallery = settings.gallery_images;
+  const galleryImages = Array.isArray(rawGallery) ? rawGallery.slice(0, 6) : [];
+  const hasGallery = galleryImages.length > 0;
+  (0, import_react49.useEffect)(() => {
+    if (!lightboxUrl) return;
+    const handler = (e) => {
+      if (e.key === "Escape") {
+        setLightboxUrl(null);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxUrl]);
   const heroHeightClass = (() => {
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
@@ -10424,6 +10440,39 @@ function LandingPageViewer({
                     )
                   }
                 ),
+                lightboxUrl && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                  "div",
+                  {
+                    className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
+                    onClick: () => setLightboxUrl(null),
+                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                      "div",
+                      {
+                        className: "max-w-3xl max-h-[90vh] px-4",
+                        onClick: (e) => e.stopPropagation(),
+                        children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            "img",
+                            {
+                              src: lightboxUrl,
+                              alt: "Gallery full view",
+                              className: "w-full h-full object-contain rounded-2xl"
+                            }
+                          ),
+                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            "button",
+                            {
+                              type: "button",
+                              className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
+                              onClick: () => setLightboxUrl(null),
+                              children: "Close"
+                            }
+                          ) })
+                        ]
+                      }
+                    )
+                  }
+                ),
                 settings.bio && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                   import_framer_motion12.motion.p,
                   {
@@ -10641,6 +10690,111 @@ function LandingPageViewer({
                       )
                     }
                   )
+                ),
+                hasGallery && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                  import_framer_motion12.motion.div,
+                  {
+                    initial: { opacity: 0, y: 10 },
+                    animate: { opacity: 1, y: 0 },
+                    transition: { delay: 0.7, duration: 0.3 },
+                    className: "w-full mt-6",
+                    children: (() => {
+                      const total = galleryImages.length;
+                      if (total === 0) return null;
+                      const index = Math.min(activeGalleryIndex, total - 1);
+                      const goPrev = () => {
+                        if (total <= 1) return;
+                        setActiveGalleryIndex(
+                          (prev) => (prev - 1 + total) % total
+                        );
+                      };
+                      const goNext = () => {
+                        if (total <= 1) return;
+                        setActiveGalleryIndex((prev) => (prev + 1) % total);
+                      };
+                      const handleTouchStart = (e) => {
+                        galleryTouchStartX.current = e.touches[0].clientX;
+                      };
+                      const handleTouchEnd = (e) => {
+                        if (galleryTouchStartX.current == null) return;
+                        const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
+                        const threshold = 40;
+                        if (deltaX > threshold) {
+                          goPrev();
+                        } else if (deltaX < -threshold) {
+                          goNext();
+                        }
+                        galleryTouchStartX.current = null;
+                      };
+                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "div",
+                          {
+                            className: "relative w-full flex items-center justify-center",
+                            onTouchStart: handleTouchStart,
+                            onTouchEnd: handleTouchEnd,
+                            children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
+                              const cards = [];
+                              for (let offset = -2; offset <= 2; offset++) {
+                                const imgIndex = (index + offset + total) % total;
+                                const url = galleryImages[imgIndex];
+                                const absOffset = Math.abs(offset);
+                                const isActive = offset === 0;
+                                const translateX = offset * 120;
+                                const scale = isActive ? 1 : 0.85;
+                                const opacity = isActive ? 1 : 0.35;
+                                const blur = isActive ? "none" : "blur(3px)";
+                                const zIndex = 20 - absOffset;
+                                cards.push(
+                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                    "div",
+                                    {
+                                      className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
+                                      style: {
+                                        width: "13rem",
+                                        height: "17rem",
+                                        transform: `translateX(${translateX}%) scale(${scale})`,
+                                        opacity,
+                                        filter: blur,
+                                        zIndex
+                                      },
+                                      onClick: () => {
+                                        if (isActive) {
+                                          setLightboxUrl(url);
+                                        } else {
+                                          setActiveGalleryIndex(imgIndex);
+                                        }
+                                      },
+                                      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "img",
+                                        {
+                                          src: url,
+                                          alt: `Gallery ${imgIndex + 1}`,
+                                          className: "w-full h-full object-cover",
+                                          loading: "lazy"
+                                        }
+                                      )
+                                    },
+                                    `${url}-${imgIndex}`
+                                  )
+                                );
+                              }
+                              return cards;
+                            })() })
+                          }
+                        ),
+                        total > 1 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "button",
+                          {
+                            type: "button",
+                            onClick: () => setActiveGalleryIndex(dotIndex),
+                            className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-white" : "w-1.5 bg-white/40"}`
+                          },
+                          `${url}-${dotIndex}`
+                        )) })
+                      ] });
+                    })()
+                  }
                 ),
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                   import_framer_motion12.motion.div,
