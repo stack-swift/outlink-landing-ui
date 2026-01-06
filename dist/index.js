@@ -10177,7 +10177,7 @@ function LandingPageViewer({
               target: "_blank",
               rel: "noreferrer",
               className: "absolute inset-x-0 top-0 z-20",
-              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "w-full rounded-t-2xl bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
+              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
                 /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                   import_react50.Icon,
