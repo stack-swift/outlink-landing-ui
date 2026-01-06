@@ -1,5 +1,3 @@
-// src/types.ts
-
 export interface SocialLink {
   id?: string;
   platform: string;
@@ -37,6 +35,18 @@ export interface CTACard {
   ctr_mechanisms?: any; // keep loose for now
 }
 
+// Layout + spacing types (match dashboard)
+export type LayoutSectionKey =
+  | "header"
+  | "bio"
+  | "social_block"
+  | "voice_note"
+  | "cta_block"
+  | "gallery"
+  | "branding";
+
+export type SectionSpacing = "tight" | "normal" | "relaxed";
+
 export interface LandingPageSettings {
   id: string;
   link_id: string;
@@ -67,6 +77,10 @@ export interface LandingPageSettings {
 
   // Gallery images (optional; empty/undefined = no gallery)
   gallery_images?: string[];
+
+  // Layout + spacing (optional)
+  layout_sections?: LayoutSectionKey[];
+  section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>>;
 
   // Badges / meta
   verified_badge: boolean;

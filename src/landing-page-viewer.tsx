@@ -13,7 +13,12 @@ import { ModernAudioPlayer } from "./modern-audio-player";
 import { CTACardWithMechanisms } from "./ctr-mechanisms/cta-card-with-mechanisms";
 import { AgeConfirmationModal } from "./ctr-mechanisms/age-confirmation-modal";
 
-import type { Link, LandingPageSettings } from "./types";
+import type {
+  Link,
+  LandingPageSettings,
+  LayoutSectionKey,
+  SectionSpacing,
+} from "./types";
 
 interface LandingPageViewerProps {
   link: Link;
@@ -43,10 +48,7 @@ function wrapUrlForNavigation(
 }
 
 // Helper: send click event to analytics
-function trackClick(
-  linkId: string | undefined,
-  isPreview: boolean | undefined,
-) {
+function trackClick(linkId: string | undefined, isPreview: boolean | undefined) {
   if (!linkId || isPreview || typeof window === "undefined") return;
 
   fetch("/api/analytics/track", {
@@ -129,6 +131,57 @@ export function LandingPageViewer({
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
 
+  // Layout + spacing
+  const DEFAULT_LAYOUT_SECTIONS: LayoutSectionKey[] = [
+    "header",
+    "bio",
+    "social_block",
+    "voice_note",
+    "cta_block",
+    "gallery",
+    "branding",
+  ];
+
+  let layoutSections: LayoutSectionKey[] =
+    (settings.layout_sections && settings.layout_sections.length
+      ? (settings.layout_sections as LayoutSectionKey[])
+      : DEFAULT_LAYOUT_SECTIONS);
+
+  // Ensure branding footer is always present and fixed at the end
+  layoutSections = [
+    ...layoutSections.filter((k) => k !== "branding"),
+    "branding",
+  ];
+
+  const isSectionEnabled = (key: LayoutSectionKey) =>
+    key === "branding" ? true : layoutSections.includes(key);
+
+  const getSectionOrder = (key: LayoutSectionKey) => {
+    const index = layoutSections.indexOf(key);
+    if (index === -1) return 999;
+    // start after header/bio block; higher order = lower on page
+    return (index + 1) * 10;
+  };
+
+  const getSectionSpacingClass = (key: LayoutSectionKey) => {
+    if (key === "branding") {
+      // Branding spacing is locked
+      return "mt-3";
+    }
+    const spacing =
+      (settings.section_spacing?.[key] as SectionSpacing | undefined) ||
+      "normal";
+    switch (spacing) {
+      case "tight":
+        return "mt-1";
+      case "relaxed":
+        return "mt-6";
+      case "normal":
+      default:
+        return "mt-3";
+    }
+  };
+
   // Normalised gallery images from settings (optional feature)
   const rawGallery = (settings as any).gallery_images;
   const galleryImages: string[] = Array.isArray(rawGallery)
@@ -188,9 +241,9 @@ export function LandingPageViewer({
 
       {/* Mobile-sized container */}
       <div
-  className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-  style={{ backgroundColor: themeColors.background }}
->
+        className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+        style={{ backgroundColor: themeColors.background }}
+      >
         {isFreePlan && (
           <a
             href="https://www.outlink.bio/"
@@ -289,13 +342,16 @@ export function LandingPageViewer({
         >
           <div className="w-full max-w-md">
             <div className="flex flex-col items-center gap-4">
-              {/* Name and Verification - Hero modes */}
-              {(isFullMode || isVideoMode) && (
+              {/* Name + badge + handle - hero modes */}
+              {(isFullMode || isVideoMode) && isSectionEnabled("header") && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
-                  className="flex flex-col items-center gap-2 mt-4"
+                  className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                    "header"
+                  )}`}
+                  style={{ order: getSectionOrder("header") }}
                 >
                   <div className="flex items-center gap-2">
                     <h1
@@ -374,13 +430,16 @@ export function LandingPageViewer({
                 </motion.div>
               )}
 
-              {/* Name and Verification - Avatar mode */}
-              {mode === "avatar" && (
+              {/* Name and Verification - Avatar mode only */}
+              {mode === "avatar" && isSectionEnabled("header") && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
-                  className="flex flex-col items-center gap-1"
+                  className={`flex flex-col items-center gap-1 ${getSectionSpacingClass(
+                    "header"
+                  )}`}
+                  style={{ order: getSectionOrder("header") }}
                 >
                   <div className="flex items-center gap-2">
                     <h1
@@ -427,64 +486,77 @@ export function LandingPageViewer({
                 </motion.div>
               )}
 
-              {/* Social Links */}
-              {settings.social_links &&
-                settings.social_links.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3, duration: 0.3 }}
-                    className="flex flex-wrap items-center justify-center gap-2"
-                  >
-                    {settings.social_links.map((social, index) => (
-                      <Button
-                        key={index}
-                        as="a"
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        isIconOnly
-                        size="sm"
-                        variant="flat"
-                        className="hover:scale-110 transition-transform"
+              {/* Social + Followers block */}
+              {isSectionEnabled("social_block") && (
+                <div
+                  className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                    "social_block"
+                  )}`}
+                  style={{ order: getSectionOrder("social_block") }}
+                >
+                  {/* Social Links */}
+                  {settings.social_links &&
+                    settings.social_links.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.3 }}
+                        className="flex flex-wrap items-center justify-center gap-2"
                       >
-                        <Icon icon={social.icon} width={20} />
-                      </Button>
-                    ))}
-                  </motion.div>
-                )}
+                        {settings.social_links.map((social, index) => (
+                          <Button
+                            key={index}
+                            as="a"
+                            href={social.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            isIconOnly
+                            size="sm"
+                            variant="flat"
+                            className="hover:scale-110 transition-transform"
+                          >
+                            <Icon icon={social.icon} width={20} />
+                          </Button>
+                        ))}
+                      </motion.div>
+                    )}
 
-              {/* Follower Count */}
-              {settings.show_follower_count &&
-                settings.follower_count > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 0.3 }}
-                    className="text-center"
-                  >
-                    <p
-                      className="text-sm"
-                      style={{ color: themeColors.textSecondary }}
-                    >
-                      <span
-                        className="font-semibold"
-                        style={{ color: themeColors.textPrimary }}
+                  {/* Follower Count */}
+                  {settings.show_follower_count &&
+                    settings.follower_count > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4, duration: 0.3 }}
+                        className="text-center"
                       >
-                        {settings.follower_count.toLocaleString()}
-                      </span>{" "}
-                      Total Followers
-                    </p>
-                  </motion.div>
-                )}
+                        <p
+                          className="text-sm"
+                          style={{ color: themeColors.textSecondary }}
+                        >
+                          <span
+                            className="font-semibold"
+                            style={{ color: themeColors.textPrimary }}
+                          >
+                            {settings.follower_count.toLocaleString()}
+                          </span>{" "}
+                          Total Followers
+                        </p>
+                      </motion.div>
+                    )}
+                </div>
+              )}
 
               {/* Voice Note */}
-              {settings.voice_note_url && (
+              {isSectionEnabled("voice_note") && settings.voice_note_url && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.45, duration: 0.3 }}
-                  className="w-full max-w-sm"
+                  className={`w-full max-w-sm ${getSectionSpacingClass(
+                    "voice_note"
+                  )}`}
+                  style={{ order: getSectionOrder("voice_note") }}
                 >
                   <ModernAudioPlayer
                     src={settings.voice_note_url}
@@ -521,318 +593,329 @@ export function LandingPageViewer({
                 </div>
               )}
 
-              {/* Bio */}
-              {settings.bio && (
+              {/* Bio – now part of layout system */}
+              {isSectionEnabled("bio") && settings.bio && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.3 }}
-                  className="text-center max-w-sm"
-                  style={{ color: themeColors.textSecondary }}
+                  className={`text-center max-w-sm ${getSectionSpacingClass(
+                    "bio"
+                  )}`}
+                  style={{
+                    color: themeColors.textSecondary,
+                    order: getSectionOrder("bio"),
+                  }}
                 >
                   {settings.bio}
                 </motion.p>
               )}
 
-              {/* CTA Cards */}
-              {settings.cta_cards && settings.cta_cards.length > 0 ? (
-                <div className="w-full space-y-3 mt-4">
-                  {settings.cta_cards
-                    .sort((a, b) => a.order - b.order)
-                    .map((card, index) => {
-                      const getCardStyle = () => {
-                        switch (card.style.type) {
-                          case "solid":
-                            return {
-                              background:
-                                card.style.background_color || "#666",
-                            };
-                          case "gradient":
-                            return {
-                              background: card.style.background_gradient
-                                ? `linear-gradient(135deg, ${card.style.background_gradient.start}, ${card.style.background_gradient.end})`
-                                : "linear-gradient(135deg, #667eea, #764ba2)",
-                            };
-                          case "image":
-                            return {
-                              backgroundImage: card.style.background_image
-                                ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})`
-                                : "none",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                            };
-                          case "video":
-                            return { background: "#000" };
-                          default:
-                            return {};
-                        }
-                      };
+              {/* CTA block (cards or default button) */}
+              {isSectionEnabled("cta_block") && (
+                <div
+                  className={`w-full ${getSectionSpacingClass("cta_block")}`}
+                  style={{ order: getSectionOrder("cta_block") }}
+                >
+                  {settings.cta_cards && settings.cta_cards.length > 0 ? (
+                    <div className="w-full space-y-3">
+                      {settings.cta_cards
+                        .sort((a, b) => a.order - b.order)
+                        .map((card, index) => {
+                          const getCardStyle = () => {
+                            switch (card.style.type) {
+                              case "solid":
+                                return {
+                                  background:
+                                    card.style.background_color || "#666",
+                                };
+                              case "gradient":
+                                return {
+                                  background: card.style.background_gradient
+                                    ? `linear-gradient(135deg, ${card.style.background_gradient.start}, ${card.style.background_gradient.end})`
+                                    : "linear-gradient(135deg, #667eea, #764ba2)",
+                                };
+                              case "image":
+                                return {
+                                  backgroundImage: card.style.background_image
+                                    ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})`
+                                    : "none",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center",
+                                };
+                              case "video":
+                                return { background: "#000" };
+                              default:
+                                return {};
+                            }
+                          };
 
-                      const handleCardClick = () => {
-                        // Skip everything in preview mode
-                        if (isPreview) return;
+                          const handleCardClick = () => {
+                            // Skip everything in preview mode
+                            if (isPreview) return;
 
-                        // Age gate
-                        if (card.require_18plus) {
-                          setShowingAgeConfirmationFor(card.id);
-                          return;
-                        }
+                            // Age gate
+                            if (card.require_18plus) {
+                              setShowingAgeConfirmationFor(card.id);
+                              return;
+                            }
 
-                        trackClick(link.id, isPreview);
+                            trackClick(link.id, isPreview);
 
-                        const navUrl = wrapUrlForNavigation(
-                          card.url,
-                          isPreview,
-                        );
-                        if (!navUrl) return;
+                            const navUrl = wrapUrlForNavigation(
+                              card.url,
+                              isPreview,
+                            );
+                            if (!navUrl) return;
 
-                        window.location.href = navUrl;
-                      };
+                            window.location.href = navUrl;
+                          };
 
-                      const handleAgeConfirm = () => {
-                        trackClick(link.id, isPreview);
+                          const handleAgeConfirm = () => {
+                            trackClick(link.id, isPreview);
 
-                        const navUrl = wrapUrlForNavigation(
-                          card.url,
-                          isPreview,
-                        );
-                        if (!navUrl) return;
+                            const navUrl = wrapUrlForNavigation(
+                              card.url,
+                              isPreview,
+                            );
+                            if (!navUrl) return;
 
-                        window.location.href = navUrl;
-                      };
+                            window.location.href = navUrl;
+                          };
 
-                      const handleAgeCancel = () => {
-                        setShowingAgeConfirmationFor(null);
-                      };
+                          const handleAgeCancel = () => {
+                            setShowingAgeConfirmationFor(null);
+                          };
 
-                      const renderCardContent = () => (
-                        <Card
-                          isPressable
-                          onPress={handleCardClick}
-                          className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
-                          style={getCardStyle()}
-                        >
-                          <CardBody
-                            className={`p-6 flex items-center justify-center relative ${
-                              card.ctr_mechanisms
-                                ? "min-h-[150px] md:min-h-[140px]"
-                                : "min-h-[120px]"
-                            }`}
-                          >
-                            {/* Video Background */}
-                            {card.style.type === "video" &&
-                              card.style.background_video &&
-                              (() => {
-                                const fit =
-                                  card.style.background_fit || "fill";
-                                const focus =
-                                  card.style.background_focus || "top";
+                          const renderCardContent = () => (
+                            <Card
+                              isPressable
+                              onPress={handleCardClick}
+                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
+                              style={getCardStyle()}
+                            >
+                              <CardBody
+                                className={`p-6 flex items-center justify-center relative ${
+                                  card.ctr_mechanisms
+                                    ? "min-h-[150px] md:min-h-[140px]"
+                                    : "min-h-[120px]"
+                                }`}
+                              >
+                                {/* Video Background */}
+                                {card.style.type === "video" &&
+                                  card.style.background_video &&
+                                  (() => {
+                                    const fit =
+                                      card.style.background_fit || "fill";
+                                    const focus =
+                                      card.style.background_focus || "top";
 
-                                const baseClasses =
-                                  "absolute inset-0 w-full h-full opacity-60";
-                                const fitClass =
-                                  fit === "fit"
-                                    ? "object-contain"
-                                    : "object-cover";
-                                let focusClass = "";
+                                    const baseClasses =
+                                      "absolute inset-0 w-full h-full opacity-60";
+                                    const fitClass =
+                                      fit === "fit"
+                                        ? "object-contain"
+                                        : "object-cover";
+                                    let focusClass = "";
 
-                                if (fit === "fill") {
-                                  if (focus === "top")
-                                    focusClass = "object-top";
-                                  else if (focus === "bottom")
-                                    focusClass = "object-bottom";
-                                  else focusClass = "object-center";
-                                }
+                                    if (fit === "fill") {
+                                      if (focus === "top")
+                                        focusClass = "object-top";
+                                      else if (focus === "bottom")
+                                        focusClass = "object-bottom";
+                                      else focusClass = "object-center";
+                                    }
 
-                                return (
-                                  <video
-                                    src={card.style.background_video}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                  />
-                                );
-                              })()}
+                                    return (
+                                      <video
+                                        src={card.style.background_video}
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                      />
+                                    );
+                                  })()}
+                                <div className="text-center w-full relative z-10">
+                                  {/* Logo Style */}
+                                  {card.style.logo_icon && (
+                                    <div className="mb-2">
+                                      <Icon
+                                        icon={card.style.logo_icon}
+                                        width={36}
+                                        style={{
+                                          color:
+                                            card.style.logo_color || "#fff",
+                                          filter:
+                                            card.style.type === "image" ||
+                                            card.style.type === "video"
+                                              ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
+                                              : "none",
+                                        }}
+                                        className="mx-auto"
+                                      />
+                                      {card.style.logo_name && (
+                                        <p
+                                          className="font-bold text-lg mt-1"
+                                          style={{
+                                            color:
+                                              card.style.logo_color || "#fff",
+                                            textShadow:
+                                              card.style.type === "image" ||
+                                              card.style.type === "video"
+                                                ? "0 2px 4px rgba(0,0,0,0.3)"
+                                                : "none",
+                                          }}
+                                        >
+                                          {card.style.prefix_text && (
+                                            <span className="mr-1">
+                                              {card.style.prefix_text}
+                                            </span>
+                                          )}
+                                          {card.style.logo_name}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )}
 
-                            <div className="text-center w-full relative z-10">
-                              {/* Logo Style */}
-                              {card.style.logo_icon && (
-                                <div className="mb-2">
-                                  <Icon
-                                    icon={card.style.logo_icon}
-                                    width={36}
+                                  {/* Title and Description */}
+                                  <h3
+                                    className={`text-lg font-semibold ${
+                                      card.style.type === "image" ||
+                                      card.style.type === "gradient" ||
+                                      card.style.type === "solid" ||
+                                      card.style.type === "video"
+                                        ? "text-white"
+                                        : "text-foreground"
+                                    }`}
                                     style={{
-                                      color:
-                                        card.style.logo_color || "#fff",
-                                      filter:
+                                      textShadow:
                                         card.style.type === "image" ||
                                         card.style.type === "video"
-                                          ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
+                                          ? "0 2px 8px rgba(0,0,0,0.5)"
                                           : "none",
                                     }}
-                                    className="mx-auto"
-                                  />
-
-                                  {card.style.logo_name && (
+                                  >
+                                    {card.title}
+                                  </h3>
+                                  {card.description && (
                                     <p
-                                      className="font-bold text-lg mt-1"
+                                      className={`text-sm mt-1 ${
+                                        card.style.type === "image" ||
+                                        card.style.type === "gradient" ||
+                                        card.style.type === "solid" ||
+                                        card.style.type === "video"
+                                          ? "text-white/90"
+                                          : "text-default-500"
+                                      }`}
                                       style={{
-                                        color:
-                                          card.style.logo_color || "#fff",
                                         textShadow:
                                           card.style.type === "image" ||
                                           card.style.type === "video"
-                                            ? "0 2px 4px rgba(0,0,0,0.3)"
+                                            ? "0 1px 4px rgba(0,0,0,0.5)"
                                             : "none",
                                       }}
                                     >
-                                      {card.style.prefix_text && (
-                                        <span className="mr-1">
-                                          {card.style.prefix_text}
-                                        </span>
-                                      )}
-                                      {card.style.logo_name}
+                                      {card.description}
                                     </p>
                                   )}
                                 </div>
-                              )}
+                              </CardBody>
+                            </Card>
+                          );
 
-                              {/* Title and Description */}
-                              <h3
-                                className={`text-lg font-semibold ${
-                                  card.style.type === "image" ||
-                                  card.style.type === "gradient" ||
-                                  card.style.type === "solid" ||
-                                  card.style.type === "video"
-                                    ? "text-white"
-                                    : "text-foreground"
-                                }`}
-                                style={{
-                                  textShadow:
-                                    card.style.type === "image" ||
-                                    card.style.type === "video"
-                                      ? "0 2px 8px rgba(0,0,0,0.5)"
-                                      : "none",
-                                }}
+                          // First render card with CTR mechanisms
+                          const cardWithMechanisms = card.ctr_mechanisms ? (
+                            <CTACardWithMechanisms
+                              card={card}
+                              onReveal={() => {
+                                // just reveal, no navigation
+                              }}
+                            >
+                              {renderCardContent()}
+                            </CTACardWithMechanisms>
+                          ) : (
+                            renderCardContent()
+                          );
+
+                          // Then wrap with age confirmation if needed
+                          const finalContent =
+                            showingAgeConfirmationFor === card.id &&
+                            !isPreview ? (
+                              <AgeConfirmationModal
+                                isOpen={true}
+                                onConfirm={handleAgeConfirm}
+                                onCancel={handleAgeCancel}
                               >
-                                {card.title}
-                              </h3>
+                                {cardWithMechanisms}
+                              </AgeConfirmationModal>
+                            ) : (
+                              cardWithMechanisms
+                            );
 
-                              {card.description && (
-                                <p
-                                  className={`text-sm mt-1 ${
-                                    card.style.type === "image" ||
-                                    card.style.type === "gradient" ||
-                                    card.style.type === "solid" ||
-                                    card.style.type === "video"
-                                      ? "text-white/90"
-                                      : "text-default-500"
-                                  }`}
-                                  style={{
-                                    textShadow:
-                                      card.style.type === "image" ||
-                                      card.style.type === "video"
-                                        ? "0 1px 4px rgba(0,0,0,0.5)"
-                                        : "none",
-                                  }}
-                                >
-                                  {card.description}
+                          return (
+                            <motion.div
+                              key={card.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                delay: 0.6 + index * 0.1,
+                                duration: 0.3,
+                              }}
+                              className="relative"
+                            >
+                              {finalContent}
+                            </motion.div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    // Fallback to default button if no CTA cards
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6, duration: 0.3 }}
+                      className="w-full px-4"
+                    >
+                      <Card
+                        isPressable
+                        onPress={handleButtonClick}
+                        className="w-full hover:scale-[1.02] transition-transform shadow-lg"
+                      >
+                        <CardBody className="p-6">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold text-foreground">
+                                {link.title || "Click here"}
+                              </h3>
+                              {link.description && (
+                                <p className="text-sm text-default-500 mt-1">
+                                  {link.description}
                                 </p>
                               )}
                             </div>
-                          </CardBody>
-                        </Card>
-                      );
-
-                      // First render card with CTR mechanisms
-                      const cardWithMechanisms = card.ctr_mechanisms ? (
-                        <CTACardWithMechanisms
-                          card={card}
-                          onReveal={() => {
-                            // just reveal, no navigation
-                          }}
-                        >
-                          {renderCardContent()}
-                        </CTACardWithMechanisms>
-                      ) : (
-                        renderCardContent()
-                      );
-
-                      // Then wrap with age confirmation if needed
-                      const finalContent =
-                        showingAgeConfirmationFor === card.id && !isPreview ? (
-                          <AgeConfirmationModal
-                            isOpen={true}
-                            onConfirm={handleAgeConfirm}
-                            onCancel={handleAgeCancel}
-                          >
-                            {cardWithMechanisms}
-                          </AgeConfirmationModal>
-                        ) : (
-                          cardWithMechanisms
-                        );
-
-                      return (
-                        <motion.div
-                          key={card.id}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{
-                            delay: 0.6 + index * 0.1,
-                            duration: 0.3,
-                          }}
-                          className="relative"
-                        >
-                          {finalContent}
-                        </motion.div>
-                      );
-                    })}
+                            <Icon
+                              icon="solar:arrow-right-line-duotone"
+                              width={24}
+                              className="text-default-400 ml-4"
+                            />
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </motion.div>
+                  )}
                 </div>
-              ) : (
-                // Fallback to default button if no CTA cards
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.3 }}
-                  className="w-full px-4"
-                >
-                  <Card
-                    isPressable
-                    onPress={handleButtonClick}
-                    className="w-full hover:scale-[1.02] transition-transform shadow-lg"
-                  >
-                    <CardBody className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-foreground">
-                            {link.title || "Click here"}
-                          </h3>
-                          {link.description && (
-                            <p className="text-sm text-default-500 mt-1">
-                              {link.description}
-                            </p>
-                          )}
-                        </div>
-                        <Icon
-                          icon="solar:arrow-right-line-duotone"
-                          width={24}
-                          className="text-default-400 ml-4"
-                        />
-                      </div>
-                    </CardBody>
-                  </Card>
-                </motion.div>
               )}
 
-              {/* Gallery – carousel with focused center card and side previews (always under CTAs) */}
-              {hasGallery && (
+              {/* Gallery – carousel with focused center card and side previews */}
+              {isSectionEnabled("gallery") && hasGallery && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 0.3 }}
-                  className="w-full mt-6"
+                  className={`w-full ${getSectionSpacingClass("gallery")}`}
+                  style={{ order: getSectionOrder("gallery") }}
                 >
                   {(() => {
                     const total = galleryImages.length;
@@ -937,9 +1020,7 @@ export function LandingPageViewer({
                               <button
                                 key={`${url}-${dotIndex}`}
                                 type="button"
-                                onClick={() =>
-                                  setActiveGalleryIndex(dotIndex)
-                                }
+                                onClick={() => setActiveGalleryIndex(dotIndex)}
                                 className={`h-1.5 rounded-full transition-all ${
                                   dotIndex === index
                                     ? "w-4 bg-white"
@@ -955,45 +1036,50 @@ export function LandingPageViewer({
                 </motion.div>
               )}
 
-              {/* Footer */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.3 }}
-                className="mt-8 pb-8 flex justify-center"
-              >
-                {isFreePlan ? (
-                  <a
-                    href="https://www.outlink.bio/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white"
-                  >
-                    <span className="inline-flex h-6 w-6 items-center justify-center">
+              {/* Branding / Powered by Outlink – part of layout */}
+              {isSectionEnabled("branding") && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.3 }}
+                  className={`${getSectionSpacingClass(
+                    "branding"
+                  )} pb-8 flex justify-center`}
+                  style={{ order: getSectionOrder("branding") }}
+                >
+                  {isFreePlan ? (
+                    <a
+                      href="https://www.outlink.bio/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold shadow-lg hover:brightness-110 transition bg-gradient-to-r from-pink-500 to-orange-400 text-white"
+                    >
+                      <span className="inline-flex h-6 w-6 items-center justify-center">
+                        <img
+                          src="/logo2.svg"
+                          alt="Outlink logo"
+                          className="h-4 w-4"
+                        />
+                      </span>
+                      <span>Build your own premium page with Outlink</span>
+                    </a>
+                  ) : (
+                    <a
+                      href="https://www.outlink.bio/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
+                    >
                       <img
                         src="/logo2.svg"
                         alt="Outlink logo"
                         className="h-4 w-4"
                       />
-                    </span>
-                    <span>Build your own premium page with Outlink</span>
-                  </a>
-                ) : (
-                  <a
-                    href="https://www.outlink.bio/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
-                  >
-                    <img
-                      src="/logo2.svg"
-                      alt="Outlink logo"
-                      className="h-4 w-4"
-                    />
-                    <span>Powered by Outlink</span>
-                  </a>
-                )}
-              </motion.div>
+                      <span>Powered by Outlink</span>
+                    </a>
+                  )}
+                </motion.div>
+              )}
             </div>
           </div>
         </div>

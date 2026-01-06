@@ -34,6 +34,8 @@ interface CTACard {
     require_18plus?: boolean;
     ctr_mechanisms?: any;
 }
+type LayoutSectionKey = "header" | "bio" | "social_block" | "voice_note" | "cta_block" | "gallery" | "branding";
+type SectionSpacing = "tight" | "normal" | "relaxed";
 interface LandingPageSettings {
     id: string;
     link_id: string;
@@ -55,6 +57,8 @@ interface LandingPageSettings {
     social_links: SocialLink[];
     cta_cards: CTACard[];
     gallery_images?: string[];
+    layout_sections?: LayoutSectionKey[];
+    section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>>;
     verified_badge: boolean;
     verified_badge_style: "chip" | "solid";
     show_follower_count: boolean;
@@ -103,4 +107,4 @@ interface AgeConfirmationModalProps {
 }
 declare function AgeConfirmationModal({ isOpen, onConfirm, onCancel, children, }: AgeConfirmationModalProps): react_jsx_runtime.JSX.Element;
 
-export { AgeConfirmationModal, type CTACard, type CTACardStyle, CTACardWithMechanisms, type LandingPageSettings, LandingPageViewer, type Link, ModernAudioPlayer, type SocialLink };
+export { AgeConfirmationModal, type CTACard, type CTACardStyle, CTACardWithMechanisms, type LandingPageSettings, LandingPageViewer, type LayoutSectionKey, type Link, ModernAudioPlayer, type SectionSpacing, type SocialLink };

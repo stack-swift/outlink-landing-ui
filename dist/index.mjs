@@ -10025,6 +10025,42 @@ function LandingPageViewer({
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
+  const DEFAULT_LAYOUT_SECTIONS = [
+    "header",
+    "bio",
+    "social_block",
+    "voice_note",
+    "cta_block",
+    "gallery",
+    "branding"
+  ];
+  let layoutSections = settings.layout_sections && settings.layout_sections.length ? settings.layout_sections : DEFAULT_LAYOUT_SECTIONS;
+  layoutSections = [
+    ...layoutSections.filter((k2) => k2 !== "branding"),
+    "branding"
+  ];
+  const isSectionEnabled = (key) => key === "branding" ? true : layoutSections.includes(key);
+  const getSectionOrder = (key) => {
+    const index = layoutSections.indexOf(key);
+    if (index === -1) return 999;
+    return (index + 1) * 10;
+  };
+  const getSectionSpacingClass = (key) => {
+    var _a;
+    if (key === "branding") {
+      return "mt-3";
+    }
+    const spacing = ((_a = settings.section_spacing) == null ? void 0 : _a[key]) || "normal";
+    switch (spacing) {
+      case "tight":
+        return "mt-1";
+      case "relaxed":
+        return "mt-6";
+      case "normal":
+      default:
+        return "mt-3";
+    }
+  };
   const rawGallery = settings.gallery_images;
   const galleryImages = Array.isArray(rawGallery) ? rawGallery.slice(0, 6) : [];
   const hasGallery = galleryImages.length > 0;
@@ -10166,13 +10202,16 @@ function LandingPageViewer({
               className: "flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10",
               style: { marginTop: isFullMode ? "0" : "0" },
               children: /* @__PURE__ */ jsx20("div", { className: "w-full max-w-md", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col items-center gap-4", children: [
-                (isFullMode || isVideoMode) && /* @__PURE__ */ jsxs15(
+                (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ jsxs15(
                   motion10.div,
                   {
                     initial: { opacity: 0, y: 10 },
                     animate: { opacity: 1, y: 0 },
                     transition: { delay: 0.2, duration: 0.3 },
-                    className: "flex flex-col items-center gap-2 mt-4",
+                    className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                      "header"
+                    )}`,
+                    style: { order: getSectionOrder("header") },
                     children: [
                       /* @__PURE__ */ jsxs15("div", { className: "flex items-center gap-2", children: [
                         /* @__PURE__ */ jsx20(
@@ -10258,13 +10297,16 @@ function LandingPageViewer({
                     )
                   }
                 ),
-                mode === "avatar" && /* @__PURE__ */ jsxs15(
+                mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ jsxs15(
                   motion10.div,
                   {
                     initial: { opacity: 0, y: 10 },
                     animate: { opacity: 1, y: 0 },
                     transition: { delay: 0.2, duration: 0.3 },
-                    className: "flex flex-col items-center gap-1",
+                    className: `flex flex-col items-center gap-1 ${getSectionSpacingClass(
+                      "header"
+                    )}`,
+                    style: { order: getSectionOrder("header") },
                     children: [
                       /* @__PURE__ */ jsxs15("div", { className: "flex items-center gap-2", children: [
                         /* @__PURE__ */ jsx20(
@@ -10315,65 +10357,79 @@ function LandingPageViewer({
                     ]
                   }
                 ),
-                settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ jsx20(
-                  motion10.div,
+                isSectionEnabled("social_block") && /* @__PURE__ */ jsxs15(
+                  "div",
                   {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { delay: 0.3, duration: 0.3 },
-                    className: "flex flex-wrap items-center justify-center gap-2",
-                    children: settings.social_links.map((social, index) => /* @__PURE__ */ jsx20(
-                      button_default,
-                      {
-                        as: "a",
-                        href: social.url,
-                        target: "_blank",
-                        rel: "noopener noreferrer",
-                        isIconOnly: true,
-                        size: "sm",
-                        variant: "flat",
-                        className: "hover:scale-110 transition-transform",
-                        children: /* @__PURE__ */ jsx20(Icon9, { icon: social.icon, width: 20 })
-                      },
-                      index
-                    ))
-                  }
-                ),
-                settings.show_follower_count && settings.follower_count > 0 && /* @__PURE__ */ jsx20(
-                  motion10.div,
-                  {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { delay: 0.4, duration: 0.3 },
-                    className: "text-center",
-                    children: /* @__PURE__ */ jsxs15(
-                      "p",
-                      {
-                        className: "text-sm",
-                        style: { color: themeColors.textSecondary },
-                        children: [
-                          /* @__PURE__ */ jsx20(
-                            "span",
+                    className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                      "social_block"
+                    )}`,
+                    style: { order: getSectionOrder("social_block") },
+                    children: [
+                      settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ jsx20(
+                        motion10.div,
+                        {
+                          initial: { opacity: 0 },
+                          animate: { opacity: 1 },
+                          transition: { delay: 0.3, duration: 0.3 },
+                          className: "flex flex-wrap items-center justify-center gap-2",
+                          children: settings.social_links.map((social, index) => /* @__PURE__ */ jsx20(
+                            button_default,
                             {
-                              className: "font-semibold",
-                              style: { color: themeColors.textPrimary },
-                              children: settings.follower_count.toLocaleString()
+                              as: "a",
+                              href: social.url,
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                              isIconOnly: true,
+                              size: "sm",
+                              variant: "flat",
+                              className: "hover:scale-110 transition-transform",
+                              children: /* @__PURE__ */ jsx20(Icon9, { icon: social.icon, width: 20 })
+                            },
+                            index
+                          ))
+                        }
+                      ),
+                      settings.show_follower_count && settings.follower_count > 0 && /* @__PURE__ */ jsx20(
+                        motion10.div,
+                        {
+                          initial: { opacity: 0 },
+                          animate: { opacity: 1 },
+                          transition: { delay: 0.4, duration: 0.3 },
+                          className: "text-center",
+                          children: /* @__PURE__ */ jsxs15(
+                            "p",
+                            {
+                              className: "text-sm",
+                              style: { color: themeColors.textSecondary },
+                              children: [
+                                /* @__PURE__ */ jsx20(
+                                  "span",
+                                  {
+                                    className: "font-semibold",
+                                    style: { color: themeColors.textPrimary },
+                                    children: settings.follower_count.toLocaleString()
+                                  }
+                                ),
+                                " ",
+                                "Total Followers"
+                              ]
                             }
-                          ),
-                          " ",
-                          "Total Followers"
-                        ]
-                      }
-                    )
+                          )
+                        }
+                      )
+                    ]
                   }
                 ),
-                settings.voice_note_url && /* @__PURE__ */ jsx20(
+                isSectionEnabled("voice_note") && settings.voice_note_url && /* @__PURE__ */ jsx20(
                   motion10.div,
                   {
                     initial: { opacity: 0, y: 10 },
                     animate: { opacity: 1, y: 0 },
                     transition: { delay: 0.45, duration: 0.3 },
-                    className: "w-full max-w-sm",
+                    className: `w-full max-w-sm ${getSectionSpacingClass(
+                      "voice_note"
+                    )}`,
+                    style: { order: getSectionOrder("voice_note") },
                     children: /* @__PURE__ */ jsx20(
                       ModernAudioPlayer,
                       {
@@ -10416,231 +10472,244 @@ function LandingPageViewer({
                     )
                   }
                 ),
-                settings.bio && /* @__PURE__ */ jsx20(
+                isSectionEnabled("bio") && settings.bio && /* @__PURE__ */ jsx20(
                   motion10.p,
                   {
                     initial: { opacity: 0 },
                     animate: { opacity: 1 },
                     transition: { delay: 0.5, duration: 0.3 },
-                    className: "text-center max-w-sm",
-                    style: { color: themeColors.textSecondary },
+                    className: `text-center max-w-sm ${getSectionSpacingClass(
+                      "bio"
+                    )}`,
+                    style: {
+                      color: themeColors.textSecondary,
+                      order: getSectionOrder("bio")
+                    },
                     children: settings.bio
                   }
                 ),
-                settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx20("div", { className: "w-full space-y-3 mt-4", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
-                  const getCardStyle = () => {
-                    switch (card2.style.type) {
-                      case "solid":
-                        return {
-                          background: card2.style.background_color || "#666"
-                        };
-                      case "gradient":
-                        return {
-                          background: card2.style.background_gradient ? `linear-gradient(135deg, ${card2.style.background_gradient.start}, ${card2.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
-                        };
-                      case "image":
-                        return {
-                          backgroundImage: card2.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card2.style.background_image})` : "none",
-                          backgroundSize: "cover",
-                          backgroundPosition: "center"
-                        };
-                      case "video":
-                        return { background: "#000" };
-                      default:
-                        return {};
-                    }
-                  };
-                  const handleCardClick = () => {
-                    if (isPreview) return;
-                    if (card2.require_18plus) {
-                      setShowingAgeConfirmationFor(card2.id);
-                      return;
-                    }
-                    trackClick(link.id, isPreview);
-                    const navUrl = wrapUrlForNavigation(
-                      card2.url,
-                      isPreview
-                    );
-                    if (!navUrl) return;
-                    window.location.href = navUrl;
-                  };
-                  const handleAgeConfirm = () => {
-                    trackClick(link.id, isPreview);
-                    const navUrl = wrapUrlForNavigation(
-                      card2.url,
-                      isPreview
-                    );
-                    if (!navUrl) return;
-                    window.location.href = navUrl;
-                  };
-                  const handleAgeCancel = () => {
-                    setShowingAgeConfirmationFor(null);
-                  };
-                  const renderCardContent = () => /* @__PURE__ */ jsx20(
-                    card_default,
-                    {
-                      isPressable: true,
-                      onPress: handleCardClick,
-                      className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
-                      style: getCardStyle(),
-                      children: /* @__PURE__ */ jsxs15(
-                        card_body_default,
-                        {
-                          className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
-                          children: [
-                            card2.style.type === "video" && card2.style.background_video && (() => {
-                              const fit = card2.style.background_fit || "fill";
-                              const focus = card2.style.background_focus || "top";
-                              const baseClasses = "absolute inset-0 w-full h-full opacity-60";
-                              const fitClass = fit === "fit" ? "object-contain" : "object-cover";
-                              let focusClass = "";
-                              if (fit === "fill") {
-                                if (focus === "top")
-                                  focusClass = "object-top";
-                                else if (focus === "bottom")
-                                  focusClass = "object-bottom";
-                                else focusClass = "object-center";
-                              }
-                              return /* @__PURE__ */ jsx20(
-                                "video",
-                                {
-                                  src: card2.style.background_video,
-                                  autoPlay: true,
-                                  loop: true,
-                                  muted: true,
-                                  playsInline: true,
-                                  className: `${baseClasses} ${fitClass} ${focusClass}`
-                                }
-                              );
-                            })(),
-                            /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
-                              card2.style.logo_icon && /* @__PURE__ */ jsxs15("div", { className: "mb-2", children: [
-                                /* @__PURE__ */ jsx20(
-                                  Icon9,
-                                  {
-                                    icon: card2.style.logo_icon,
-                                    width: 36,
-                                    style: {
-                                      color: card2.style.logo_color || "#fff",
-                                      filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
-                                    },
-                                    className: "mx-auto"
-                                  }
-                                ),
-                                card2.style.logo_name && /* @__PURE__ */ jsxs15(
-                                  "p",
-                                  {
-                                    className: "font-bold text-lg mt-1",
-                                    style: {
-                                      color: card2.style.logo_color || "#fff",
-                                      textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
-                                    },
-                                    children: [
-                                      card2.style.prefix_text && /* @__PURE__ */ jsx20("span", { className: "mr-1", children: card2.style.prefix_text }),
-                                      card2.style.logo_name
-                                    ]
-                                  }
-                                )
-                              ] }),
-                              /* @__PURE__ */ jsx20(
-                                "h3",
-                                {
-                                  className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
-                                  style: {
-                                    textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
-                                  },
-                                  children: card2.title
-                                }
-                              ),
-                              card2.description && /* @__PURE__ */ jsx20(
-                                "p",
-                                {
-                                  className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
-                                  style: {
-                                    textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
-                                  },
-                                  children: card2.description
-                                }
-                              )
-                            ] })
-                          ]
+                isSectionEnabled("cta_block") && /* @__PURE__ */ jsx20(
+                  "div",
+                  {
+                    className: `w-full ${getSectionSpacingClass("cta_block")}`,
+                    style: { order: getSectionOrder("cta_block") },
+                    children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx20("div", { className: "w-full space-y-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                      const getCardStyle = () => {
+                        switch (card2.style.type) {
+                          case "solid":
+                            return {
+                              background: card2.style.background_color || "#666"
+                            };
+                          case "gradient":
+                            return {
+                              background: card2.style.background_gradient ? `linear-gradient(135deg, ${card2.style.background_gradient.start}, ${card2.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
+                            };
+                          case "image":
+                            return {
+                              backgroundImage: card2.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card2.style.background_image})` : "none",
+                              backgroundSize: "cover",
+                              backgroundPosition: "center"
+                            };
+                          case "video":
+                            return { background: "#000" };
+                          default:
+                            return {};
                         }
-                      )
-                    }
-                  );
-                  const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ jsx20(
-                    CTACardWithMechanisms,
-                    {
-                      card: card2,
-                      onReveal: () => {
-                      },
-                      children: renderCardContent()
-                    }
-                  ) : renderCardContent();
-                  const finalContent = showingAgeConfirmationFor === card2.id && !isPreview ? /* @__PURE__ */ jsx20(
-                    AgeConfirmationModal,
-                    {
-                      isOpen: true,
-                      onConfirm: handleAgeConfirm,
-                      onCancel: handleAgeCancel,
-                      children: cardWithMechanisms
-                    }
-                  ) : cardWithMechanisms;
-                  return /* @__PURE__ */ jsx20(
-                    motion10.div,
-                    {
-                      initial: { opacity: 0, y: 10 },
-                      animate: { opacity: 1, y: 0 },
-                      transition: {
-                        delay: 0.6 + index * 0.1,
-                        duration: 0.3
-                      },
-                      className: "relative",
-                      children: finalContent
-                    },
-                    card2.id
-                  );
-                }) }) : (
-                  // Fallback to default button if no CTA cards
-                  /* @__PURE__ */ jsx20(
-                    motion10.div,
-                    {
-                      initial: { opacity: 0, y: 10 },
-                      animate: { opacity: 1, y: 0 },
-                      transition: { delay: 0.6, duration: 0.3 },
-                      className: "w-full px-4",
-                      children: /* @__PURE__ */ jsx20(
+                      };
+                      const handleCardClick = () => {
+                        if (isPreview) return;
+                        if (card2.require_18plus) {
+                          setShowingAgeConfirmationFor(card2.id);
+                          return;
+                        }
+                        trackClick(link.id, isPreview);
+                        const navUrl = wrapUrlForNavigation(
+                          card2.url,
+                          isPreview
+                        );
+                        if (!navUrl) return;
+                        window.location.href = navUrl;
+                      };
+                      const handleAgeConfirm = () => {
+                        trackClick(link.id, isPreview);
+                        const navUrl = wrapUrlForNavigation(
+                          card2.url,
+                          isPreview
+                        );
+                        if (!navUrl) return;
+                        window.location.href = navUrl;
+                      };
+                      const handleAgeCancel = () => {
+                        setShowingAgeConfirmationFor(null);
+                      };
+                      const renderCardContent = () => /* @__PURE__ */ jsx20(
                         card_default,
                         {
                           isPressable: true,
-                          onPress: handleButtonClick,
-                          className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
-                          children: /* @__PURE__ */ jsx20(card_body_default, { className: "p-6", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-between", children: [
-                            /* @__PURE__ */ jsxs15("div", { className: "flex-1", children: [
-                              /* @__PURE__ */ jsx20("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                              link.description && /* @__PURE__ */ jsx20("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                            ] }),
-                            /* @__PURE__ */ jsx20(
-                              Icon9,
-                              {
-                                icon: "solar:arrow-right-line-duotone",
-                                width: 24,
-                                className: "text-default-400 ml-4"
-                              }
-                            )
-                          ] }) })
+                          onPress: handleCardClick,
+                          className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
+                          style: getCardStyle(),
+                          children: /* @__PURE__ */ jsxs15(
+                            card_body_default,
+                            {
+                              className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
+                              children: [
+                                card2.style.type === "video" && card2.style.background_video && (() => {
+                                  const fit = card2.style.background_fit || "fill";
+                                  const focus = card2.style.background_focus || "top";
+                                  const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                                  const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                                  let focusClass = "";
+                                  if (fit === "fill") {
+                                    if (focus === "top")
+                                      focusClass = "object-top";
+                                    else if (focus === "bottom")
+                                      focusClass = "object-bottom";
+                                    else focusClass = "object-center";
+                                  }
+                                  return /* @__PURE__ */ jsx20(
+                                    "video",
+                                    {
+                                      src: card2.style.background_video,
+                                      autoPlay: true,
+                                      loop: true,
+                                      muted: true,
+                                      playsInline: true,
+                                      className: `${baseClasses} ${fitClass} ${focusClass}`
+                                    }
+                                  );
+                                })(),
+                                /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
+                                  card2.style.logo_icon && /* @__PURE__ */ jsxs15("div", { className: "mb-2", children: [
+                                    /* @__PURE__ */ jsx20(
+                                      Icon9,
+                                      {
+                                        icon: card2.style.logo_icon,
+                                        width: 36,
+                                        style: {
+                                          color: card2.style.logo_color || "#fff",
+                                          filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
+                                        },
+                                        className: "mx-auto"
+                                      }
+                                    ),
+                                    card2.style.logo_name && /* @__PURE__ */ jsxs15(
+                                      "p",
+                                      {
+                                        className: "font-bold text-lg mt-1",
+                                        style: {
+                                          color: card2.style.logo_color || "#fff",
+                                          textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
+                                        },
+                                        children: [
+                                          card2.style.prefix_text && /* @__PURE__ */ jsx20("span", { className: "mr-1", children: card2.style.prefix_text }),
+                                          card2.style.logo_name
+                                        ]
+                                      }
+                                    )
+                                  ] }),
+                                  /* @__PURE__ */ jsx20(
+                                    "h3",
+                                    {
+                                      className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                      style: {
+                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
+                                      },
+                                      children: card2.title
+                                    }
+                                  ),
+                                  card2.description && /* @__PURE__ */ jsx20(
+                                    "p",
+                                    {
+                                      className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                      style: {
+                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
+                                      },
+                                      children: card2.description
+                                    }
+                                  )
+                                ] })
+                              ]
+                            }
+                          )
+                        }
+                      );
+                      const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ jsx20(
+                        CTACardWithMechanisms,
+                        {
+                          card: card2,
+                          onReveal: () => {
+                          },
+                          children: renderCardContent()
+                        }
+                      ) : renderCardContent();
+                      const finalContent = showingAgeConfirmationFor === card2.id && !isPreview ? /* @__PURE__ */ jsx20(
+                        AgeConfirmationModal,
+                        {
+                          isOpen: true,
+                          onConfirm: handleAgeConfirm,
+                          onCancel: handleAgeCancel,
+                          children: cardWithMechanisms
+                        }
+                      ) : cardWithMechanisms;
+                      return /* @__PURE__ */ jsx20(
+                        motion10.div,
+                        {
+                          initial: { opacity: 0, y: 10 },
+                          animate: { opacity: 1, y: 0 },
+                          transition: {
+                            delay: 0.6 + index * 0.1,
+                            duration: 0.3
+                          },
+                          className: "relative",
+                          children: finalContent
+                        },
+                        card2.id
+                      );
+                    }) }) : (
+                      // Fallback to default button if no CTA cards
+                      /* @__PURE__ */ jsx20(
+                        motion10.div,
+                        {
+                          initial: { opacity: 0, y: 10 },
+                          animate: { opacity: 1, y: 0 },
+                          transition: { delay: 0.6, duration: 0.3 },
+                          className: "w-full px-4",
+                          children: /* @__PURE__ */ jsx20(
+                            card_default,
+                            {
+                              isPressable: true,
+                              onPress: handleButtonClick,
+                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
+                              children: /* @__PURE__ */ jsx20(card_body_default, { className: "p-6", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-between", children: [
+                                /* @__PURE__ */ jsxs15("div", { className: "flex-1", children: [
+                                  /* @__PURE__ */ jsx20("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                  link.description && /* @__PURE__ */ jsx20("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                ] }),
+                                /* @__PURE__ */ jsx20(
+                                  Icon9,
+                                  {
+                                    icon: "solar:arrow-right-line-duotone",
+                                    width: 24,
+                                    className: "text-default-400 ml-4"
+                                  }
+                                )
+                              ] }) })
+                            }
+                          )
                         }
                       )
-                    }
-                  )
+                    )
+                  }
                 ),
-                hasGallery && /* @__PURE__ */ jsx20(
+                isSectionEnabled("gallery") && hasGallery && /* @__PURE__ */ jsx20(
                   motion10.div,
                   {
                     initial: { opacity: 0, y: 10 },
                     animate: { opacity: 1, y: 0 },
                     transition: { delay: 0.7, duration: 0.3 },
-                    className: "w-full mt-6",
+                    className: `w-full ${getSectionSpacingClass("gallery")}`,
+                    style: { order: getSectionOrder("gallery") },
                     children: (() => {
                       const total = galleryImages.length;
                       if (total === 0) return null;
@@ -10739,13 +10808,16 @@ function LandingPageViewer({
                     })()
                   }
                 ),
-                /* @__PURE__ */ jsx20(
+                isSectionEnabled("branding") && /* @__PURE__ */ jsx20(
                   motion10.div,
                   {
                     initial: { opacity: 0 },
                     animate: { opacity: 1 },
                     transition: { delay: 0.8, duration: 0.3 },
-                    className: "mt-8 pb-8 flex justify-center",
+                    className: `${getSectionSpacingClass(
+                      "branding"
+                    )} pb-8 flex justify-center`,
+                    style: { order: getSectionOrder("branding") },
                     children: isFreePlan ? /* @__PURE__ */ jsxs15(
                       "a",
                       {
