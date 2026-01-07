@@ -248,7 +248,7 @@ export function LandingPageViewer({
   {/* Free-plan vertical ribbon ad on the right edge (desktop only) */}
   {isFreePlan && (
   <a
-    href="https://www.outlink.bio/"
+    href="https://app.outlink.bio/signup"
     target="_blank"
     rel="noreferrer"
     className="absolute inset-x-0 top-0 z-20"

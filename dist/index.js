@@ -10173,7 +10173,7 @@ function LandingPageViewer({
           isFreePlan && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
             "a",
             {
-              href: "https://www.outlink.bio/",
+              href: "https://app.outlink.bio/signup",
               target: "_blank",
               rel: "noreferrer",
               className: "absolute inset-x-0 top-0 z-20",
