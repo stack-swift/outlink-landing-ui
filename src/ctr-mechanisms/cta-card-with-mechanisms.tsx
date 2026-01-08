@@ -125,7 +125,9 @@ export function CTACardWithMechanisms({
     !isRevealed &&
     (mechanisms?.click_to_reveal?.enabled ||
       mechanisms?.progress_bar?.enabled ||
-      mechanisms?.countdown_timer?.enabled);
+      mechanisms?.countdown_timer?.enabled ||
+      mechanisms?.blur_preview?.enabled);
+      
 
   const showBadges = !blockingActive;
 

@@ -9766,7 +9766,7 @@ function CTACardWithMechanisms({
   onReveal,
   children
 }) {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
   const [isRevealed, setIsRevealed] = useState10(false);
   const [showConfetti, setShowConfetti] = useState10(false);
   const mechanisms = card2.ctr_mechanisms;
@@ -9835,15 +9835,15 @@ function CTACardWithMechanisms({
       }
     );
   }
-  const blockingActive = !isRevealed && (((_g = mechanisms == null ? void 0 : mechanisms.click_to_reveal) == null ? void 0 : _g.enabled) || ((_h = mechanisms == null ? void 0 : mechanisms.progress_bar) == null ? void 0 : _h.enabled) || ((_i = mechanisms == null ? void 0 : mechanisms.countdown_timer) == null ? void 0 : _i.enabled));
+  const blockingActive = !isRevealed && (((_g = mechanisms == null ? void 0 : mechanisms.click_to_reveal) == null ? void 0 : _g.enabled) || ((_h = mechanisms == null ? void 0 : mechanisms.progress_bar) == null ? void 0 : _h.enabled) || ((_i = mechanisms == null ? void 0 : mechanisms.countdown_timer) == null ? void 0 : _i.enabled) || ((_j = mechanisms == null ? void 0 : mechanisms.blur_preview) == null ? void 0 : _j.enabled));
   const showBadges = !blockingActive;
   const hasMultipleBadges = showBadges && [
-    (_j = mechanisms == null ? void 0 : mechanisms.limited_slots) == null ? void 0 : _j.enabled,
-    (_k = mechanisms == null ? void 0 : mechanisms.live_viewers) == null ? void 0 : _k.enabled,
-    (_l = mechanisms == null ? void 0 : mechanisms.exclusive_badge) == null ? void 0 : _l.enabled
+    (_k = mechanisms == null ? void 0 : mechanisms.limited_slots) == null ? void 0 : _k.enabled,
+    (_l = mechanisms == null ? void 0 : mechanisms.live_viewers) == null ? void 0 : _l.enabled,
+    (_m = mechanisms == null ? void 0 : mechanisms.exclusive_badge) == null ? void 0 : _m.enabled
   ].filter(Boolean).length > 1;
   return /* @__PURE__ */ jsxs13("div", { className: "relative overflow-hidden rounded-xl", children: [
-    showBadges && ((_m = mechanisms == null ? void 0 : mechanisms.limited_slots) == null ? void 0 : _m.enabled) && /* @__PURE__ */ jsx18(
+    showBadges && ((_n = mechanisms == null ? void 0 : mechanisms.limited_slots) == null ? void 0 : _n.enabled) && /* @__PURE__ */ jsx18(
       ScarcityBadge,
       {
         type: "slots",
@@ -9852,14 +9852,14 @@ function CTACardWithMechanisms({
         message: mechanisms.limited_slots.message
       }
     ),
-    showBadges && ((_n = mechanisms == null ? void 0 : mechanisms.live_viewers) == null ? void 0 : _n.enabled) && /* @__PURE__ */ jsx18(
+    showBadges && ((_o = mechanisms == null ? void 0 : mechanisms.live_viewers) == null ? void 0 : _o.enabled) && /* @__PURE__ */ jsx18(
       ScarcityBadge,
       {
         type: "viewers",
         count: mechanisms.live_viewers.count
       }
     ),
-    showBadges && ((_o = mechanisms == null ? void 0 : mechanisms.exclusive_badge) == null ? void 0 : _o.enabled) && /* @__PURE__ */ jsx18(
+    showBadges && ((_p = mechanisms == null ? void 0 : mechanisms.exclusive_badge) == null ? void 0 : _p.enabled) && /* @__PURE__ */ jsx18(
       motion8.div,
       {
         initial: { opacity: 0, scale: 0.8 },
