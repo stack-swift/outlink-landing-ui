@@ -205,14 +205,14 @@ export function LandingPageViewer({
     // Auto‑redirect to a CTA button after N seconds (optional)
  // Auto‑redirect to a CTA button after N seconds (optional)
 useEffect(() => {
-  console.log("autoRedirect check", {
-    isPreview,
-    linkType: link.link_type,
-    enabled: settings.auto_redirect_enabled,
-    delay: settings.auto_redirect_delay_seconds,
-    ctas: settings.cta_cards?.length,
-    targetId: settings.auto_redirect_cta_id,
-  });
+  // console.log("autoRedirect check", {
+  //   isPreview,
+  //   linkType: link.link_type,
+  //   enabled: settings.auto_redirect_enabled,
+  //   delay: settings.auto_redirect_delay_seconds,
+  //   ctas: settings.cta_cards?.length,
+  //   targetId: settings.auto_redirect_cta_id,
+  // });
 
   if (isPreview) return;
   if (link.link_type !== "whitehat") return;

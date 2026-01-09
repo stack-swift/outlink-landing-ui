@@ -10075,15 +10075,7 @@ function LandingPageViewer({
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
   useEffect8(() => {
-    var _a, _b;
-    console.log("autoRedirect check", {
-      isPreview,
-      linkType: link.link_type,
-      enabled: settings.auto_redirect_enabled,
-      delay: settings.auto_redirect_delay_seconds,
-      ctas: (_a = settings.cta_cards) == null ? void 0 : _a.length,
-      targetId: settings.auto_redirect_cta_id
-    });
+    var _a;
     if (isPreview) return;
     if (link.link_type !== "whitehat") return;
     if (!settings.auto_redirect_enabled) return;
@@ -10093,7 +10085,7 @@ function LandingPageViewer({
     if (!targetId) return;
     const targetCard = cards.find((c2) => c2.id === targetId);
     if (!targetCard || !targetCard.url) return;
-    const delaySec = (_b = settings.auto_redirect_delay_seconds) != null ? _b : 10;
+    const delaySec = (_a = settings.auto_redirect_delay_seconds) != null ? _a : 10;
     const delayMs = Math.max(1, delaySec) * 1e3;
     const timer = window.setTimeout(() => {
       trackClick(link.id, isPreview);
