@@ -10074,6 +10074,42 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
+  useEffect8(() => {
+    var _a, _b;
+    console.log("autoRedirect check", {
+      isPreview,
+      linkType: link.link_type,
+      enabled: settings.auto_redirect_enabled,
+      delay: settings.auto_redirect_delay_seconds,
+      ctas: (_a = settings.cta_cards) == null ? void 0 : _a.length,
+      targetId: settings.auto_redirect_cta_id
+    });
+    if (isPreview) return;
+    if (link.link_type !== "whitehat") return;
+    if (!settings.auto_redirect_enabled) return;
+    const cards = settings.cta_cards || [];
+    if (!cards.length) return;
+    const targetId = settings.auto_redirect_cta_id || cards[0] && cards[0].id || null;
+    if (!targetId) return;
+    const targetCard = cards.find((c2) => c2.id === targetId);
+    if (!targetCard || !targetCard.url) return;
+    const delaySec = (_b = settings.auto_redirect_delay_seconds) != null ? _b : 10;
+    const delayMs = Math.max(1, delaySec) * 1e3;
+    const timer = window.setTimeout(() => {
+      trackClick(link.id, isPreview);
+      const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
+      if (!navUrl) return;
+      window.location.href = navUrl;
+    }, delayMs);
+    return () => window.clearTimeout(timer);
+  }, [
+    isPreview,
+    settings.auto_redirect_enabled,
+    settings.auto_redirect_delay_seconds,
+    settings.auto_redirect_cta_id,
+    settings.cta_cards,
+    link.id
+  ]);
   const heroHeightClass = (() => {
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
