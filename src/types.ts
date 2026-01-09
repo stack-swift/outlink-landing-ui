@@ -11,13 +11,11 @@ export interface CTACardStyle {
   background_gradient?: { start: string; end: string } | null;
   background_image?: string | null;
   background_video?: string | null;
-
   // Brand/logo
   logo_icon?: string | null;
   logo_name?: string | null;
   logo_color?: string | null;
   prefix_text?: string | null;
-
   // Video framing (for type === "video")
   background_fit?: "fill" | "fit"; // fill = cover, fit = contain
   background_focus?: "top" | "center" | "bottom";
@@ -94,6 +92,11 @@ export interface LandingPageSettings {
 
   // Optional voice note
   voice_note_url: string | null;
+
+  // Auto-redirect behaviour (optional)
+  auto_redirect_enabled?: boolean;
+  auto_redirect_delay_seconds?: number;
+  auto_redirect_cta_id?: string | null;
 }
 
 export interface Link {

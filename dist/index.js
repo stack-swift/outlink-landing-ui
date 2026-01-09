@@ -9970,7 +9970,7 @@ function AgeConfirmationModal({
             {
               icon: "solar:shield-warning-bold-duotone",
               width: 36,
-              className: "text-warning mx-auto drop-shadow-lg"
+              className: "mx-auto drop-shadow-lg text-[#EC4899]"
             }
           ),
           /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "space-y-0.5", children: [

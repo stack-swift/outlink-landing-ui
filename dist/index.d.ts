@@ -66,6 +66,9 @@ interface LandingPageSettings {
     show_domain_handle: boolean;
     profile_display_mode: "full" | "avatar" | "video";
     voice_note_url: string | null;
+    auto_redirect_enabled?: boolean;
+    auto_redirect_delay_seconds?: number;
+    auto_redirect_cta_id?: string | null;
 }
 interface Link {
     id: string;

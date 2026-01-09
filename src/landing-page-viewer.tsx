@@ -202,6 +202,43 @@ export function LandingPageViewer({
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
 
+    // Auto‑redirect to a CTA button after N seconds (optional)
+    useEffect(() => {
+      if (isPreview) return;
+      if (link.link_type !== "whitehat") return;
+
+  if (!settings.auto_redirect_enabled) return;
+      const cards = settings.cta_cards || [];
+      if (!cards.length) return;
+  
+      const targetId =
+        settings.auto_redirect_cta_id || (cards[0] && cards[0].id) || null;
+      if (!targetId) return;
+  
+      const targetCard = cards.find((c) => c.id === targetId);
+      if (!targetCard || !targetCard.url) return;
+  
+      const delaySec = settings.auto_redirect_delay_seconds ?? 10;
+      const delayMs = Math.max(1, delaySec) * 1000;
+  
+      const timer = window.setTimeout(() => {
+        // track + navigate like a normal CTA click
+        trackClick(link.id, isPreview);
+        const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
+        if (!navUrl) return;
+        window.location.href = navUrl;
+      }, delayMs);
+  
+      return () => window.clearTimeout(timer);
+    }, [
+      isPreview,
+      settings.auto_redirect_enabled,
+      settings.auto_redirect_delay_seconds,
+      settings.auto_redirect_cta_id,
+      settings.cta_cards,
+      link.id,
+    ]);
+
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
