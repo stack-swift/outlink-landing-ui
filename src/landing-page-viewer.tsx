@@ -256,7 +256,10 @@ useEffect(() => {
   })();
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div
+      className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
+      style={{ paddingTop: "env(safe-area-inset-top)" }}
+    >
       {/* Blurred background for desktop - only shows on larger screens */}
       {isVideoMode && settings.header_video_url ? (
         <video

@@ -10163,783 +10163,790 @@ function LandingPageViewer({
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
   })();
-  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "min-h-screen flex items-center justify-center relative overflow-hidden", children: [
-    isVideoMode && settings.header_video_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-      "video",
-      {
-        className: "hidden md:block absolute inset-0 z-0 w-full h-full object-cover",
-        src: settings.header_video_url,
-        autoPlay: true,
-        loop: true,
-        muted: true,
-        playsInline: true,
-        "aria-hidden": "true",
-        style: {
-          filter: "blur(80px) brightness(0.4)",
-          transform: "scale(1.1)"
-        }
-      }
-    ) : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-      "div",
-      {
-        className: "hidden md:block absolute inset-0 z-0",
-        style: {
-          backgroundImage: `url(${settings.avatar_url})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(80px) brightness(0.4)",
-          transform: "scale(1.1)"
-        }
-      }
-    ) : null,
-    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-      "div",
-      {
-        className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
-        style: { backgroundColor: themeColors.background },
-        children: [
-          isFreePlan && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-            "a",
-            {
-              href: "https://app.outlink.bio/signup",
-              target: "_blank",
-              rel: "noreferrer",
-              className: "absolute inset-x-0 top-0 z-20",
-              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_react50.Icon,
-                  {
-                    icon: "solar:arrow-right-linear",
-                    width: 12,
-                    className: "text-white"
-                  }
-                )
-              ] })
+  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+    "div",
+    {
+      className: "min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden",
+      style: { paddingTop: "env(safe-area-inset-top)" },
+      children: [
+        isVideoMode && settings.header_video_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "video",
+          {
+            className: "hidden md:block absolute inset-0 z-0 w-full h-full object-cover",
+            src: settings.header_video_url,
+            autoPlay: true,
+            loop: true,
+            muted: true,
+            playsInline: true,
+            "aria-hidden": "true",
+            style: {
+              filter: "blur(80px) brightness(0.4)",
+              transform: "scale(1.1)"
             }
-          ),
-          isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-            import_framer_motion12.motion.div,
-            {
-              initial: { opacity: 0 },
-              animate: { opacity: 1 },
-              transition: { duration: 0.6 },
-              className: `relative w-full ${heroHeightClass}`,
-              children: isVideoMode ? (() => {
-                if (settings.header_video_url) {
-                  const focus = settings.header_video_focus || "center";
-                  let focusClass = "object-center";
-                  if (focus === "top") focusClass = "object-top";
-                  else if (focus === "bottom") focusClass = "object-bottom";
-                  return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                      "video",
+          }
+        ) : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          "div",
+          {
+            className: "hidden md:block absolute inset-0 z-0",
+            style: {
+              backgroundImage: `url(${settings.avatar_url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              filter: "blur(80px) brightness(0.4)",
+              transform: "scale(1.1)"
+            }
+          }
+        ) : null,
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+          "div",
+          {
+            className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
+            style: { backgroundColor: themeColors.background },
+            children: [
+              isFreePlan && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                "a",
+                {
+                  href: "https://app.outlink.bio/signup",
+                  target: "_blank",
+                  rel: "noreferrer",
+                  className: "absolute inset-x-0 top-0 z-20",
+                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_react50.Icon,
                       {
-                        src: settings.header_video_url,
-                        autoPlay: true,
-                        loop: true,
-                        muted: true,
-                        playsInline: true,
-                        className: `w-full h-full object-cover ${focusClass}`
+                        icon: "solar:arrow-right-linear",
+                        width: 12,
+                        className: "text-white"
+                      }
+                    )
+                  ] })
+                }
+              ),
+              isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                import_framer_motion12.motion.div,
+                {
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.6 },
+                  className: `relative w-full ${heroHeightClass}`,
+                  children: isVideoMode ? (() => {
+                    if (settings.header_video_url) {
+                      const focus = settings.header_video_focus || "center";
+                      let focusClass = "object-center";
+                      if (focus === "top") focusClass = "object-top";
+                      else if (focus === "bottom") focusClass = "object-bottom";
+                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "video",
+                          {
+                            src: settings.header_video_url,
+                            autoPlay: true,
+                            loop: true,
+                            muted: true,
+                            playsInline: true,
+                            className: `w-full h-full object-cover ${focusClass}`
+                          }
+                        ) }),
+                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "div",
+                          {
+                            className: "absolute inset-x-0 bottom-0 h-48 pointer-events-none",
+                            style: {
+                              background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
+                            }
+                          }
+                        )
+                      ] });
+                    }
+                    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_react50.Icon,
+                      {
+                        icon: "solar:clapperboard-play-bold-duotone",
+                        className: "w-16 h-16 text-default-300"
+                      }
+                    ) });
+                  })() : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      "img",
+                      {
+                        src: settings.avatar_url,
+                        alt: settings.display_name || link.title || "Profile",
+                        className: "w-full h-full object-cover object-center"
                       }
                     ) }),
                     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                       "div",
                       {
-                        className: "absolute inset-x-0 bottom-0 h-48 pointer-events-none",
+                        className: "absolute inset-x-0 bottom-0 h-32 pointer-events-none",
                         style: {
                           background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
                         }
                       }
                     )
-                  ] });
-                }
-                return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_react50.Icon,
-                  {
-                    icon: "solar:clapperboard-play-bold-duotone",
-                    className: "w-16 h-16 text-default-300"
-                  }
-                ) });
-              })() : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  "img",
-                  {
-                    src: settings.avatar_url,
-                    alt: settings.display_name || link.title || "Profile",
-                    className: "w-full h-full object-cover object-center"
-                  }
-                ) }),
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  "div",
-                  {
-                    className: "absolute inset-x-0 bottom-0 h-32 pointer-events-none",
-                    style: {
-                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
+                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                    import_react50.Icon,
+                    {
+                      icon: "solar:user-bold-duotone",
+                      className: "w-24 h-24 text-default-300"
                     }
-                  }
-                )
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                import_react50.Icon,
-                {
-                  icon: "solar:user-bold-duotone",
-                  className: "w-24 h-24 text-default-300"
+                  ) })
                 }
-              ) })
-            }
-          ) : (
-            /* Avatar Mode - Circular Profile Picture */
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full pt-8" })
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-            "div",
-            {
-              className: "flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10",
-              style: { marginTop: isFullMode ? "0" : "0" },
-              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full max-w-md", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-4", children: [
-                (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { opacity: 0, y: 10 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { delay: 0.2, duration: 0.3 },
-                    className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                      "header"
-                    )}`,
-                    style: { order: getSectionOrder("header") },
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center gap-2", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "h1",
-                          {
-                            className: "text-2xl sm:text-3xl font-bold",
-                            style: { color: themeColors.textPrimary },
-                            children: settings.display_name || link.title || "Profile"
-                          }
-                        ),
-                        settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          import_react50.Icon,
-                          {
-                            icon: "solar:verified-check-bold",
-                            width: 24,
-                            style: { color: "#ec4899" }
-                          }
-                        ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          chip_default,
-                          {
-                            size: "sm",
-                            variant: "flat",
-                            className: "bg-[#ec4899]/10 text-[#ec4899]",
-                            startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                              import_react50.Icon,
-                              {
-                                icon: "solar:verified-check-bold",
-                                width: 16,
-                                style: { color: "#ec4899" }
-                              }
-                            ),
-                            children: "Verified"
-                          }
-                        ) })
-                      ] }),
-                      settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                        "p",
-                        {
-                          className: "text-sm",
-                          style: { color: themeColors.textSecondary },
-                          children: [
-                            link.domain,
-                            "/",
-                            link.path
-                          ]
-                        }
-                      )
-                    ]
-                  }
-                ),
-                mode === "avatar" && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { scale: 0.8 },
-                    animate: { scale: 1 },
-                    transition: { delay: 0.1, duration: 0.3 },
-                    className: "relative",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                      "div",
+              ) : (
+                /* Avatar Mode - Circular Profile Picture */
+                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full pt-8" })
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                "div",
+                {
+                  className: "flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10",
+                  style: { marginTop: isFullMode ? "0" : "0" },
+                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full max-w-md", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-4", children: [
+                    (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                      import_framer_motion12.motion.div,
                       {
-                        className: "rounded-full p-1",
-                        style: {
-                          background: "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)"
-                        },
-                        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          avatar_default,
-                          {
-                            src: settings.avatar_url || void 0,
-                            alt: settings.display_name || link.title || "Profile",
-                            className: "w-32 h-32 text-large border-4",
-                            style: { borderColor: themeColors.background },
-                            showFallback: true,
-                            fallback: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                              import_react50.Icon,
+                        initial: { opacity: 0, y: 10 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { delay: 0.2, duration: 0.3 },
+                        className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                          "header"
+                        )}`,
+                        style: { order: getSectionOrder("header") },
+                        children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              "h1",
                               {
-                                icon: "solar:user-bold-duotone",
-                                className: "w-20 h-20 text-default-500"
+                                className: "text-2xl sm:text-3xl font-bold",
+                                style: { color: themeColors.textPrimary },
+                                children: settings.display_name || link.title || "Profile"
                               }
-                            )
-                          }
-                        )
-                      }
-                    )
-                  }
-                ),
-                mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { opacity: 0, y: 10 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { delay: 0.2, duration: 0.3 },
-                    className: `flex flex-col items-center gap-1 ${getSectionSpacingClass(
-                      "header"
-                    )}`,
-                    style: { order: getSectionOrder("header") },
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center gap-2", children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "h1",
-                          {
-                            className: "text-2xl sm:text-3xl font-bold",
-                            style: { color: themeColors.textPrimary },
-                            children: settings.display_name || link.title || "Profile"
-                          }
-                        ),
-                        settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          import_react50.Icon,
-                          {
-                            icon: "solar:verified-check-bold",
-                            width: 24,
-                            style: { color: "#ec4899" }
-                          }
-                        ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          chip_default,
-                          {
-                            size: "sm",
-                            variant: "flat",
-                            className: "bg-[#ec4899]/10 text-[#ec4899]",
-                            startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            ),
+                            settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                               import_react50.Icon,
                               {
                                 icon: "solar:verified-check-bold",
-                                width: 16,
+                                width: 24,
                                 style: { color: "#ec4899" }
                               }
-                            ),
-                            children: "Verified"
-                          }
-                        ) })
-                      ] }),
-                      settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                        "p",
-                        {
-                          className: "text-sm",
-                          style: { color: themeColors.textSecondary },
-                          children: [
-                            link.domain,
-                            "/",
-                            link.path
-                          ]
-                        }
-                      )
-                    ]
-                  }
-                ),
-                isSectionEnabled("social_block") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                  "div",
-                  {
-                    className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                      "social_block"
-                    )}`,
-                    style: { order: getSectionOrder("social_block") },
-                    children: [
-                      settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        import_framer_motion12.motion.div,
-                        {
-                          initial: { opacity: 0 },
-                          animate: { opacity: 1 },
-                          transition: { delay: 0.3, duration: 0.3 },
-                          className: "flex flex-wrap items-center justify-center gap-3",
-                          children: settings.social_links.map((social, index) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            button_default,
-                            {
-                              as: "a",
-                              href: social.url,
-                              target: "_blank",
-                              rel: "noopener noreferrer",
-                              isIconOnly: true,
-                              size: "sm",
-                              variant: "light",
-                              className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
-                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                import_react50.Icon,
-                                {
-                                  icon: social.icon,
-                                  width: 20,
-                                  color: isLightMode ? "#ec4899" : "#e5e7eb"
-                                }
-                              )
-                            },
-                            index
-                          ))
-                        }
-                      ),
-                      settings.show_follower_count && settings.follower_count > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        import_framer_motion12.motion.div,
-                        {
-                          initial: { opacity: 0 },
-                          animate: { opacity: 1 },
-                          transition: { delay: 0.4, duration: 0.3 },
-                          className: "text-center",
-                          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                            ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              chip_default,
+                              {
+                                size: "sm",
+                                variant: "flat",
+                                className: "bg-[#ec4899]/10 text-[#ec4899]",
+                                startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  import_react50.Icon,
+                                  {
+                                    icon: "solar:verified-check-bold",
+                                    width: 16,
+                                    style: { color: "#ec4899" }
+                                  }
+                                ),
+                                children: "Verified"
+                              }
+                            ) })
+                          ] }),
+                          settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
                             "p",
                             {
                               className: "text-sm",
                               style: { color: themeColors.textSecondary },
                               children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  "span",
-                                  {
-                                    className: "font-semibold",
-                                    style: { color: themeColors.textPrimary },
-                                    children: settings.follower_count.toLocaleString()
-                                  }
-                                ),
-                                " ",
-                                "Total Followers"
+                                link.domain,
+                                "/",
+                                link.path
                               ]
                             }
                           )
-                        }
-                      )
-                    ]
-                  }
-                ),
-                isSectionEnabled("voice_note") && settings.voice_note_url && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { opacity: 0, y: 10 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { delay: 0.45, duration: 0.3 },
-                    className: `w-full max-w-sm ${getSectionSpacingClass(
-                      "voice_note"
-                    )}`,
-                    style: { order: getSectionOrder("voice_note") },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                      ModernAudioPlayer,
-                      {
-                        src: settings.voice_note_url,
-                        theme: settings.theme_mode
-                      }
-                    )
-                  }
-                ),
-                lightboxUrl && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  "div",
-                  {
-                    className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
-                    onClick: () => setLightboxUrl(null),
-                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                      "div",
-                      {
-                        className: "max-w-3xl max-h-[90vh] px-4",
-                        onClick: (e) => e.stopPropagation(),
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            "img",
-                            {
-                              src: lightboxUrl,
-                              alt: "Gallery full view",
-                              className: "w-full h-full object-contain rounded-2xl"
-                            }
-                          ),
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            "button",
-                            {
-                              type: "button",
-                              className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
-                              onClick: () => setLightboxUrl(null),
-                              children: "Close"
-                            }
-                          ) })
                         ]
                       }
-                    )
-                  }
-                ),
-                isSectionEnabled("bio") && settings.bio && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_framer_motion12.motion.p,
-                  {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { delay: 0.5, duration: 0.3 },
-                    className: `text-center max-w-sm ${getSectionSpacingClass(
-                      "bio"
-                    )}`,
-                    style: {
-                      color: themeColors.textSecondary,
-                      order: getSectionOrder("bio")
-                    },
-                    children: settings.bio
-                  }
-                ),
-                isSectionEnabled("cta_block") && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  "div",
-                  {
-                    className: `w-full ${getSectionSpacingClass("cta_block")}`,
-                    style: { order: getSectionOrder("cta_block") },
-                    children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full space-y-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
-                      const getCardStyle = () => {
-                        switch (card2.style.type) {
-                          case "solid":
-                            return {
-                              background: card2.style.background_color || "#666"
-                            };
-                          case "gradient":
-                            return {
-                              background: card2.style.background_gradient ? `linear-gradient(135deg, ${card2.style.background_gradient.start}, ${card2.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
-                            };
-                          case "image":
-                            return {
-                              backgroundImage: card2.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card2.style.background_image})` : "none",
-                              backgroundSize: "cover",
-                              backgroundPosition: "center"
-                            };
-                          case "video":
-                            return { background: "#000" };
-                          default:
-                            return {};
-                        }
-                      };
-                      const handleCardClick = () => {
-                        if (isPreview) return;
-                        if (card2.require_18plus) {
-                          setShowingAgeConfirmationFor(card2.id);
-                          return;
-                        }
-                        trackClick(link.id, isPreview);
-                        const navUrl = wrapUrlForNavigation(
-                          card2.url,
-                          isPreview
-                        );
-                        if (!navUrl) return;
-                        window.location.href = navUrl;
-                      };
-                      const handleAgeConfirm = () => {
-                        trackClick(link.id, isPreview);
-                        const navUrl = wrapUrlForNavigation(
-                          card2.url,
-                          isPreview
-                        );
-                        if (!navUrl) return;
-                        window.location.href = navUrl;
-                      };
-                      const handleAgeCancel = () => {
-                        setShowingAgeConfirmationFor(null);
-                      };
-                      const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        card_default,
-                        {
-                          isPressable: true,
-                          onPress: handleCardClick,
-                          className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
-                          style: getCardStyle(),
-                          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                            card_body_default,
-                            {
-                              className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
-                              children: [
-                                card2.style.type === "video" && card2.style.background_video && (() => {
-                                  const fit = card2.style.background_fit || "fill";
-                                  const focus = card2.style.background_focus || "top";
-                                  const baseClasses = "absolute inset-0 w-full h-full opacity-60";
-                                  const fitClass = fit === "fit" ? "object-contain" : "object-cover";
-                                  let focusClass = "";
-                                  if (fit === "fill") {
-                                    if (focus === "top")
-                                      focusClass = "object-top";
-                                    else if (focus === "bottom")
-                                      focusClass = "object-bottom";
-                                    else focusClass = "object-center";
+                    ),
+                    mode === "avatar" && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_framer_motion12.motion.div,
+                      {
+                        initial: { scale: 0.8 },
+                        animate: { scale: 1 },
+                        transition: { delay: 0.1, duration: 0.3 },
+                        className: "relative",
+                        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "div",
+                          {
+                            className: "rounded-full p-1",
+                            style: {
+                              background: "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)"
+                            },
+                            children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              avatar_default,
+                              {
+                                src: settings.avatar_url || void 0,
+                                alt: settings.display_name || link.title || "Profile",
+                                className: "w-32 h-32 text-large border-4",
+                                style: { borderColor: themeColors.background },
+                                showFallback: true,
+                                fallback: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  import_react50.Icon,
+                                  {
+                                    icon: "solar:user-bold-duotone",
+                                    className: "w-20 h-20 text-default-500"
                                   }
-                                  return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    "video",
-                                    {
-                                      src: card2.style.background_video,
-                                      autoPlay: true,
-                                      loop: true,
-                                      muted: true,
-                                      playsInline: true,
-                                      className: `${baseClasses} ${fitClass} ${focusClass}`
-                                    }
-                                  );
-                                })(),
-                                /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                  card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mb-2", children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                      import_react50.Icon,
-                                      {
-                                        icon: card2.style.logo_icon,
-                                        width: 36,
-                                        style: {
-                                          color: card2.style.logo_color || "#fff",
-                                          filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
-                                        },
-                                        className: "mx-auto"
-                                      }
-                                    ),
-                                    card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                                      "p",
-                                      {
-                                        className: "font-bold text-lg mt-1",
-                                        style: {
-                                          color: card2.style.logo_color || "#fff",
-                                          textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
-                                        },
-                                        children: [
-                                          card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "mr-1", children: card2.style.prefix_text }),
-                                          card2.style.logo_name
-                                        ]
-                                      }
-                                    )
-                                  ] }),
-                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    "h3",
-                                    {
-                                      className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
-                                      style: {
-                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
-                                      },
-                                      children: card2.title
-                                    }
-                                  ),
-                                  card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    "p",
-                                    {
-                                      className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
-                                      style: {
-                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
-                                      },
-                                      children: card2.description
-                                    }
-                                  )
-                                ] })
+                                )
+                              }
+                            )
+                          }
+                        )
+                      }
+                    ),
+                    mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                      import_framer_motion12.motion.div,
+                      {
+                        initial: { opacity: 0, y: 10 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { delay: 0.2, duration: 0.3 },
+                        className: `flex flex-col items-center gap-1 ${getSectionSpacingClass(
+                          "header"
+                        )}`,
+                        style: { order: getSectionOrder("header") },
+                        children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center gap-2", children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              "h1",
+                              {
+                                className: "text-2xl sm:text-3xl font-bold",
+                                style: { color: themeColors.textPrimary },
+                                children: settings.display_name || link.title || "Profile"
+                              }
+                            ),
+                            settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              import_react50.Icon,
+                              {
+                                icon: "solar:verified-check-bold",
+                                width: 24,
+                                style: { color: "#ec4899" }
+                              }
+                            ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              chip_default,
+                              {
+                                size: "sm",
+                                variant: "flat",
+                                className: "bg-[#ec4899]/10 text-[#ec4899]",
+                                startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  import_react50.Icon,
+                                  {
+                                    icon: "solar:verified-check-bold",
+                                    width: 16,
+                                    style: { color: "#ec4899" }
+                                  }
+                                ),
+                                children: "Verified"
+                              }
+                            ) })
+                          ] }),
+                          settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                            "p",
+                            {
+                              className: "text-sm",
+                              style: { color: themeColors.textSecondary },
+                              children: [
+                                link.domain,
+                                "/",
+                                link.path
                               ]
                             }
                           )
-                        }
-                      );
-                      const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        CTACardWithMechanisms,
-                        {
-                          card: card2,
-                          onReveal: () => {
-                          },
-                          children: renderCardContent()
-                        }
-                      ) : renderCardContent();
-                      const finalContent = showingAgeConfirmationFor === card2.id && !isPreview ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        AgeConfirmationModal,
-                        {
-                          isOpen: true,
-                          onConfirm: handleAgeConfirm,
-                          onCancel: handleAgeCancel,
-                          children: cardWithMechanisms
-                        }
-                      ) : cardWithMechanisms;
-                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        import_framer_motion12.motion.div,
-                        {
-                          initial: { opacity: 0, y: 10 },
-                          animate: { opacity: 1, y: 0 },
-                          transition: {
-                            delay: 0.6 + index * 0.1,
-                            duration: 0.3
-                          },
-                          className: "relative",
-                          children: finalContent
+                        ]
+                      }
+                    ),
+                    isSectionEnabled("social_block") && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                      "div",
+                      {
+                        className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                          "social_block"
+                        )}`,
+                        style: { order: getSectionOrder("social_block") },
+                        children: [
+                          settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            import_framer_motion12.motion.div,
+                            {
+                              initial: { opacity: 0 },
+                              animate: { opacity: 1 },
+                              transition: { delay: 0.3, duration: 0.3 },
+                              className: "flex flex-wrap items-center justify-center gap-3",
+                              children: settings.social_links.map((social, index) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                button_default,
+                                {
+                                  as: "a",
+                                  href: social.url,
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                  isIconOnly: true,
+                                  size: "sm",
+                                  variant: "light",
+                                  className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
+                                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                    import_react50.Icon,
+                                    {
+                                      icon: social.icon,
+                                      width: 20,
+                                      color: isLightMode ? "#ec4899" : "#e5e7eb"
+                                    }
+                                  )
+                                },
+                                index
+                              ))
+                            }
+                          ),
+                          settings.show_follower_count && settings.follower_count > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            import_framer_motion12.motion.div,
+                            {
+                              initial: { opacity: 0 },
+                              animate: { opacity: 1 },
+                              transition: { delay: 0.4, duration: 0.3 },
+                              className: "text-center",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                                "p",
+                                {
+                                  className: "text-sm",
+                                  style: { color: themeColors.textSecondary },
+                                  children: [
+                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      "span",
+                                      {
+                                        className: "font-semibold",
+                                        style: { color: themeColors.textPrimary },
+                                        children: settings.follower_count.toLocaleString()
+                                      }
+                                    ),
+                                    " ",
+                                    "Total Followers"
+                                  ]
+                                }
+                              )
+                            }
+                          )
+                        ]
+                      }
+                    ),
+                    isSectionEnabled("voice_note") && settings.voice_note_url && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_framer_motion12.motion.div,
+                      {
+                        initial: { opacity: 0, y: 10 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { delay: 0.45, duration: 0.3 },
+                        className: `w-full max-w-sm ${getSectionSpacingClass(
+                          "voice_note"
+                        )}`,
+                        style: { order: getSectionOrder("voice_note") },
+                        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          ModernAudioPlayer,
+                          {
+                            src: settings.voice_note_url,
+                            theme: settings.theme_mode
+                          }
+                        )
+                      }
+                    ),
+                    lightboxUrl && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      "div",
+                      {
+                        className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
+                        onClick: () => setLightboxUrl(null),
+                        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                          "div",
+                          {
+                            className: "max-w-3xl max-h-[90vh] px-4",
+                            onClick: (e) => e.stopPropagation(),
+                            children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "img",
+                                {
+                                  src: lightboxUrl,
+                                  alt: "Gallery full view",
+                                  className: "w-full h-full object-contain rounded-2xl"
+                                }
+                              ),
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "button",
+                                {
+                                  type: "button",
+                                  className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
+                                  onClick: () => setLightboxUrl(null),
+                                  children: "Close"
+                                }
+                              ) })
+                            ]
+                          }
+                        )
+                      }
+                    ),
+                    isSectionEnabled("bio") && settings.bio && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_framer_motion12.motion.p,
+                      {
+                        initial: { opacity: 0 },
+                        animate: { opacity: 1 },
+                        transition: { delay: 0.5, duration: 0.3 },
+                        className: `text-center max-w-sm ${getSectionSpacingClass(
+                          "bio"
+                        )}`,
+                        style: {
+                          color: themeColors.textSecondary,
+                          order: getSectionOrder("bio")
                         },
-                        card2.id
-                      );
-                    }) }) : (
-                      // Fallback to default button if no CTA cards
-                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                        import_framer_motion12.motion.div,
-                        {
-                          initial: { opacity: 0, y: 10 },
-                          animate: { opacity: 1, y: 0 },
-                          transition: { delay: 0.6, duration: 0.3 },
-                          className: "w-full px-4",
-                          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                        children: settings.bio
+                      }
+                    ),
+                    isSectionEnabled("cta_block") && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      "div",
+                      {
+                        className: `w-full ${getSectionSpacingClass("cta_block")}`,
+                        style: { order: getSectionOrder("cta_block") },
+                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full space-y-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                          const getCardStyle = () => {
+                            switch (card2.style.type) {
+                              case "solid":
+                                return {
+                                  background: card2.style.background_color || "#666"
+                                };
+                              case "gradient":
+                                return {
+                                  background: card2.style.background_gradient ? `linear-gradient(135deg, ${card2.style.background_gradient.start}, ${card2.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
+                                };
+                              case "image":
+                                return {
+                                  backgroundImage: card2.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card2.style.background_image})` : "none",
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center"
+                                };
+                              case "video":
+                                return { background: "#000" };
+                              default:
+                                return {};
+                            }
+                          };
+                          const handleCardClick = () => {
+                            if (isPreview) return;
+                            if (card2.require_18plus) {
+                              setShowingAgeConfirmationFor(card2.id);
+                              return;
+                            }
+                            trackClick(link.id, isPreview);
+                            const navUrl = wrapUrlForNavigation(
+                              card2.url,
+                              isPreview
+                            );
+                            if (!navUrl) return;
+                            window.location.href = navUrl;
+                          };
+                          const handleAgeConfirm = () => {
+                            trackClick(link.id, isPreview);
+                            const navUrl = wrapUrlForNavigation(
+                              card2.url,
+                              isPreview
+                            );
+                            if (!navUrl) return;
+                            window.location.href = navUrl;
+                          };
+                          const handleAgeCancel = () => {
+                            setShowingAgeConfirmationFor(null);
+                          };
+                          const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             card_default,
                             {
                               isPressable: true,
-                              onPress: handleButtonClick,
-                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
-                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
-                                /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
-                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                                  link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                                ] }),
-                                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  import_react50.Icon,
-                                  {
-                                    icon: "solar:arrow-right-line-duotone",
-                                    width: 24,
-                                    className: "text-default-400 ml-4"
-                                  }
-                                )
-                              ] }) })
-                            }
-                          )
-                        }
-                      )
-                    )
-                  }
-                ),
-                isSectionEnabled("gallery") && hasGallery && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { opacity: 0, y: 10 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { delay: 0.7, duration: 0.3 },
-                    className: `w-full ${getSectionSpacingClass("gallery")}`,
-                    style: { order: getSectionOrder("gallery") },
-                    children: (() => {
-                      const total = galleryImages.length;
-                      if (total === 0) return null;
-                      const index = Math.min(activeGalleryIndex, total - 1);
-                      const goPrev = () => {
-                        if (total <= 1) return;
-                        setActiveGalleryIndex(
-                          (prev) => (prev - 1 + total) % total
-                        );
-                      };
-                      const goNext = () => {
-                        if (total <= 1) return;
-                        setActiveGalleryIndex((prev) => (prev + 1) % total);
-                      };
-                      const handleTouchStart = (e) => {
-                        galleryTouchStartX.current = e.touches[0].clientX;
-                      };
-                      const handleTouchEnd = (e) => {
-                        if (galleryTouchStartX.current == null) return;
-                        const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
-                        const threshold = 40;
-                        if (deltaX > threshold) {
-                          goPrev();
-                        } else if (deltaX < -threshold) {
-                          goNext();
-                        }
-                        galleryTouchStartX.current = null;
-                      };
-                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "div",
-                          {
-                            className: "relative w-full flex items-center justify-center",
-                            onTouchStart: handleTouchStart,
-                            onTouchEnd: handleTouchEnd,
-                            children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
-                              const cards = [];
-                              for (let offset = -2; offset <= 2; offset++) {
-                                const imgIndex = (index + offset + total) % total;
-                                const url = galleryImages[imgIndex];
-                                const absOffset = Math.abs(offset);
-                                const isActive = offset === 0;
-                                const translateX = offset * 120;
-                                const scale = isActive ? 1 : 0.85;
-                                const opacity = isActive ? 1 : 0.35;
-                                const blur = isActive ? "none" : "blur(3px)";
-                                const zIndex = 20 - absOffset;
-                                cards.push(
-                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    "div",
-                                    {
-                                      className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
-                                      style: {
-                                        width: "13rem",
-                                        height: "17rem",
-                                        transform: `translateX(${translateX}%) scale(${scale})`,
-                                        opacity,
-                                        filter: blur,
-                                        zIndex
-                                      },
-                                      onClick: () => {
-                                        if (isActive) {
-                                          setLightboxUrl(url);
-                                        } else {
-                                          setActiveGalleryIndex(imgIndex);
-                                        }
-                                      },
-                                      children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                        "img",
+                              onPress: handleCardClick,
+                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
+                              style: getCardStyle(),
+                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                                card_body_default,
+                                {
+                                  className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
+                                  children: [
+                                    card2.style.type === "video" && card2.style.background_video && (() => {
+                                      const fit = card2.style.background_fit || "fill";
+                                      const focus = card2.style.background_focus || "top";
+                                      const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                                      const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                                      let focusClass = "";
+                                      if (fit === "fill") {
+                                        if (focus === "top")
+                                          focusClass = "object-top";
+                                        else if (focus === "bottom")
+                                          focusClass = "object-bottom";
+                                        else focusClass = "object-center";
+                                      }
+                                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "video",
                                         {
-                                          src: url,
-                                          alt: `Gallery ${imgIndex + 1}`,
-                                          className: "w-full h-full object-cover",
-                                          loading: "lazy"
+                                          src: card2.style.background_video,
+                                          autoPlay: true,
+                                          loop: true,
+                                          muted: true,
+                                          playsInline: true,
+                                          className: `${baseClasses} ${fitClass} ${focusClass}`
+                                        }
+                                      );
+                                    })(),
+                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
+                                      card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mb-2", children: [
+                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                          import_react50.Icon,
+                                          {
+                                            icon: card2.style.logo_icon,
+                                            width: 36,
+                                            style: {
+                                              color: card2.style.logo_color || "#fff",
+                                              filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
+                                            },
+                                            className: "mx-auto"
+                                          }
+                                        ),
+                                        card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                                          "p",
+                                          {
+                                            className: "font-bold text-lg mt-1",
+                                            style: {
+                                              color: card2.style.logo_color || "#fff",
+                                              textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
+                                            },
+                                            children: [
+                                              card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "mr-1", children: card2.style.prefix_text }),
+                                              card2.style.logo_name
+                                            ]
+                                          }
+                                        )
+                                      ] }),
+                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "h3",
+                                        {
+                                          className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                          style: {
+                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
+                                          },
+                                          children: card2.title
+                                        }
+                                      ),
+                                      card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "p",
+                                        {
+                                          className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                          style: {
+                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
+                                          },
+                                          children: card2.description
                                         }
                                       )
-                                    },
-                                    `${url}-${imgIndex}`
-                                  )
-                                );
-                              }
-                              return cards;
-                            })() })
-                          }
-                        ),
-                        total > 1 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "button",
-                          {
-                            type: "button",
-                            onClick: () => setActiveGalleryIndex(dotIndex),
-                            className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#ec4899]" : "w-1.5 bg-[#ec4899]/40"}`
-                          },
-                          `${url}-${dotIndex}`
-                        )) })
-                      ] });
-                    })()
-                  }
-                ),
-                isSectionEnabled("branding") && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                  import_framer_motion12.motion.div,
-                  {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { delay: 0.8, duration: 0.3 },
-                    className: `${getSectionSpacingClass("branding")} pb-8 flex justify-center`,
-                    style: { order: getSectionOrder("branding") },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                      "a",
+                                    ] })
+                                  ]
+                                }
+                              )
+                            }
+                          );
+                          const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            CTACardWithMechanisms,
+                            {
+                              card: card2,
+                              onReveal: () => {
+                              },
+                              children: renderCardContent()
+                            }
+                          ) : renderCardContent();
+                          const finalContent = showingAgeConfirmationFor === card2.id && !isPreview ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            AgeConfirmationModal,
+                            {
+                              isOpen: true,
+                              onConfirm: handleAgeConfirm,
+                              onCancel: handleAgeCancel,
+                              children: cardWithMechanisms
+                            }
+                          ) : cardWithMechanisms;
+                          return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            import_framer_motion12.motion.div,
+                            {
+                              initial: { opacity: 0, y: 10 },
+                              animate: { opacity: 1, y: 0 },
+                              transition: {
+                                delay: 0.6 + index * 0.1,
+                                duration: 0.3
+                              },
+                              className: "relative",
+                              children: finalContent
+                            },
+                            card2.id
+                          );
+                        }) }) : (
+                          // Fallback to default button if no CTA cards
+                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            import_framer_motion12.motion.div,
+                            {
+                              initial: { opacity: 0, y: 10 },
+                              animate: { opacity: 1, y: 0 },
+                              transition: { delay: 0.6, duration: 0.3 },
+                              className: "w-full px-4",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                card_default,
+                                {
+                                  isPressable: true,
+                                  onPress: handleButtonClick,
+                                  className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
+                                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
+                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
+                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                      link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                    ] }),
+                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      import_react50.Icon,
+                                      {
+                                        icon: "solar:arrow-right-line-duotone",
+                                        width: 24,
+                                        className: "text-default-400 ml-4"
+                                      }
+                                    )
+                                  ] }) })
+                                }
+                              )
+                            }
+                          )
+                        )
+                      }
+                    ),
+                    isSectionEnabled("gallery") && hasGallery && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_framer_motion12.motion.div,
                       {
-                        href: "https://www.outlink.bio/",
-                        target: "_blank",
-                        rel: "noreferrer",
-                        className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("img", { src: "/logo2.svg", alt: "Outlink logo", className: "h-4 w-4" }),
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: "Powered by outlink" })
-                        ]
+                        initial: { opacity: 0, y: 10 },
+                        animate: { opacity: 1, y: 0 },
+                        transition: { delay: 0.7, duration: 0.3 },
+                        className: `w-full ${getSectionSpacingClass("gallery")}`,
+                        style: { order: getSectionOrder("gallery") },
+                        children: (() => {
+                          const total = galleryImages.length;
+                          if (total === 0) return null;
+                          const index = Math.min(activeGalleryIndex, total - 1);
+                          const goPrev = () => {
+                            if (total <= 1) return;
+                            setActiveGalleryIndex(
+                              (prev) => (prev - 1 + total) % total
+                            );
+                          };
+                          const goNext = () => {
+                            if (total <= 1) return;
+                            setActiveGalleryIndex((prev) => (prev + 1) % total);
+                          };
+                          const handleTouchStart = (e) => {
+                            galleryTouchStartX.current = e.touches[0].clientX;
+                          };
+                          const handleTouchEnd = (e) => {
+                            if (galleryTouchStartX.current == null) return;
+                            const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
+                            const threshold = 40;
+                            if (deltaX > threshold) {
+                              goPrev();
+                            } else if (deltaX < -threshold) {
+                              goNext();
+                            }
+                            galleryTouchStartX.current = null;
+                          };
+                          return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              "div",
+                              {
+                                className: "relative w-full flex items-center justify-center",
+                                onTouchStart: handleTouchStart,
+                                onTouchEnd: handleTouchEnd,
+                                children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
+                                  const cards = [];
+                                  for (let offset = -2; offset <= 2; offset++) {
+                                    const imgIndex = (index + offset + total) % total;
+                                    const url = galleryImages[imgIndex];
+                                    const absOffset = Math.abs(offset);
+                                    const isActive = offset === 0;
+                                    const translateX = offset * 120;
+                                    const scale = isActive ? 1 : 0.85;
+                                    const opacity = isActive ? 1 : 0.35;
+                                    const blur = isActive ? "none" : "blur(3px)";
+                                    const zIndex = 20 - absOffset;
+                                    cards.push(
+                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "div",
+                                        {
+                                          className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
+                                          style: {
+                                            width: "13rem",
+                                            height: "17rem",
+                                            transform: `translateX(${translateX}%) scale(${scale})`,
+                                            opacity,
+                                            filter: blur,
+                                            zIndex
+                                          },
+                                          onClick: () => {
+                                            if (isActive) {
+                                              setLightboxUrl(url);
+                                            } else {
+                                              setActiveGalleryIndex(imgIndex);
+                                            }
+                                          },
+                                          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                            "img",
+                                            {
+                                              src: url,
+                                              alt: `Gallery ${imgIndex + 1}`,
+                                              className: "w-full h-full object-cover",
+                                              loading: "lazy"
+                                            }
+                                          )
+                                        },
+                                        `${url}-${imgIndex}`
+                                      )
+                                    );
+                                  }
+                                  return cards;
+                                })() })
+                              }
+                            ),
+                            total > 1 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              "button",
+                              {
+                                type: "button",
+                                onClick: () => setActiveGalleryIndex(dotIndex),
+                                className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#ec4899]" : "w-1.5 bg-[#ec4899]/40"}`
+                              },
+                              `${url}-${dotIndex}`
+                            )) })
+                          ] });
+                        })()
+                      }
+                    ),
+                    isSectionEnabled("branding") && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                      import_framer_motion12.motion.div,
+                      {
+                        initial: { opacity: 0 },
+                        animate: { opacity: 1 },
+                        transition: { delay: 0.8, duration: 0.3 },
+                        className: `${getSectionSpacingClass("branding")} pb-8 flex justify-center`,
+                        style: { order: getSectionOrder("branding") },
+                        children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
+                          "a",
+                          {
+                            href: "https://www.outlink.bio/",
+                            target: "_blank",
+                            rel: "noreferrer",
+                            className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
+                            children: [
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("img", { src: "/logo2.svg", alt: "Outlink logo", className: "h-4 w-4" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: "Powered by outlink" })
+                            ]
+                          }
+                        )
                       }
                     )
-                  }
-                )
-              ] }) })
-            }
-          )
-        ]
-      }
-    )
-  ] });
+                  ] }) })
+                }
+              )
+            ]
+          }
+        )
+      ]
+    }
+  );
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
