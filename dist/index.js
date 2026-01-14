@@ -10600,27 +10600,27 @@ function LandingPageViewer({
                       {
                         className: `w-full ${getSectionSpacingClass("cta_block")}`,
                         style: { order: getSectionOrder("cta_block") },
-                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full grid grid-cols-1 sm:grid-cols-2 gap-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full grid grid-cols-2 gap-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
                           const size = card2.style.size || "standard";
                           let sizeBodyClasses = "p-5 min-h-[120px]";
                           let sizeTitleClass = "text-lg";
                           let sizeDescriptionClass = "text-sm";
                           let sizeColSpanClass = "";
                           if (size === "small") {
-                            sizeBodyClasses = "p-5 min-h-[120px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
+                            sizeBodyClasses = "p-4 min-h-[110px]";
+                            sizeTitleClass = "text-base";
+                            sizeDescriptionClass = "text-xs";
                             sizeColSpanClass = "";
                           } else if (size === "standard") {
-                            sizeBodyClasses = "p-6 min-h-[120px]";
+                            sizeBodyClasses = "p-5 min-h-[150px]";
                             sizeTitleClass = "text-lg";
                             sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "sm:col-span-2";
+                            sizeColSpanClass = "col-span-2";
                           } else if (size === "large") {
-                            sizeBodyClasses = "p-6 min-h-[200px]";
+                            sizeBodyClasses = "p-6 min-h-[260px]";
                             sizeTitleClass = "text-lg";
                             sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "sm:col-span-2";
+                            sizeColSpanClass = "col-span-2";
                           }
                           const getCardStyle = () => {
                             switch (card2.style.type) {
@@ -10681,7 +10681,7 @@ function LandingPageViewer({
                               children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
                                 card_body_default,
                                 {
-                                  className: `p-6 flex items-center justify-center relative ${card2.ctr_mechanisms ? "min-h-[150px] md:min-h-[140px]" : "min-h-[120px]"}`,
+                                  className: `${sizeBodyClasses} flex items-center justify-center relative`,
                                   children: [
                                     card2.style.type === "video" && card2.style.background_video && (() => {
                                       const fit = card2.style.background_fit || "fill";

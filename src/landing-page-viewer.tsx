@@ -683,36 +683,36 @@ useEffect(() => {
                   style={{ order: getSectionOrder("cta_block") }}
                 >
                   {settings.cta_cards && settings.cta_cards.length > 0 ? (
-  <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
+ <div className="w-full grid grid-cols-2 gap-3">
     {settings.cta_cards
       .sort((a, b) => a.order - b.order)
       .map((card, index) => {
         const size = card.style.size || "standard";
 
-                          let sizeBodyClasses = "p-5 min-h-[120px]";
-                          let sizeTitleClass = "text-lg";
-                          let sizeDescriptionClass = "text-sm";
-                          let sizeColSpanClass = "";
-
-                          if (size === "small") {
-                            // small = current half-width tile
-                            sizeBodyClasses = "p-5 min-h-[120px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "";
-                          } else if (size === "standard") {
-                            // standard = original full-width normal button
-                            sizeBodyClasses = "p-6 min-h-[120px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "sm:col-span-2";
-                          } else if (size === "large") {
-                            // large = hero (taller)
-                            sizeBodyClasses = "p-6 min-h-[200px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "sm:col-span-2";
-                          }
+        let sizeBodyClasses = "p-5 min-h-[120px]";
+        let sizeTitleClass = "text-lg";
+        let sizeDescriptionClass = "text-sm";
+        let sizeColSpanClass = "";
+      
+        if (size === "small") {
+          // small = half-height tile
+          sizeBodyClasses = "p-4 min-h-[110px]";
+          sizeTitleClass = "text-base";
+          sizeDescriptionClass = "text-xs";
+          sizeColSpanClass = "";
+        } else if (size === "standard") {
+          // standard = normal full-width
+          sizeBodyClasses = "p-5 min-h-[150px]";
+          sizeTitleClass = "text-lg";
+          sizeDescriptionClass = "text-sm";
+          sizeColSpanClass = "col-span-2";
+        } else if (size === "large") {
+          // large = clearly bigger hero
+          sizeBodyClasses = "p-6 min-h-[260px]";
+          sizeTitleClass = "text-lg";
+          sizeDescriptionClass = "text-sm";
+          sizeColSpanClass = "col-span-2";
+        }
 
                           const getCardStyle = () => {
                             switch (card.style.type) {
