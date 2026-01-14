@@ -85,7 +85,7 @@ export function LandingPageViewer({
     background: isLightMode ? "#FFFFFF" : "#000000",
     textPrimary: isLightMode ? "#18181b" : "#ffffff",
     textSecondary: isLightMode ? "#64748b" : "#94a3b8",
-    cardBg: isLightMode ? "#f8fafc" : "#111111", // optional: slightly above black
+    cardBg: isLightMode ? "#f8fafc" : "#111111",
     border: isLightMode ? "#e2e8f0" : "#27272a",
   };
 
@@ -143,9 +143,9 @@ export function LandingPageViewer({
   ];
 
   let layoutSections: LayoutSectionKey[] =
-    (settings.layout_sections && settings.layout_sections.length
+    settings.layout_sections && settings.layout_sections.length
       ? (settings.layout_sections as LayoutSectionKey[])
-      : DEFAULT_LAYOUT_SECTIONS);
+      : DEFAULT_LAYOUT_SECTIONS;
 
   // Ensure branding footer is always present and fixed at the end
   layoutSections = [
@@ -202,51 +202,44 @@ export function LandingPageViewer({
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
 
-    // Auto‑redirect to a CTA button after N seconds (optional)
- // Auto‑redirect to a CTA button after N seconds (optional)
-useEffect(() => {
-  // console.log("autoRedirect check", {
-  //   isPreview,
-  //   linkType: link.link_type,
-  //   enabled: settings.auto_redirect_enabled,
-  //   delay: settings.auto_redirect_delay_seconds,
-  //   ctas: settings.cta_cards?.length,
-  //   targetId: settings.auto_redirect_cta_id,
-  // });
+  // Auto‑redirect to a CTA button after N seconds (optional)
+  useEffect(
+    () => {
+      if (isPreview) return;
+      if (link.link_type !== "whitehat") return;
+      if (!settings.auto_redirect_enabled) return;
 
-  if (isPreview) return;
-  if (link.link_type !== "whitehat") return;
-  if (!settings.auto_redirect_enabled) return;
+      const cards = settings.cta_cards || [];
+      if (!cards.length) return;
 
-  const cards = settings.cta_cards || [];
-  if (!cards.length) return;
+      const targetId =
+        settings.auto_redirect_cta_id || (cards[0] && cards[0].id) || null;
+      if (!targetId) return;
 
-  const targetId =
-    settings.auto_redirect_cta_id || (cards[0] && cards[0].id) || null;
-  if (!targetId) return;
+      const targetCard = cards.find((c) => c.id === targetId);
+      if (!targetCard || !targetCard.url) return;
 
-  const targetCard = cards.find((c) => c.id === targetId);
-  if (!targetCard || !targetCard.url) return;
+      const delaySec = settings.auto_redirect_delay_seconds ?? 10;
+      const delayMs = Math.max(1, delaySec) * 1000;
 
-  const delaySec = settings.auto_redirect_delay_seconds ?? 10;
-  const delayMs = Math.max(1, delaySec) * 1000;
+      const timer = window.setTimeout(() => {
+        trackClick(link.id, isPreview);
+        const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
+        if (!navUrl) return;
+        window.location.href = navUrl;
+      }, delayMs);
 
-  const timer = window.setTimeout(() => {
-    trackClick(link.id, isPreview);
-    const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
-    if (!navUrl) return;
-    window.location.href = navUrl;
-  }, delayMs);
-
-  return () => window.clearTimeout(timer);
-}, [
-  isPreview,
-  settings.auto_redirect_enabled,
-  settings.auto_redirect_delay_seconds,
-  settings.auto_redirect_cta_id,
-  settings.cta_cards,
-  link.id,
-]);
+      return () => window.clearTimeout(timer);
+    },
+    [
+      isPreview,
+      settings.auto_redirect_enabled,
+      settings.auto_redirect_delay_seconds,
+      settings.auto_redirect_cta_id,
+      settings.cta_cards,
+      link.id,
+    ],
+  );
 
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
@@ -289,32 +282,32 @@ useEffect(() => {
       ) : null}
 
       {/* Mobile-sized container */}
-      {/* Mobile-sized container */}
-<div
-  className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-  style={{ backgroundColor: themeColors.background }}
->
-  {/* Free-plan vertical ribbon ad on the right edge (desktop only) */}
-  {isFreePlan && (
-  <a
-    href="https://app.outlink.bio/signup"
-    target="_blank"
-    rel="noreferrer"
-    className="absolute inset-x-0 top-0 z-20"
-  >
-    <div className="w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2">
-      <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
-        Claim your domain
-      </span>
-      <Icon
-        icon="solar:arrow-right-linear"
-        width={12}
-        className="text-white"
-      />
-    </div>
-  </a>
-)}
-        {/* Hero area for Full Display & Video Header modes */}
+      <div
+        className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+        style={{ backgroundColor: themeColors.background }}
+      >
+        {/* Free-plan ribbon */}
+        {isFreePlan && (
+          <a
+            href="https://app.outlink.bio/signup"
+            target="_blank"
+            rel="noreferrer"
+            className="absolute inset-x-0 top-0 z-20"
+          >
+            <div className="w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2">
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
+                Claim your domain
+              </span>
+              <Icon
+                icon="solar:arrow-right-linear"
+                width={12}
+                className="text-white"
+              />
+            </div>
+          </a>
+        )}
+
+        {/* Hero area */}
         {isFullMode || isVideoMode ? (
           <motion.div
             initial={{ opacity: 0 }}
@@ -364,7 +357,6 @@ useEffect(() => {
                 })()
               : settings.avatar_url ? (
                   <>
-                    {/* Profile Image Container */}
                     <div className="relative w-full h-full overflow-hidden">
                       <img
                         src={settings.avatar_url}
@@ -372,7 +364,6 @@ useEffect(() => {
                         className="w-full h-full object-cover object-center"
                       />
                     </div>
-                    {/* Gradient overlay to blend into page background */}
                     <div
                       className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
                       style={{
@@ -390,7 +381,6 @@ useEffect(() => {
                 )}
           </motion.div>
         ) : (
-          /* Avatar Mode - Circular Profile Picture */
           <div className="w-full pt-8" />
         )}
 
@@ -401,14 +391,14 @@ useEffect(() => {
         >
           <div className="w-full max-w-md">
             <div className="flex flex-col items-center gap-4">
-              {/* Name + badge + handle - hero modes */}
+              {/* Name + badge + handle */}
               {(isFullMode || isVideoMode) && isSectionEnabled("header") && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                   className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                    "header"
+                    "header",
                   )}`}
                   style={{ order: getSectionOrder("header") }}
                 >
@@ -457,7 +447,7 @@ useEffect(() => {
                 </motion.div>
               )}
 
-              {/* Avatar Mode Display */}
+              {/* Avatar mode display */}
               {mode === "avatar" && (
                 <motion.div
                   initial={{ scale: 0.8 }}
@@ -489,14 +479,14 @@ useEffect(() => {
                 </motion.div>
               )}
 
-              {/* Name and Verification - Avatar mode only */}
+              {/* Avatar mode name */}
               {mode === "avatar" && isSectionEnabled("header") && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.3 }}
                   className={`flex flex-col items-center gap-1 ${getSectionSpacingClass(
-                    "header"
+                    "header",
                   )}`}
                   style={{ order: getSectionOrder("header") }}
                 >
@@ -547,70 +537,74 @@ useEffect(() => {
 
               {/* Social + Followers block */}
               {isSectionEnabled("social_block") &&
-  ((settings.social_links && settings.social_links.length > 0) ||
-    (settings.show_follower_count &&
-      (settings.follower_count || 0) > 0)) && (
-  <div
-    className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
-      "social_block"
-    )}`}
-    style={{ order: getSectionOrder("social_block") }}
-  >
-                  {/* Social Links */}
-                  {settings.social_links && settings.social_links.length > 0 && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.3, duration: 0.3 }}
-    className="flex flex-wrap items-center justify-center gap-3"
-  >
-    {settings.social_links.map((social, index) => (
-      <Button
-        key={index}
-        as="a"
-        href={social.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        isIconOnly
-        size="sm"
-        variant="light" // no background
-        className="hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0"
-      >
-        <Icon
-          icon={social.icon}
-          width={20}
-          color={isLightMode ? "#ec4899" : "#e5e7eb"} // pink in light mode, neutral in dark
-        />
-      </Button>
-    ))}
-  </motion.div>
-)}
-
-                  {/* Follower Count */}
-                  {settings.show_follower_count &&
-  (settings.follower_count || 0) > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.3 }}
-                        className="text-center"
-                      >
-                        <p
-                          className="text-sm"
-                          style={{ color: themeColors.textSecondary }}
+                ((settings.social_links &&
+                  settings.social_links.length > 0) ||
+                  (settings.show_follower_count &&
+                    (settings.follower_count || 0) > 0)) && (
+                  <div
+                    className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                      "social_block",
+                    )}`}
+                    style={{ order: getSectionOrder("social_block") }}
+                  >
+                    {/* Social Links */}
+                    {settings.social_links &&
+                      settings.social_links.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.3, duration: 0.3 }}
+                          className="flex flex-wrap items-center justify-center gap-3"
                         >
-                          <span
-                            className="font-semibold"
-                            style={{ color: themeColors.textPrimary }}
+                          {settings.social_links.map((social, index) => (
+                            <Button
+                              key={index}
+                              as="a"
+                              href={social.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              isIconOnly
+                              size="sm"
+                              variant="light"
+                              className="hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0"
+                            >
+                              <Icon
+                                icon={social.icon}
+                                width={20}
+                                color={
+                                  isLightMode ? "#ec4899" : "#e5e7eb"
+                                }
+                              />
+                            </Button>
+                          ))}
+                        </motion.div>
+                      )}
+
+                    {/* Follower Count */}
+                    {settings.show_follower_count &&
+                      (settings.follower_count || 0) > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.4, duration: 0.3 }}
+                          className="text-center"
+                        >
+                          <p
+                            className="text-sm"
+                            style={{ color: themeColors.textSecondary }}
                           >
-                            {settings.follower_count.toLocaleString()}
-                          </span>{" "}
-                          Total Followers
-                        </p>
-                      </motion.div>
-                    )}
-                </div>
-              )}
+                            <span
+                              className="font-semibold"
+                              style={{ color: themeColors.textPrimary }}
+                            >
+                              {settings.follower_count.toLocaleString()}
+                            </span>{" "}
+                            Total Followers
+                          </p>
+                        </motion.div>
+                      )}
+                  </div>
+                )}
 
               {/* Voice Note */}
               {isSectionEnabled("voice_note") && settings.voice_note_url && (
@@ -619,7 +613,7 @@ useEffect(() => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.45, duration: 0.3 }}
                   className={`w-full max-w-sm ${getSectionSpacingClass(
-                    "voice_note"
+                    "voice_note",
                   )}`}
                   style={{ order: getSectionOrder("voice_note") }}
                 >
@@ -658,14 +652,14 @@ useEffect(() => {
                 </div>
               )}
 
-              {/* Bio – now part of layout system */}
+              {/* Bio */}
               {isSectionEnabled("bio") && settings.bio && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.3 }}
                   className={`text-center max-w-sm ${getSectionSpacingClass(
-                    "bio"
+                    "bio",
                   )}`}
                   style={{
                     color: themeColors.textSecondary,
@@ -683,36 +677,50 @@ useEffect(() => {
                   style={{ order: getSectionOrder("cta_block") }}
                 >
                   {settings.cta_cards && settings.cta_cards.length > 0 ? (
- <div className="w-full grid grid-cols-2 gap-3">
-    {settings.cta_cards
-      .sort((a, b) => a.order - b.order)
-      .map((card, index) => {
-        const size = card.style.size || "standard";
+                    <div className="w-full grid grid-cols-2 gap-3">
+                      {settings.cta_cards
+                        .sort((a, b) => a.order - b.order)
+                        .map((card, index) => {
+                          const size = card.style.size || "standard";
 
-        let sizeBodyClasses = "p-5 min-h-[120px]";
-        let sizeTitleClass = "text-lg";
-        let sizeDescriptionClass = "text-sm";
-        let sizeColSpanClass = "";
-      
-        if (size === "small") {
-          // small = half-height tile
-          sizeBodyClasses = "p-4 min-h-[110px]";
-          sizeTitleClass = "text-base";
-          sizeDescriptionClass = "text-xs";
-          sizeColSpanClass = "";
-        } else if (size === "standard") {
-          // standard = normal full-width
-          sizeBodyClasses = "p-5 min-h-[150px]";
-          sizeTitleClass = "text-lg";
-          sizeDescriptionClass = "text-sm";
-          sizeColSpanClass = "col-span-2";
-        } else if (size === "large") {
-          // large = clearly bigger hero
-          sizeBodyClasses = "p-6 min-h-[260px]";
-          sizeTitleClass = "text-lg";
-          sizeDescriptionClass = "text-sm";
-          sizeColSpanClass = "col-span-2";
-        }
+                          let sizeBodyClasses = "p-5 min-h-[120px]";
+                          let sizeTitleClass = "text-lg";
+                          let sizeDescriptionClass = "text-sm";
+                          let sizeColSpanClass = "";
+
+                          if (size === "small") {
+                            sizeBodyClasses = "p-4 min-h-[110px]";
+                            sizeTitleClass = "text-base";
+                            sizeDescriptionClass = "text-xs";
+                            sizeColSpanClass = "";
+                          } else if (size === "standard") {
+                            sizeBodyClasses = "p-5 min-h-[150px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
+                            sizeColSpanClass = "col-span-2";
+                          } else if (size === "large") {
+                            sizeBodyClasses = "p-6 min-h-[260px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
+                            sizeColSpanClass = "col-span-2";
+                          }
+
+                          const isOnlyfansLogo =
+                            (card.style.logo_icon || "")
+                              .toLowerCase()
+                              .includes("onlyfans") ||
+                            card.style.logo_icon === "of-local" ||
+                            (card.style.logo_name || "")
+                              .toLowerCase()
+                              === "icon";
+
+                          const isBrandedNonOF =
+                            !!card.style.logo_icon && !isOnlyfansLogo;
+
+                          const isSnapchatLogo =
+                            (card.style.logo_icon || "")
+                              .toLowerCase()
+                              .includes("snapchat");
 
                           const getCardStyle = () => {
                             switch (card.style.type) {
@@ -743,10 +751,8 @@ useEffect(() => {
                           };
 
                           const handleCardClick = () => {
-                            // Skip everything in preview mode
                             if (isPreview) return;
 
-                            // Age gate
                             if (card.require_18plus) {
                               setShowingAgeConfirmationFor(card.id);
                               return;
@@ -779,11 +785,6 @@ useEffect(() => {
                             setShowingAgeConfirmationFor(null);
                           };
 
-                          const isOnlyfansLogo =
-                          (card.style.logo_icon || "").toLowerCase().includes("onlyfans") ||
-                          card.style.logo_icon === "of-local" ||
-                          (card.style.logo_name || "").toLowerCase() === "icon";
-
                           const renderCardContent = () => (
                             <Card
                               isPressable
@@ -791,10 +792,9 @@ useEffect(() => {
                               className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
                               style={getCardStyle()}
                             >
-                              
                               <CardBody
-  className={`${sizeBodyClasses} flex items-center justify-center relative`}
->
+                                className={`${sizeBodyClasses} flex items-center justify-center relative`}
+                              >
                                 {/* Video Background */}
                                 {card.style.type === "video" &&
                                   card.style.background_video &&
@@ -831,94 +831,71 @@ useEffect(() => {
                                       />
                                     );
                                   })()}
-       <div className="text-center w-full relative z-10">
-  {(card.style.logo_icon || isOnlyfansLogo) && (
-    <div className="mb-2">
-      {isOnlyfansLogo ? (
-        <div className="flex flex-col items-center gap-1">
-          {/* TEXT ABOVE */}
-          {card.style.prefix_text && (
-            <p
-              className="text-base font-semibold"
-              style={{ color: card.style.logo_color || "#ffffff" }}
-            >
-              {card.style.prefix_text}
-            </p>
-          )}
-          {/* ICON + PIC SIDE BY SIDE (local assets only) */}
-          <div className="flex items-center justify-center gap-2">
-            <img
-              src="/of-logo.svg"
-              alt="Creator icon"
-              className="h-5 w-auto"
-              loading="lazy"
-            />
-            <img
-              src="/of.webp"
-              alt="Creator link"
-              className="h-5 w-auto"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      ) : (
-        <>
-          <Icon
-            icon={card.style.logo_icon!}
-            width={36}
-            style={{
-              color: card.style.logo_color || "#fff",
-              filter:
-                card.style.type === "image" || card.style.type === "video"
-                  ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
-                  : "none",
-            }}
-            className="mx-auto"
-          />
-          {card.style.logo_name && (
-            <p
-              className="font-bold text-lg mt-1"
-              style={{
-                color: card.style.logo_color || "#fff",
-                textShadow:
-                  card.style.type === "image" || card.style.type === "video"
-                    ? "0 2px 4px rgba(0,0,0,0.3)"
-                    : "none",
-              }}
-            >
-              {card.style.prefix_text && (
-                <span className="mr-1">{card.style.prefix_text}</span>
-              )}
-              {card.style.logo_name}
-            </p>
-          )}
-        </>
-      )}
-    </div>
-  )}
-  {/* Title and Description ... */}
-  <h3
-  className={`${sizeTitleClass} font-semibold ${
-                                      card.style.type === "image" ||
-                                      card.style.type === "gradient" ||
-                                      card.style.type === "solid" ||
-                                      card.style.type === "video"
-                                        ? "text-white"
-                                        : "text-foreground"
-                                    }`}
-                                    style={{
-                                      textShadow:
-                                        card.style.type === "image" ||
-                                        card.style.type === "video"
-                                          ? "0 2px 8px rgba(0,0,0,0.5)"
-                                          : "none",
-                                    }}
-                                  >
-                                    {card.title}
-                                  </h3>
-                                  {card.description && (
+
+                                {/* Center content */}
+                                <div className="text-center w-full relative z-10">
+                                  {/* OnlyFans special layout – stacked in center */}
+                                  {isOnlyfansLogo && (
+                                    <div className="mb-2">
+                                      <div className="flex flex-col items-center gap-1">
+                                        {card.style.prefix_text && (
+                                          <p
+                                            className="text-base font-semibold"
+                                            style={{
+                                              color:
+                                                card.style.logo_color ||
+                                                "#ffffff",
+                                            }}
+                                          >
+                                            {card.style.prefix_text}
+                                          </p>
+                                        )}
+                                        <div className="flex items-center justify-center gap-2">
+                                          <img
+                                            src="/of-logo.svg"
+                                            alt="Creator icon"
+                                            className="h-5 w-auto"
+                                            loading="lazy"
+                                          />
+                                          <img
+                                            src="/of.webp"
+                                            alt="Creator link"
+                                            className="h-5 w-auto"
+                                            loading="lazy"
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {/* Centered title/description ONLY for non‑branded or OnlyFans */}
+                                  {!isBrandedNonOF &&
+                                    card.title &&
+                                    card.title.trim() !== "" && (
+                                      <h3
+                                        className={`${sizeTitleClass} font-semibold ${
+                                          card.style.type === "image" ||
+                                          card.style.type === "gradient" ||
+                                          card.style.type === "solid" ||
+                                          card.style.type === "video"
+                                            ? "text-white"
+                                            : "text-foreground"
+                                        }`}
+                                        style={{
+                                          textShadow:
+                                            card.style.type === "image" ||
+                                            card.style.type === "video"
+                                              ? "0 2px 8px rgba(0,0,0,0.5)"
+                                              : "none",
+                                        }}
+                                      >
+                                        {card.title}
+                                      </h3>
+                                    )}
+
+                                  {!isBrandedNonOF && card.description && (
                                     <p
-                                    className={`${sizeDescriptionClass} mt-1 ${
+                                      className={`${sizeDescriptionClass} mt-1 ${
                                         card.style.type === "image" ||
                                         card.style.type === "gradient" ||
                                         card.style.type === "solid" ||
@@ -938,11 +915,59 @@ useEffect(() => {
                                     </p>
                                   )}
                                 </div>
+
+                                {/* Brand overlay for non‑OF branded buttons */}
+                                {isBrandedNonOF && (
+                                  <>
+                                    {card.style.logo_icon && (
+                                      <div className="absolute top-2 right-2 z-20">
+                                        <div
+                                          className="rounded-full px-2 py-2 flex items-center justify-center shadow-md"
+                                          style={{
+                                            backgroundColor: isSnapchatLogo
+                                              ? "#000000"
+                                              : "#ffffff",
+                                          }}
+                                        >
+                                          <Icon
+                                            icon={card.style.logo_icon}
+                                            width={18}
+                                            style={{
+                                              color:
+                                                card.style.logo_color ||
+                                                "#ffffff",
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+
+                                    {card.style.logo_name && (
+                                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-20">
+                                        <p
+                                          className="text-xs font-semibold"
+                                          style={{
+                                            color:
+                                              card.style.logo_color ||
+                                              "#ffffff",
+                                            textShadow:
+                                              card.style.type === "image" ||
+                                              card.style.type === "video"
+                                                ? "0 1px 3px rgba(0,0,0,0.7)"
+                                                : "none",
+                                          }}
+                                        >
+                                          {card.style.logo_name}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
                               </CardBody>
                             </Card>
                           );
 
-                          // First render card with CTR mechanisms
+                          // Wrap with CTR mechanisms
                           const cardWithMechanisms = card.ctr_mechanisms ? (
                             <CTACardWithMechanisms
                               card={card}
@@ -956,7 +981,7 @@ useEffect(() => {
                             renderCardContent()
                           );
 
-                          // Then wrap with age confirmation if needed
+                          // Wrap with age confirmation if needed
                           const finalContent =
                             showingAgeConfirmationFor === card.id &&
                             !isPreview ? (
@@ -1025,7 +1050,7 @@ useEffect(() => {
                 </div>
               )}
 
-              {/* Gallery – carousel with focused center card and side previews */}
+              {/* Gallery */}
               {isSectionEnabled("gallery") && hasGallery && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -1091,7 +1116,7 @@ useEffect(() => {
                                 const url = galleryImages[imgIndex];
                                 const absOffset = Math.abs(offset);
                                 const isActive = offset === 0;
-                                const translateX = offset * 120; // percentage shift
+                                const translateX = offset * 120;
                                 const scale = isActive ? 1 : 0.85;
                                 const opacity = isActive ? 1 : 0.35;
                                 const blur = isActive ? "none" : "blur(3px)";
@@ -1140,8 +1165,8 @@ useEffect(() => {
                                 onClick={() => setActiveGalleryIndex(dotIndex)}
                                 className={`h-1.5 rounded-full transition-all ${
                                   dotIndex === index
-                                  ? "w-4 bg-[#ec4899]"       
-                                  : "w-1.5 bg-[#ec4899]/40"   
+                                    ? "w-4 bg-[#ec4899]"
+                                    : "w-1.5 bg-[#ec4899]/40"
                                 }`}
                               />
                             ))}
@@ -1153,27 +1178,32 @@ useEffect(() => {
                 </motion.div>
               )}
 
-              {/* Branding / Powered by Outlink – part of layout */}
-   {/* Branding / Powered by Outlink – part of layout */}
-{isSectionEnabled("branding") && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.8, duration: 0.3 }}
-    className={`${getSectionSpacingClass("branding")} pb-8 flex justify-center`}
-    style={{ order: getSectionOrder("branding") }}
-  >
-    <a
-      href="https://www.outlink.bio/"
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
-    >
-      <img src="/logo2.svg" alt="Outlink logo" className="h-4 w-4" />
-      <span>Powered by outlink</span>
-    </a>
-  </motion.div>
-)}
+              {/* Branding / Powered by  of layout */}
+              {isSectionEnabled("branding") && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 0.3 }}
+                  className={`${getSectionSpacingClass(
+                    "branding",
+                  )} pb-8 flex justify-center`}
+                  style={{ order: getSectionOrder("branding") }}
+                >
+                  <a
+                    href="https://www.outlink.bio/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
+                  >
+                    <img
+                      src="/logo2.svg"
+                      alt="Outlink logo"
+                      className="h-4 w-4"
+                    />
+                    <span>Powered by outlink</span>
+                  </a>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>
