@@ -1132,7 +1132,7 @@ useEffect(() => {
                         </div>
 
                         {total > 1 && (
-                          <div className="mt-3 flex justify-center gap-1.5">
+                          <div className="mt-5 flex justify-center gap-1.5">
                             {galleryImages.map((url, dotIndex) => (
                               <button
                                 key={`${url}-${dotIndex}`}

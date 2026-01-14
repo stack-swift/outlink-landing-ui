@@ -10953,7 +10953,7 @@ function LandingPageViewer({
                                 })() })
                               }
                             ),
-                            total > 1 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            total > 1 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mt-5 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                               "button",
                               {
                                 type: "button",

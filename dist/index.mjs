@@ -10896,7 +10896,7 @@ function LandingPageViewer({
                                 })() })
                               }
                             ),
-                            total > 1 && /* @__PURE__ */ jsx20("div", { className: "mt-3 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ jsx20(
+                            total > 1 && /* @__PURE__ */ jsx20("div", { className: "mt-5 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ jsx20(
                               "button",
                               {
                                 type: "button",
