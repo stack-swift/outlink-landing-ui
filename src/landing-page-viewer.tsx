@@ -753,7 +753,9 @@ useEffect(() => {
                           };
 
                           const isOnlyfansLogo =
-                          (card.style.logo_name || "").toLowerCase() === "onlyfans";
+                          (card.style.logo_icon || "").toLowerCase().includes("onlyfans") ||
+                          card.style.logo_icon === "of-local" ||
+                          (card.style.logo_name || "").toLowerCase() === "icon";
 
                           const renderCardContent = () => (
                             <Card
@@ -819,20 +821,18 @@ useEffect(() => {
               {card.style.prefix_text}
             </p>
           )}
-
-          {/* ICON + PIC SIDE BY SIDE */}
+          {/* ICON + PIC SIDE BY SIDE (local assets only) */}
           <div className="flex items-center justify-center gap-2">
-            {card.style.logo_icon && (
-              <Icon
-                icon={card.style.logo_icon!}
-                width={24}
-                style={{ color: card.style.logo_color || "#00AEEF" }}
-              />
-            )}
+            <img
+              src="/of-logo.svg"
+              alt="Creator icon"
+              className="h-5 w-auto"
+              loading="lazy"
+            />
             <img
               src="/of.webp"
               alt="Creator link"
-              className="h-6 w-auto"
+              className="h-5 w-auto"
               loading="lazy"
             />
           </div>
@@ -872,7 +872,6 @@ useEffect(() => {
       )}
     </div>
   )}
-
   {/* Title and Description ... */}
                                   <h3
                                     className={`text-lg font-semibold ${

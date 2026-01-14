@@ -10592,7 +10592,7 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
-                          const isOnlyfansLogo = (card2.style.logo_name || "").toLowerCase() === "onlyfans";
+                          const isOnlyfansLogo = (card2.style.logo_icon || "").toLowerCase().includes("onlyfans") || card2.style.logo_icon === "of-local" || (card2.style.logo_name || "").toLowerCase() === "icon";
                           const renderCardContent = () => /* @__PURE__ */ jsx20(
                             card_default,
                             {
@@ -10641,12 +10641,13 @@ function LandingPageViewer({
                                           }
                                         ),
                                         /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-center gap-2", children: [
-                                          card2.style.logo_icon && /* @__PURE__ */ jsx20(
-                                            Icon9,
+                                          /* @__PURE__ */ jsx20(
+                                            "img",
                                             {
-                                              icon: card2.style.logo_icon,
-                                              width: 24,
-                                              style: { color: card2.style.logo_color || "#00AEEF" }
+                                              src: "/of-logo.svg",
+                                              alt: "Creator icon",
+                                              className: "h-5 w-auto",
+                                              loading: "lazy"
                                             }
                                           ),
                                           /* @__PURE__ */ jsx20(
@@ -10654,7 +10655,7 @@ function LandingPageViewer({
                                             {
                                               src: "/of.webp",
                                               alt: "Creator link",
-                                              className: "h-6 w-auto",
+                                              className: "h-5 w-auto",
                                               loading: "lazy"
                                             }
                                           )

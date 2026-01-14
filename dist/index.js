@@ -10649,7 +10649,7 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
-                          const isOnlyfansLogo = (card2.style.logo_name || "").toLowerCase() === "onlyfans";
+                          const isOnlyfansLogo = (card2.style.logo_icon || "").toLowerCase().includes("onlyfans") || card2.style.logo_icon === "of-local" || (card2.style.logo_name || "").toLowerCase() === "icon";
                           const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             card_default,
                             {
@@ -10698,12 +10698,13 @@ function LandingPageViewer({
                                           }
                                         ),
                                         /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
-                                          card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                            import_react50.Icon,
+                                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                            "img",
                                             {
-                                              icon: card2.style.logo_icon,
-                                              width: 24,
-                                              style: { color: card2.style.logo_color || "#00AEEF" }
+                                              src: "/of-logo.svg",
+                                              alt: "Creator icon",
+                                              className: "h-5 w-auto",
+                                              loading: "lazy"
                                             }
                                           ),
                                           /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -10711,7 +10712,7 @@ function LandingPageViewer({
                                             {
                                               src: "/of.webp",
                                               alt: "Creator link",
-                                              className: "h-6 w-auto",
+                                              className: "h-5 w-auto",
                                               loading: "lazy"
                                             }
                                           )
