@@ -24,18 +24,18 @@ interface LandingPageViewerProps {
   link: Link;
   settings: LandingPageSettings;
   onButtonClick?: () => void;
-  isPreview?: boolean; // When true, disables navigation
-  isFreePlan?: boolean; // When true, show free-plan promo badge + footer
+  isPreview?: boolean; 
+  isFreePlan?: boolean; 
 }
 
-// Helper: detect Reddit flow via ?r=1
+
 function isRedditFlow(): boolean {
   if (typeof window === "undefined") return false;
   const params = new URLSearchParams(window.location.search);
   return params.has("r");
 }
 
-// Helper: for Reddit, send navigation through /reddit-escape (live mode only)
+
 function wrapUrlForNavigation(
   url: string | null | undefined,
   isPreview: boolean | undefined,

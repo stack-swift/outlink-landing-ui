@@ -10047,7 +10047,6 @@ function LandingPageViewer({
     textPrimary: isLightMode ? "#18181b" : "#ffffff",
     textSecondary: isLightMode ? "#64748b" : "#94a3b8",
     cardBg: isLightMode ? "#f8fafc" : "#111111",
-    // optional: slightly above black
     border: isLightMode ? "#e2e8f0" : "#27272a"
   };
   const getButtonVariant = () => {
@@ -10131,34 +10130,37 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
-  (0, import_react49.useEffect)(() => {
-    var _a;
-    if (isPreview) return;
-    if (link.link_type !== "whitehat") return;
-    if (!settings.auto_redirect_enabled) return;
-    const cards = settings.cta_cards || [];
-    if (!cards.length) return;
-    const targetId = settings.auto_redirect_cta_id || cards[0] && cards[0].id || null;
-    if (!targetId) return;
-    const targetCard = cards.find((c2) => c2.id === targetId);
-    if (!targetCard || !targetCard.url) return;
-    const delaySec = (_a = settings.auto_redirect_delay_seconds) != null ? _a : 10;
-    const delayMs = Math.max(1, delaySec) * 1e3;
-    const timer = window.setTimeout(() => {
-      trackClick(link.id, isPreview);
-      const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
-      if (!navUrl) return;
-      window.location.href = navUrl;
-    }, delayMs);
-    return () => window.clearTimeout(timer);
-  }, [
-    isPreview,
-    settings.auto_redirect_enabled,
-    settings.auto_redirect_delay_seconds,
-    settings.auto_redirect_cta_id,
-    settings.cta_cards,
-    link.id
-  ]);
+  (0, import_react49.useEffect)(
+    () => {
+      var _a;
+      if (isPreview) return;
+      if (link.link_type !== "whitehat") return;
+      if (!settings.auto_redirect_enabled) return;
+      const cards = settings.cta_cards || [];
+      if (!cards.length) return;
+      const targetId = settings.auto_redirect_cta_id || cards[0] && cards[0].id || null;
+      if (!targetId) return;
+      const targetCard = cards.find((c2) => c2.id === targetId);
+      if (!targetCard || !targetCard.url) return;
+      const delaySec = (_a = settings.auto_redirect_delay_seconds) != null ? _a : 10;
+      const delayMs = Math.max(1, delaySec) * 1e3;
+      const timer = window.setTimeout(() => {
+        trackClick(link.id, isPreview);
+        const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
+        if (!navUrl) return;
+        window.location.href = navUrl;
+      }, delayMs);
+      return () => window.clearTimeout(timer);
+    },
+    [
+      isPreview,
+      settings.auto_redirect_enabled,
+      settings.auto_redirect_delay_seconds,
+      settings.auto_redirect_cta_id,
+      settings.cta_cards,
+      link.id
+    ]
+  );
   const heroHeightClass = (() => {
     if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
     return "h-[320px] md:h-[320px]";
@@ -10292,10 +10294,7 @@ function LandingPageViewer({
                     }
                   ) })
                 }
-              ) : (
-                /* Avatar Mode - Circular Profile Picture */
-                /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full pt-8" })
-              ),
+              ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full pt-8" }),
               /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                 "div",
                 {
@@ -10622,6 +10621,9 @@ function LandingPageViewer({
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
+                          const isOnlyfansLogo = (card2.style.logo_icon || "").toLowerCase().includes("onlyfans") || card2.style.logo_icon === "of-local" || (card2.style.logo_name || "").toLowerCase() === "icon";
+                          const isBrandedNonOF = !!card2.style.logo_icon && !isOnlyfansLogo;
+                          const isSnapchatLogo = (card2.style.logo_icon || "").toLowerCase().includes("snapchat");
                           const getCardStyle = () => {
                             switch (card2.style.type) {
                               case "solid":
@@ -10670,7 +10672,6 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
-                          const isOnlyfansLogo = (card2.style.logo_icon || "").toLowerCase().includes("onlyfans") || card2.style.logo_icon === "of-local" || (card2.style.logo_name || "").toLowerCase() === "icon";
                           const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             card_default,
                             {
@@ -10709,12 +10710,14 @@ function LandingPageViewer({
                                       );
                                     })(),
                                     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                      (card2.style.logo_icon || isOnlyfansLogo) && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: isOnlyfansLogo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
+                                      isOnlyfansLogo && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
                                         card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                           "p",
                                           {
                                             className: "text-base font-semibold",
-                                            style: { color: card2.style.logo_color || "#ffffff" },
+                                            style: {
+                                              color: card2.style.logo_color || "#ffffff"
+                                            },
                                             children: card2.style.prefix_text
                                           }
                                         ),
@@ -10738,35 +10741,8 @@ function LandingPageViewer({
                                             }
                                           )
                                         ] })
-                                      ] }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                          import_react50.Icon,
-                                          {
-                                            icon: card2.style.logo_icon,
-                                            width: 36,
-                                            style: {
-                                              color: card2.style.logo_color || "#fff",
-                                              filter: card2.style.type === "image" || card2.style.type === "video" ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "none"
-                                            },
-                                            className: "mx-auto"
-                                          }
-                                        ),
-                                        card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
-                                          "p",
-                                          {
-                                            className: "font-bold text-lg mt-1",
-                                            style: {
-                                              color: card2.style.logo_color || "#fff",
-                                              textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 4px rgba(0,0,0,0.3)" : "none"
-                                            },
-                                            children: [
-                                              card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "mr-1", children: card2.style.prefix_text }),
-                                              card2.style.logo_name
-                                            ]
-                                          }
-                                        )
                                       ] }) }),
-                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      !isBrandedNonOF && card2.title && card2.title.trim() !== "" && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                         "h3",
                                         {
                                           className: `${sizeTitleClass} font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
@@ -10776,7 +10752,7 @@ function LandingPageViewer({
                                           children: card2.title
                                         }
                                       ),
-                                      card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      !isBrandedNonOF && card2.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                         "p",
                                         {
                                           className: `${sizeDescriptionClass} mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
@@ -10786,6 +10762,38 @@ function LandingPageViewer({
                                           children: card2.description
                                         }
                                       )
+                                    ] }),
+                                    isBrandedNonOF && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+                                      card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "div",
+                                        {
+                                          className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
+                                          style: {
+                                            backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
+                                          },
+                                          children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                            import_react50.Icon,
+                                            {
+                                              icon: card2.style.logo_icon,
+                                              width: 18,
+                                              style: {
+                                                color: card2.style.logo_color || "#ffffff"
+                                              }
+                                            }
+                                          )
+                                        }
+                                      ) }),
+                                      card2.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "p",
+                                        {
+                                          className: "text-xs font-semibold",
+                                          style: {
+                                            color: card2.style.logo_color || "#ffffff",
+                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
+                                          },
+                                          children: card2.style.logo_name
+                                        }
+                                      ) })
                                     ] })
                                   ]
                                 }
@@ -10972,7 +10980,9 @@ function LandingPageViewer({
                         initial: { opacity: 0 },
                         animate: { opacity: 1 },
                         transition: { delay: 0.8, duration: 0.3 },
-                        className: `${getSectionSpacingClass("branding")} pb-8 flex justify-center`,
+                        className: `${getSectionSpacingClass(
+                          "branding"
+                        )} pb-8 flex justify-center`,
                         style: { order: getSectionOrder("branding") },
                         children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
                           "a",
@@ -10982,7 +10992,14 @@ function LandingPageViewer({
                             rel: "noreferrer",
                             className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
                             children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("img", { src: "/logo2.svg", alt: "Outlink logo", className: "h-4 w-4" }),
+                              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                "img",
+                                {
+                                  src: "/logo2.svg",
+                                  alt: "Outlink logo",
+                                  className: "h-4 w-4"
+                                }
+                              ),
                               /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { children: "Powered by outlink" })
                             ]
                           }
