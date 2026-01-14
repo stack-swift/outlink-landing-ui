@@ -753,7 +753,7 @@ useEffect(() => {
                           };
 
                           const isOnlyfansLogo =
-  (card.style.logo_name || "").toLowerCase() === "onlyfans";
+                          (card.style.logo_name || "").toLowerCase() === "onlyfans";
 
                           const renderCardContent = () => (
                             <Card
@@ -809,27 +809,30 @@ useEffect(() => {
   {(card.style.logo_icon || isOnlyfansLogo) && (
     <div className="mb-2">
       {isOnlyfansLogo ? (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex flex-col items-center gap-1">
+          {/* TEXT ABOVE */}
           {card.style.prefix_text && (
             <p
-              className="text-base font-semibold leading-none"
+              className="text-base font-semibold"
               style={{ color: card.style.logo_color || "#ffffff" }}
             >
               {card.style.prefix_text}
             </p>
           )}
-          <div className="flex flex-col items-center justify-center gap-0.5">
+
+          {/* ICON + PIC SIDE BY SIDE */}
+          <div className="flex items-center justify-center gap-2">
             {card.style.logo_icon && (
               <Icon
                 icon={card.style.logo_icon!}
-                width={20}
+                width={24}
                 style={{ color: card.style.logo_color || "#00AEEF" }}
               />
             )}
             <img
               src="/of.webp"
               alt="Creator link"
-              className="h-5 w-auto"
+              className="h-6 w-auto"
               loading="lazy"
             />
           </div>
@@ -869,6 +872,7 @@ useEffect(() => {
       )}
     </div>
   )}
+
   {/* Title and Description ... */}
                                   <h3
                                     className={`text-lg font-semibold ${

@@ -10688,21 +10688,21 @@ function LandingPageViewer({
                                       );
                                     })(),
                                     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                      (card2.style.logo_icon || isOnlyfansLogo) && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: isOnlyfansLogo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
+                                      (card2.style.logo_icon || isOnlyfansLogo) && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: isOnlyfansLogo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
                                         card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                           "p",
                                           {
-                                            className: "text-base font-semibold leading-none",
+                                            className: "text-base font-semibold",
                                             style: { color: card2.style.logo_color || "#ffffff" },
                                             children: card2.style.prefix_text
                                           }
                                         ),
-                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center justify-center gap-0.5", children: [
+                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
                                           card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                             import_react50.Icon,
                                             {
                                               icon: card2.style.logo_icon,
-                                              width: 20,
+                                              width: 24,
                                               style: { color: card2.style.logo_color || "#00AEEF" }
                                             }
                                           ),
@@ -10711,7 +10711,7 @@ function LandingPageViewer({
                                             {
                                               src: "/of.webp",
                                               alt: "Creator link",
-                                              className: "h-5 w-auto",
+                                              className: "h-6 w-auto",
                                               loading: "lazy"
                                             }
                                           )
