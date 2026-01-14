@@ -752,6 +752,9 @@ useEffect(() => {
                             setShowingAgeConfirmationFor(null);
                           };
 
+                          const isOnlyfansLogo =
+  (card.style.logo_name || "").toLowerCase() === "onlyfans";
+
                           const renderCardContent = () => (
                             <Card
                               isPressable
@@ -802,49 +805,71 @@ useEffect(() => {
                                       />
                                     );
                                   })()}
-                                <div className="text-center w-full relative z-10">
-                                  {/* Logo Style */}
-                                  {card.style.logo_icon && (
-                                    <div className="mb-2">
-                                      <Icon
-                                        icon={card.style.logo_icon}
-                                        width={36}
-                                        style={{
-                                          color:
-                                            card.style.logo_color || "#fff",
-                                          filter:
-                                            card.style.type === "image" ||
-                                            card.style.type === "video"
-                                              ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
-                                              : "none",
-                                        }}
-                                        className="mx-auto"
-                                      />
-                                      {card.style.logo_name && (
-                                        <p
-                                          className="font-bold text-lg mt-1"
-                                          style={{
-                                            color:
-                                              card.style.logo_color || "#fff",
-                                            textShadow:
-                                              card.style.type === "image" ||
-                                              card.style.type === "video"
-                                                ? "0 2px 4px rgba(0,0,0,0.3)"
-                                                : "none",
-                                          }}
-                                        >
-                                          {card.style.prefix_text && (
-                                            <span className="mr-1">
-                                              {card.style.prefix_text}
-                                            </span>
-                                          )}
-                                          {card.style.logo_name}
-                                        </p>
-                                      )}
-                                    </div>
-                                  )}
-
-                                  {/* Title and Description */}
+       <div className="text-center w-full relative z-10">
+  {(card.style.logo_icon || isOnlyfansLogo) && (
+    <div className="mb-2">
+      {isOnlyfansLogo ? (
+        <div className="flex items-center justify-center gap-2">
+          {card.style.prefix_text && (
+            <p
+              className="text-base font-semibold leading-none"
+              style={{ color: card.style.logo_color || "#ffffff" }}
+            >
+              {card.style.prefix_text}
+            </p>
+          )}
+          <div className="flex flex-col items-center justify-center gap-0.5">
+            {card.style.logo_icon && (
+              <Icon
+                icon={card.style.logo_icon!}
+                width={20}
+                style={{ color: card.style.logo_color || "#00AEEF" }}
+              />
+            )}
+            <img
+              src="/of.webp"
+              alt="Creator link"
+              className="h-5 w-auto"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <Icon
+            icon={card.style.logo_icon!}
+            width={36}
+            style={{
+              color: card.style.logo_color || "#fff",
+              filter:
+                card.style.type === "image" || card.style.type === "video"
+                  ? "drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
+                  : "none",
+            }}
+            className="mx-auto"
+          />
+          {card.style.logo_name && (
+            <p
+              className="font-bold text-lg mt-1"
+              style={{
+                color: card.style.logo_color || "#fff",
+                textShadow:
+                  card.style.type === "image" || card.style.type === "video"
+                    ? "0 2px 4px rgba(0,0,0,0.3)"
+                    : "none",
+              }}
+            >
+              {card.style.prefix_text && (
+                <span className="mr-1">{card.style.prefix_text}</span>
+              )}
+              {card.style.logo_name}
+            </p>
+          )}
+        </>
+      )}
+    </div>
+  )}
+  {/* Title and Description ... */}
                                   <h3
                                     className={`text-lg font-semibold ${
                                       card.style.type === "image" ||

@@ -10592,6 +10592,7 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
+                          const isOnlyfansLogo = (card2.style.logo_name || "").toLowerCase() === "onlyfans";
                           const renderCardContent = () => /* @__PURE__ */ jsx20(
                             card_default,
                             {
@@ -10630,7 +10631,35 @@ function LandingPageViewer({
                                       );
                                     })(),
                                     /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
-                                      card2.style.logo_icon && /* @__PURE__ */ jsxs15("div", { className: "mb-2", children: [
+                                      (card2.style.logo_icon || isOnlyfansLogo) && /* @__PURE__ */ jsx20("div", { className: "mb-2", children: isOnlyfansLogo ? /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-center gap-2", children: [
+                                        card2.style.prefix_text && /* @__PURE__ */ jsx20(
+                                          "p",
+                                          {
+                                            className: "text-base font-semibold leading-none",
+                                            style: { color: card2.style.logo_color || "#ffffff" },
+                                            children: card2.style.prefix_text
+                                          }
+                                        ),
+                                        /* @__PURE__ */ jsxs15("div", { className: "flex flex-col items-center justify-center gap-0.5", children: [
+                                          card2.style.logo_icon && /* @__PURE__ */ jsx20(
+                                            Icon9,
+                                            {
+                                              icon: card2.style.logo_icon,
+                                              width: 20,
+                                              style: { color: card2.style.logo_color || "#00AEEF" }
+                                            }
+                                          ),
+                                          /* @__PURE__ */ jsx20(
+                                            "img",
+                                            {
+                                              src: "/of.webp",
+                                              alt: "Creator link",
+                                              className: "h-5 w-auto",
+                                              loading: "lazy"
+                                            }
+                                          )
+                                        ] })
+                                      ] }) : /* @__PURE__ */ jsxs15(Fragment8, { children: [
                                         /* @__PURE__ */ jsx20(
                                           Icon9,
                                           {
@@ -10657,7 +10686,7 @@ function LandingPageViewer({
                                             ]
                                           }
                                         )
-                                      ] }),
+                                      ] }) }),
                                       /* @__PURE__ */ jsx20(
                                         "h3",
                                         {

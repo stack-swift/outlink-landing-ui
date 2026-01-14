@@ -10649,6 +10649,7 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
+                          const isOnlyfansLogo = (card2.style.logo_name || "").toLowerCase() === "onlyfans";
                           const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             card_default,
                             {
@@ -10687,7 +10688,35 @@ function LandingPageViewer({
                                       );
                                     })(),
                                     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                      card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "mb-2", children: [
+                                      (card2.style.logo_icon || isOnlyfansLogo) && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: isOnlyfansLogo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
+                                        card2.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                          "p",
+                                          {
+                                            className: "text-base font-semibold leading-none",
+                                            style: { color: card2.style.logo_color || "#ffffff" },
+                                            children: card2.style.prefix_text
+                                          }
+                                        ),
+                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center justify-center gap-0.5", children: [
+                                          card2.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                            import_react50.Icon,
+                                            {
+                                              icon: card2.style.logo_icon,
+                                              width: 20,
+                                              style: { color: card2.style.logo_color || "#00AEEF" }
+                                            }
+                                          ),
+                                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                            "img",
+                                            {
+                                              src: "/of.webp",
+                                              alt: "Creator link",
+                                              className: "h-5 w-auto",
+                                              loading: "lazy"
+                                            }
+                                          )
+                                        ] })
+                                      ] }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
                                         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                           import_react50.Icon,
                                           {
@@ -10714,7 +10743,7 @@ function LandingPageViewer({
                                             ]
                                           }
                                         )
-                                      ] }),
+                                      ] }) }),
                                       /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                         "h3",
                                         {
