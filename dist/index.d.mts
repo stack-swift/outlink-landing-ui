@@ -7,6 +7,18 @@ interface SocialLink {
     url: string;
     icon: string;
 }
+interface CTACard {
+    id: string;
+    title: string;
+    description?: string | null;
+    url: string;
+    order: number;
+    open_in_new_tab?: boolean;
+    style: CTACardStyle;
+    require_18plus?: boolean;
+    ctr_mechanisms?: any;
+}
+type LayoutSectionKey = "header" | "bio" | "social_block" | "voice_note" | "cta_block" | "gallery" | "branding";
 interface CTACardStyle {
     type: "solid" | "gradient" | "image" | "video";
     background_color?: string | null;
@@ -23,18 +35,23 @@ interface CTACardStyle {
     background_fit?: "fill" | "fit";
     background_focus?: "top" | "center" | "bottom";
 }
-interface CTACard {
-    id: string;
-    title: string;
-    description?: string | null;
-    url: string;
-    order: number;
-    open_in_new_tab?: boolean;
-    style: CTACardStyle;
-    require_18plus?: boolean;
-    ctr_mechanisms?: any;
+interface CTACardStyle {
+    type: "solid" | "gradient" | "image" | "video";
+    size?: "small" | "standard" | "large" | null;
+    background_color?: string | null;
+    background_gradient?: {
+        start: string;
+        end: string;
+    } | null;
+    background_image?: string | null;
+    background_video?: string | null;
+    logo_icon?: string | null;
+    logo_name?: string | null;
+    logo_color?: string | null;
+    prefix_text?: string | null;
+    background_fit?: "fill" | "fit";
+    background_focus?: "top" | "center" | "bottom";
 }
-type LayoutSectionKey = "header" | "bio" | "social_block" | "voice_note" | "cta_block" | "gallery" | "branding";
 type SectionSpacing = "tight" | "normal" | "relaxed";
 interface LandingPageSettings {
     id: string;

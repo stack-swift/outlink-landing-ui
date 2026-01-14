@@ -10543,7 +10543,28 @@ function LandingPageViewer({
                       {
                         className: `w-full ${getSectionSpacingClass("cta_block")}`,
                         style: { order: getSectionOrder("cta_block") },
-                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx20("div", { className: "w-full space-y-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx20("div", { className: "w-full grid grid-cols-1 sm:grid-cols-2 gap-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                          const size = card2.style.size || "standard";
+                          let sizeBodyClasses = "p-5 min-h-[120px]";
+                          let sizeTitleClass = "text-lg";
+                          let sizeDescriptionClass = "text-sm";
+                          let sizeColSpanClass = "";
+                          if (size === "small") {
+                            sizeBodyClasses = "p-5 min-h-[120px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
+                            sizeColSpanClass = "";
+                          } else if (size === "standard") {
+                            sizeBodyClasses = "p-6 min-h-[120px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
+                            sizeColSpanClass = "sm:col-span-2";
+                          } else if (size === "large") {
+                            sizeBodyClasses = "p-6 min-h-[200px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
+                            sizeColSpanClass = "sm:col-span-2";
+                          }
                           const getCardStyle = () => {
                             switch (card2.style.type) {
                               case "solid":
@@ -10691,7 +10712,7 @@ function LandingPageViewer({
                                       /* @__PURE__ */ jsx20(
                                         "h3",
                                         {
-                                          className: `text-lg font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                          className: `${sizeTitleClass} font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
                                           style: {
                                             textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
                                           },
@@ -10701,7 +10722,7 @@ function LandingPageViewer({
                                       card2.description && /* @__PURE__ */ jsx20(
                                         "p",
                                         {
-                                          className: `text-sm mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                          className: `${sizeDescriptionClass} mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
                                           style: {
                                             textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
                                           },
@@ -10741,7 +10762,7 @@ function LandingPageViewer({
                                 delay: 0.6 + index * 0.1,
                                 duration: 0.3
                               },
-                              className: "relative",
+                              className: `relative ${sizeColSpanClass}`,
                               children: finalContent
                             },
                             card2.id
