@@ -10400,7 +10400,7 @@ function LandingPageViewer({
                         ]
                       }
                     ),
-                    isSectionEnabled("social_block") && /* @__PURE__ */ jsxs15(
+                    isSectionEnabled("social_block") && (settings.social_links && settings.social_links.length > 0 || settings.show_follower_count && (settings.follower_count || 0) > 0) && /* @__PURE__ */ jsxs15(
                       "div",
                       {
                         className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
@@ -10439,7 +10439,7 @@ function LandingPageViewer({
                               ))
                             }
                           ),
-                          settings.show_follower_count && settings.follower_count > 0 && /* @__PURE__ */ jsx20(
+                          settings.show_follower_count && (settings.follower_count || 0) > 0 && /* @__PURE__ */ jsx20(
                             motion10.div,
                             {
                               initial: { opacity: 0 },

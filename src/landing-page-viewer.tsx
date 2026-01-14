@@ -546,13 +546,16 @@ useEffect(() => {
               )}
 
               {/* Social + Followers block */}
-              {isSectionEnabled("social_block") && (
-                <div
-                  className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                    "social_block"
-                  )}`}
-                  style={{ order: getSectionOrder("social_block") }}
-                >
+              {isSectionEnabled("social_block") &&
+  ((settings.social_links && settings.social_links.length > 0) ||
+    (settings.show_follower_count &&
+      (settings.follower_count || 0) > 0)) && (
+  <div
+    className={`flex flex-col items-center gap-2 ${getSectionSpacingClass(
+      "social_block"
+    )}`}
+    style={{ order: getSectionOrder("social_block") }}
+  >
                   {/* Social Links */}
                   {settings.social_links && settings.social_links.length > 0 && (
   <motion.div
@@ -585,7 +588,7 @@ useEffect(() => {
 
                   {/* Follower Count */}
                   {settings.show_follower_count &&
-                    settings.follower_count > 0 && (
+  (settings.follower_count || 0) > 0 && (
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
