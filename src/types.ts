@@ -11,6 +11,7 @@ export interface CTACardStyle {
   background_gradient?: { start: string; end: string } | null;
   background_image?: string | null;
   background_video?: string | null;
+  background_video_poster_url?: string | null;
   // Brand/logo
   logo_icon?: string | null;
   logo_name?: string | null;
@@ -76,6 +77,8 @@ export interface LandingPageSettings {
 
    /** Poster thumbnail (WebP) for the header video (for instant load/LCP). */
    header_video_poster_url?: string | null;
+
+   
  
    /** Where to focus the header video inside the hero area. */
    header_video_focus?: "top" | "center" | "bottom";

@@ -28,6 +28,7 @@ interface CTACardStyle {
     } | null;
     background_image?: string | null;
     background_video?: string | null;
+    background_video_poster_url?: string | null;
     logo_icon?: string | null;
     logo_name?: string | null;
     logo_color?: string | null;

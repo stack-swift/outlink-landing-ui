@@ -822,13 +822,15 @@ export function LandingPageViewer({
 
                                     return (
                                       <video
-                                        src={card.style.background_video}
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                      />
+                                      src={card.style.background_video}
+                                      poster={card.style.background_video_poster_url || undefined}
+                                      preload="metadata"
+                                      autoPlay
+                                      loop
+                                      muted
+                                      playsInline
+                                      className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                    />
                                     );
                                   })()}
 

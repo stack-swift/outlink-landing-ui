@@ -10643,6 +10643,8 @@ function LandingPageViewer({
                                         "video",
                                         {
                                           src: card2.style.background_video,
+                                          poster: card2.style.background_video_poster_url || void 0,
+                                          preload: "metadata",
                                           autoPlay: true,
                                           loop: true,
                                           muted: true,
