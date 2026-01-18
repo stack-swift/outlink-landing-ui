@@ -10114,17 +10114,14 @@ function LandingPageViewer({
       className: "min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden",
       style: { paddingTop: "env(safe-area-inset-top)" },
       children: [
-        isVideoMode && settings.header_video_url ? /* @__PURE__ */ jsx20(
-          "video",
+        isVideoMode && (settings.header_video_poster_url || settings.avatar_url) ? /* @__PURE__ */ jsx20(
+          "div",
           {
-            className: "hidden md:block absolute inset-0 z-0 w-full h-full object-cover",
-            src: settings.header_video_url,
-            autoPlay: true,
-            loop: true,
-            muted: true,
-            playsInline: true,
-            "aria-hidden": "true",
+            className: "hidden md:block absolute inset-0 z-0",
             style: {
+              backgroundImage: `url(${settings.header_video_poster_url || settings.avatar_url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               filter: "blur(80px) brightness(0.4)",
               transform: "scale(1.1)"
             }
@@ -10186,6 +10183,8 @@ function LandingPageViewer({
                           "video",
                           {
                             src: settings.header_video_url,
+                            poster: settings.header_video_poster_url || settings.avatar_url || void 0,
+                            preload: "metadata",
                             autoPlay: true,
                             loop: true,
                             muted: true,

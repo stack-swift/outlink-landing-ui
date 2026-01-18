@@ -59,6 +59,8 @@ interface LandingPageSettings {
     avatar_url: string | null;
     /** Optional short header video clip (MP4/WebM) that can play in the hero area. */
     header_video_url?: string | null;
+    /** Poster thumbnail (WebP) for the header video (for instant load/LCP). */
+    header_video_poster_url?: string | null;
     /** Where to focus the header video inside the hero area. */
     header_video_focus?: "top" | "center" | "bottom";
     display_name: string | null;

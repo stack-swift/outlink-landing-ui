@@ -253,17 +253,15 @@ export function LandingPageViewer({
       className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      {/* Blurred background for desktop - only shows on larger screens */}
-      {isVideoMode && settings.header_video_url ? (
-        <video
-          className="hidden md:block absolute inset-0 z-0 w-full h-full object-cover"
-          src={settings.header_video_url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-hidden="true"
+           {/* Blurred background for desktop - only shows on larger screens
+          IMPORTANT: don't use a background <video> here (it downloads the hero clip twice). */}
+      {isVideoMode && (settings.header_video_poster_url || settings.avatar_url) ? (
+        <div
+          className="hidden md:block absolute inset-0 z-0"
           style={{
+            backgroundImage: `url(${settings.header_video_poster_url || settings.avatar_url})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
             filter: "blur(80px) brightness(0.4)",
             transform: "scale(1.1)",
           }}
@@ -326,14 +324,16 @@ export function LandingPageViewer({
                     return (
                       <>
                         <div className="relative w-full h-full overflow-hidden">
-                          <video
-                            src={settings.header_video_url}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            className={`w-full h-full object-cover ${focusClass}`}
-                          />
+                        <video
+  src={settings.header_video_url}
+  poster={settings.header_video_poster_url || settings.avatar_url || undefined}
+  preload="metadata"
+  autoPlay
+  loop
+  muted
+  playsInline
+  className={`w-full h-full object-cover ${focusClass}`}
+/>
                         </div>
                         <div
                           className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
