@@ -9984,6 +9984,9 @@ function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState11(0);
   const [lightboxUrl, setLightboxUrl] = useState11(null);
   const galleryTouchStartX = useRef5(null);
+  const [enableMotionVideo, setEnableMotionVideo] = useState11(false);
+  const heroVideoRef = useRef5(null);
+  const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#000000",
@@ -10073,6 +10076,29 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
+  useEffect8(() => {
+    if (isPreview) return;
+    if (enableMotionVideo) return;
+    const activate = () => setEnableMotionVideo(true);
+    window.addEventListener("pointerdown", activate, { once: true, passive: true });
+    window.addEventListener("touchstart", activate, { once: true, passive: true });
+    window.addEventListener("wheel", activate, { once: true, passive: true });
+    window.addEventListener("scroll", activate, { once: true, passive: true });
+    window.addEventListener("keydown", activate, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("touchstart", activate);
+      window.removeEventListener("wheel", activate);
+      window.removeEventListener("scroll", activate);
+      window.removeEventListener("keydown", activate);
+    };
+  }, [isPreview, enableMotionVideo]);
+  useEffect8(() => {
+    var _a;
+    if (!enableMotionVideo) return;
+    (_a = heroVideoRef.current) == null ? void 0 : _a.play().catch(() => {
+    });
+  }, [enableMotionVideo]);
   useEffect8(
     () => {
       var _a;
@@ -10179,11 +10205,12 @@ function LandingPageViewer({
                       if (focus === "top") focusClass = "object-top";
                       else if (focus === "bottom") focusClass = "object-bottom";
                       return /* @__PURE__ */ jsxs15(Fragment8, { children: [
-                        /* @__PURE__ */ jsx20("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ jsx20(
+                        /* @__PURE__ */ jsx20("div", { className: "relative w-full h-full overflow-hidden", children: enableMotionVideo ? /* @__PURE__ */ jsx20(
                           "video",
                           {
+                            ref: heroVideoRef,
                             src: settings.header_video_url,
-                            poster: settings.header_video_poster_url || settings.avatar_url || void 0,
+                            poster: heroPoster,
                             preload: "metadata",
                             autoPlay: true,
                             loop: true,
@@ -10191,7 +10218,16 @@ function LandingPageViewer({
                             playsInline: true,
                             className: `w-full h-full object-cover ${focusClass}`
                           }
-                        ) }),
+                        ) : heroPoster ? /* @__PURE__ */ jsx20(
+                          "img",
+                          {
+                            src: heroPoster,
+                            alt: settings.display_name || link.title || "Profile",
+                            className: `w-full h-full object-cover ${focusClass}`,
+                            loading: "eager",
+                            decoding: "async"
+                          }
+                        ) : null }),
                         /* @__PURE__ */ jsx20(
                           "div",
                           {
@@ -10639,7 +10675,7 @@ function LandingPageViewer({
                                           focusClass = "object-bottom";
                                         else focusClass = "object-center";
                                       }
-                                      return /* @__PURE__ */ jsx20(
+                                      return enableMotionVideo ? /* @__PURE__ */ jsx20(
                                         "video",
                                         {
                                           src: card2.style.background_video,
@@ -10651,7 +10687,18 @@ function LandingPageViewer({
                                           playsInline: true,
                                           className: `${baseClasses} ${fitClass} ${focusClass}`
                                         }
-                                      );
+                                      ) : card2.style.background_video_poster_url ? /* @__PURE__ */ jsx20(
+                                        "div",
+                                        {
+                                          className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                          style: {
+                                            backgroundImage: `url(${card2.style.background_video_poster_url})`,
+                                            backgroundSize: fit === "fit" ? "contain" : "cover",
+                                            backgroundPosition: focus === "top" ? "top" : focus === "bottom" ? "bottom" : "center",
+                                            backgroundRepeat: "no-repeat"
+                                          }
+                                        }
+                                      ) : null;
                                     })(),
                                     /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
                                       isOnlyfansLogo && /* @__PURE__ */ jsx20("div", { className: "mb-2", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col items-center gap-1", children: [

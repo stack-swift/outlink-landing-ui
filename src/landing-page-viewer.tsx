@@ -20,6 +20,8 @@ import type {
   SectionSpacing,
 } from "./types";
 
+
+
 interface LandingPageViewerProps {
   link: Link;
   settings: LandingPageSettings;
@@ -77,6 +79,13 @@ export function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const galleryTouchStartX = useRef<number | null>(null);
+
+  // Motion video gate: don't load MP4 until the user interacts (instant LCP from poster)
+const [enableMotionVideo, setEnableMotionVideo] = useState(false);
+const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+
+const heroPoster =
+  settings.header_video_poster_url || settings.avatar_url || undefined;
 
   const isLightMode = settings.theme_mode === "light";
 
@@ -202,6 +211,34 @@ export function LandingPageViewer({
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
 
+  // Enable MP4 only after first user interaction (scroll/tap/click/keypress)
+useEffect(() => {
+  if (isPreview) return;
+  if (enableMotionVideo) return;
+
+  const activate = () => setEnableMotionVideo(true);
+
+  window.addEventListener("pointerdown", activate, { once: true, passive: true });
+  window.addEventListener("touchstart", activate, { once: true, passive: true });
+  window.addEventListener("wheel", activate, { once: true, passive: true });
+  window.addEventListener("scroll", activate, { once: true, passive: true });
+  window.addEventListener("keydown", activate, { once: true });
+
+  return () => {
+    window.removeEventListener("pointerdown", activate);
+    window.removeEventListener("touchstart", activate);
+    window.removeEventListener("wheel", activate);
+    window.removeEventListener("scroll", activate);
+    window.removeEventListener("keydown", activate);
+  };
+}, [isPreview, enableMotionVideo]);
+
+// When we flip the switch, try to start playback (helps iOS/in-app webviews)
+useEffect(() => {
+  if (!enableMotionVideo) return;
+  heroVideoRef.current?.play().catch(() => {});
+}, [enableMotionVideo]);
+
   // Auto‑redirect to a CTA button after N seconds (optional)
   useEffect(
     () => {
@@ -324,16 +361,27 @@ export function LandingPageViewer({
                     return (
                       <>
                         <div className="relative w-full h-full overflow-hidden">
-                        <video
-  src={settings.header_video_url}
-  poster={settings.header_video_poster_url || settings.avatar_url || undefined}
-  preload="metadata"
-  autoPlay
-  loop
-  muted
-  playsInline
-  className={`w-full h-full object-cover ${focusClass}`}
-/>
+                        {enableMotionVideo ? (
+  <video
+    ref={heroVideoRef}
+    src={settings.header_video_url}
+    poster={heroPoster}
+    preload="metadata"
+    autoPlay
+    loop
+    muted
+    playsInline
+    className={`w-full h-full object-cover ${focusClass}`}
+  />
+) : heroPoster ? (
+  <img
+    src={heroPoster}
+    alt={settings.display_name || link.title || "Profile"}
+    className={`w-full h-full object-cover ${focusClass}`}
+    loading="eager"
+    decoding="async"
+  />
+) : null}
                         </div>
                         <div
                           className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
@@ -820,18 +868,31 @@ export function LandingPageViewer({
                                       else focusClass = "object-center";
                                     }
 
-                                    return (
+                                    return enableMotionVideo ? (
                                       <video
-                                      src={card.style.background_video}
-                                      poster={card.style.background_video_poster_url || undefined}
-                                      preload="metadata"
-                                      autoPlay
-                                      loop
-                                      muted
-                                      playsInline
-                                      className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                    />
-                                    );
+                                        src={card.style.background_video}
+                                        poster={card.style.background_video_poster_url || undefined}
+                                        preload="metadata"
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                      />
+                                    ) : card.style.background_video_poster_url ? (
+                                      <div
+                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                        style={{
+                                          backgroundImage: `url(${card.style.background_video_poster_url})`,
+                                          backgroundSize: fit === "fit" ? "contain" : "cover",
+                                          backgroundPosition:
+                                            focus === "top" ? "top" : focus === "bottom" ? "bottom" : "center",
+                                          backgroundRepeat: "no-repeat",
+                                        }}
+                                      />
+                                    ) : null;
+
+                                    
                                   })()}
 
                                 {/* Center content */}

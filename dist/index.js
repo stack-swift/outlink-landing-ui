@@ -10041,6 +10041,9 @@ function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react49.useState)(0);
   const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
   const galleryTouchStartX = (0, import_react49.useRef)(null);
+  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react49.useState)(false);
+  const heroVideoRef = (0, import_react49.useRef)(null);
+  const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#000000",
@@ -10130,6 +10133,29 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
+  (0, import_react49.useEffect)(() => {
+    if (isPreview) return;
+    if (enableMotionVideo) return;
+    const activate = () => setEnableMotionVideo(true);
+    window.addEventListener("pointerdown", activate, { once: true, passive: true });
+    window.addEventListener("touchstart", activate, { once: true, passive: true });
+    window.addEventListener("wheel", activate, { once: true, passive: true });
+    window.addEventListener("scroll", activate, { once: true, passive: true });
+    window.addEventListener("keydown", activate, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", activate);
+      window.removeEventListener("touchstart", activate);
+      window.removeEventListener("wheel", activate);
+      window.removeEventListener("scroll", activate);
+      window.removeEventListener("keydown", activate);
+    };
+  }, [isPreview, enableMotionVideo]);
+  (0, import_react49.useEffect)(() => {
+    var _a;
+    if (!enableMotionVideo) return;
+    (_a = heroVideoRef.current) == null ? void 0 : _a.play().catch(() => {
+    });
+  }, [enableMotionVideo]);
   (0, import_react49.useEffect)(
     () => {
       var _a;
@@ -10236,11 +10262,12 @@ function LandingPageViewer({
                       if (focus === "top") focusClass = "object-top";
                       else if (focus === "bottom") focusClass = "object-bottom";
                       return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                           "video",
                           {
+                            ref: heroVideoRef,
                             src: settings.header_video_url,
-                            poster: settings.header_video_poster_url || settings.avatar_url || void 0,
+                            poster: heroPoster,
                             preload: "metadata",
                             autoPlay: true,
                             loop: true,
@@ -10248,7 +10275,16 @@ function LandingPageViewer({
                             playsInline: true,
                             className: `w-full h-full object-cover ${focusClass}`
                           }
-                        ) }),
+                        ) : heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          "img",
+                          {
+                            src: heroPoster,
+                            alt: settings.display_name || link.title || "Profile",
+                            className: `w-full h-full object-cover ${focusClass}`,
+                            loading: "eager",
+                            decoding: "async"
+                          }
+                        ) : null }),
                         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                           "div",
                           {
@@ -10696,7 +10732,7 @@ function LandingPageViewer({
                                           focusClass = "object-bottom";
                                         else focusClass = "object-center";
                                       }
-                                      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      return enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                                         "video",
                                         {
                                           src: card2.style.background_video,
@@ -10708,7 +10744,18 @@ function LandingPageViewer({
                                           playsInline: true,
                                           className: `${baseClasses} ${fitClass} ${focusClass}`
                                         }
-                                      );
+                                      ) : card2.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        "div",
+                                        {
+                                          className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                          style: {
+                                            backgroundImage: `url(${card2.style.background_video_poster_url})`,
+                                            backgroundSize: fit === "fit" ? "contain" : "cover",
+                                            backgroundPosition: focus === "top" ? "top" : focus === "bottom" ? "bottom" : "center",
+                                            backgroundRepeat: "no-repeat"
+                                          }
+                                        }
+                                      ) : null;
                                     })(),
                                     /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "text-center w-full relative z-10", children: [
                                       isOnlyfansLogo && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
