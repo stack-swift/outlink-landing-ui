@@ -84,6 +84,16 @@ export function LandingPageViewer({
 const [enableMotionVideo, setEnableMotionVideo] = useState(false);
 const heroVideoRef = useRef<HTMLVideoElement | null>(null);
 
+const ctaVideoMapRef = useRef(new Map<string, HTMLVideoElement>());
+
+const setCtaVideoRef = (id: string) => (el: HTMLVideoElement | null) => {
+  if (!el) {
+    ctaVideoMapRef.current.delete(id);
+    return;
+  }
+  ctaVideoMapRef.current.set(id, el);
+};
+
 const heroPoster =
   settings.header_video_poster_url || settings.avatar_url || undefined;
 
@@ -236,7 +246,13 @@ useEffect(() => {
 // When we flip the switch, try to start playback (helps iOS/in-app webviews)
 useEffect(() => {
   if (!enableMotionVideo) return;
+
   heroVideoRef.current?.play().catch(() => {});
+
+  // Mobile Safari often needs an explicit play() for videos mounted after interaction
+  for (const v of ctaVideoMapRef.current.values()) {
+    v.play().catch(() => {});
+  }
 }, [enableMotionVideo]);
 
   // Auto‑redirect to a CTA button after N seconds (optional)
@@ -870,15 +886,16 @@ useEffect(() => {
 
                                     return enableMotionVideo ? (
                                       <video
-                                        src={card.style.background_video}
-                                        poster={card.style.background_video_poster_url || undefined}
-                                        preload="metadata"
-                                        autoPlay
-                                        loop
-                                        muted
-                                        playsInline
-                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                      />
+                                      ref={setCtaVideoRef(card.id)}
+                                      src={card.style.background_video}
+                                      poster={card.style.background_video_poster_url || undefined}
+                                      preload="metadata"
+                                      autoPlay
+                                      loop
+                                      muted
+                                      playsInline
+                                      className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                    />
                                     ) : card.style.background_video_poster_url ? (
                                       <div
                                         className={`${baseClasses} ${fitClass} ${focusClass}`}

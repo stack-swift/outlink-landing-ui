@@ -9986,6 +9986,14 @@ function LandingPageViewer({
   const galleryTouchStartX = useRef5(null);
   const [enableMotionVideo, setEnableMotionVideo] = useState11(false);
   const heroVideoRef = useRef5(null);
+  const ctaVideoMapRef = useRef5(/* @__PURE__ */ new Map());
+  const setCtaVideoRef = (id) => (el) => {
+    if (!el) {
+      ctaVideoMapRef.current.delete(id);
+      return;
+    }
+    ctaVideoMapRef.current.set(id, el);
+  };
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
@@ -10098,6 +10106,10 @@ function LandingPageViewer({
     if (!enableMotionVideo) return;
     (_a = heroVideoRef.current) == null ? void 0 : _a.play().catch(() => {
     });
+    for (const v of ctaVideoMapRef.current.values()) {
+      v.play().catch(() => {
+      });
+    }
   }, [enableMotionVideo]);
   useEffect8(
     () => {
@@ -10678,6 +10690,7 @@ function LandingPageViewer({
                                       return enableMotionVideo ? /* @__PURE__ */ jsx20(
                                         "video",
                                         {
+                                          ref: setCtaVideoRef(card2.id),
                                           src: card2.style.background_video,
                                           poster: card2.style.background_video_poster_url || void 0,
                                           preload: "metadata",
