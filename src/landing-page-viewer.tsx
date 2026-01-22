@@ -249,6 +249,8 @@ useEffect(() => {
 
   heroVideoRef.current?.play().catch(() => {});
 
+  ctaVideoMapRef.current = new Map(ctaVideoMapRef.current);
+
   // Mobile Safari often needs an explicit play() for videos mounted after interaction
   for (const v of ctaVideoMapRef.current.values()) {
     v.play().catch(() => {});

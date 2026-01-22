@@ -10106,6 +10106,7 @@ function LandingPageViewer({
     if (!enableMotionVideo) return;
     (_a = heroVideoRef.current) == null ? void 0 : _a.play().catch(() => {
     });
+    ctaVideoMapRef.current = new Map(ctaVideoMapRef.current);
     for (const v of ctaVideoMapRef.current.values()) {
       v.play().catch(() => {
       });
