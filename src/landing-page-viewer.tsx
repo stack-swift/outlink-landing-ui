@@ -97,6 +97,23 @@ const setCtaVideoRef = (id: string) => (el: HTMLVideoElement | null) => {
 const heroPoster =
   settings.header_video_poster_url || settings.avatar_url || undefined;
 
+  useEffect(() => {
+    if (!heroPoster) return;
+  
+    const l = document.createElement("link");
+    l.rel = "preload";
+    l.as = "image";
+    l.href = heroPoster;
+    (l as any).fetchPriority = "high";
+  
+    document.head.appendChild(l);
+    return () => {
+      try {
+        document.head.removeChild(l);
+      } catch {}
+    };
+  }, [heroPoster]);
+
   const isLightMode = settings.theme_mode === "light";
 
   // Theme-aware colors
@@ -384,7 +401,7 @@ useEffect(() => {
     ref={heroVideoRef}
     src={settings.header_video_url}
     poster={heroPoster}
-    preload="metadata"
+    preload="none"
     autoPlay
     loop
     muted
@@ -891,7 +908,7 @@ useEffect(() => {
                                       ref={setCtaVideoRef(card.id)}
                                       src={card.style.background_video}
                                       poster={card.style.background_video_poster_url || undefined}
-                                      preload="metadata"
+                                      preload="none"
                                       autoPlay
                                       loop
                                       muted
