@@ -82,6 +82,7 @@ export function LandingPageViewer({
 
   // Motion video gate: don't load MP4 until the user interacts (instant LCP from poster)
 const [enableMotionVideo, setEnableMotionVideo] = useState(false);
+const [heroVideoReady, setHeroVideoReady] = useState(false);
 const heroVideoRef = useRef<HTMLVideoElement | null>(null);
 
 const ctaVideoMapRef = useRef(new Map<string, HTMLVideoElement>());
@@ -260,6 +261,11 @@ useEffect(() => {
   };
 }, [isPreview, enableMotionVideo]);
 
+useEffect(() => {
+  if (!enableMotionVideo) return;
+  setHeroVideoReady(false);
+}, [enableMotionVideo]);
+
 // When we flip the switch, try to start playback (helps iOS/in-app webviews)
 useEffect(() => {
   if (!enableMotionVideo) return;
@@ -395,29 +401,36 @@ useEffect(() => {
 
                     return (
                       <>
-                        <div className="relative w-full h-full overflow-hidden">
-                        {enableMotionVideo ? (
-  <video
-    ref={heroVideoRef}
-    src={settings.header_video_url}
-    poster={heroPoster}
-    preload="none"
-    autoPlay
-    loop
-    muted
-    playsInline
-    className={`w-full h-full object-cover ${focusClass}`}
-  />
-) : heroPoster ? (
-  <img
-    src={heroPoster}
-    alt={settings.display_name || link.title || "Profile"}
-    className={`w-full h-full object-cover ${focusClass}`}
-    loading="eager"
-    decoding="async"
-  />
-) : null}
-                        </div>
+                  <div className="relative w-full h-full overflow-hidden">
+  {heroPoster ? (
+    <img
+      src={heroPoster}
+      alt={settings.display_name || link.title || "Profile"}
+      className={`absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${
+        heroVideoReady ? "opacity-0" : "opacity-100"
+      }`}
+      loading="eager"
+      decoding="async"
+    />
+  ) : null}
+
+  {enableMotionVideo ? (
+    <video
+      ref={heroVideoRef}
+      src={settings.header_video_url}
+      poster={heroPoster}
+      preload="none"
+      autoPlay
+      loop
+      muted
+      playsInline
+      onPlaying={() => setHeroVideoReady(true)}
+      className={`absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${
+        heroVideoReady ? "opacity-100" : "opacity-0"
+      }`}
+    />
+  ) : null}
+</div>
                         <div
                           className="absolute inset-x-0 bottom-0 h-48 pointer-events-none"
                           style={{

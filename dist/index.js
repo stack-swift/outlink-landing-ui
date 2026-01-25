@@ -10042,6 +10042,7 @@ function LandingPageViewer({
   const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
   const galleryTouchStartX = (0, import_react49.useRef)(null);
   const [enableMotionVideo, setEnableMotionVideo] = (0, import_react49.useState)(false);
+  const [heroVideoReady, setHeroVideoReady] = (0, import_react49.useState)(false);
   const heroVideoRef = (0, import_react49.useRef)(null);
   const ctaVideoMapRef = (0, import_react49.useRef)(/* @__PURE__ */ new Map());
   const setCtaVideoRef = (id) => (el) => {
@@ -10052,6 +10053,21 @@ function LandingPageViewer({
     ctaVideoMapRef.current.set(id, el);
   };
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
+  (0, import_react49.useEffect)(() => {
+    if (!heroPoster) return;
+    const l = document.createElement("link");
+    l.rel = "preload";
+    l.as = "image";
+    l.href = heroPoster;
+    l.fetchPriority = "high";
+    document.head.appendChild(l);
+    return () => {
+      try {
+        document.head.removeChild(l);
+      } catch {
+      }
+    };
+  }, [heroPoster]);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#000000",
@@ -10158,6 +10174,10 @@ function LandingPageViewer({
       window.removeEventListener("keydown", activate);
     };
   }, [isPreview, enableMotionVideo]);
+  (0, import_react49.useEffect)(() => {
+    if (!enableMotionVideo) return;
+    setHeroVideoReady(false);
+  }, [enableMotionVideo]);
   (0, import_react49.useEffect)(() => {
     var _a;
     if (!enableMotionVideo) return;
@@ -10275,29 +10295,33 @@ function LandingPageViewer({
                       if (focus === "top") focusClass = "object-top";
                       else if (focus === "bottom") focusClass = "object-bottom";
                       return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "video",
-                          {
-                            ref: heroVideoRef,
-                            src: settings.header_video_url,
-                            poster: heroPoster,
-                            preload: "none",
-                            autoPlay: true,
-                            loop: true,
-                            muted: true,
-                            playsInline: true,
-                            className: `w-full h-full object-cover ${focusClass}`
-                          }
-                        ) : heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                          "img",
-                          {
-                            src: heroPoster,
-                            alt: settings.display_name || link.title || "Profile",
-                            className: `w-full h-full object-cover ${focusClass}`,
-                            loading: "eager",
-                            decoding: "async"
-                          }
-                        ) : null }),
+                        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "relative w-full h-full overflow-hidden", children: [
+                          heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            "img",
+                            {
+                              src: heroPoster,
+                              alt: settings.display_name || link.title || "Profile",
+                              className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
+                              loading: "eager",
+                              decoding: "async"
+                            }
+                          ) : null,
+                          enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            "video",
+                            {
+                              ref: heroVideoRef,
+                              src: settings.header_video_url,
+                              poster: heroPoster,
+                              preload: "none",
+                              autoPlay: true,
+                              loop: true,
+                              muted: true,
+                              playsInline: true,
+                              onPlaying: () => setHeroVideoReady(true),
+                              className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-100" : "opacity-0"}`
+                            }
+                          ) : null
+                        ] }),
                         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                           "div",
                           {
