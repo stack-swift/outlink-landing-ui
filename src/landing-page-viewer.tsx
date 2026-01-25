@@ -928,18 +928,15 @@ useEffect(() => {
                                       playsInline
                                       className={`${baseClasses} ${fitClass} ${focusClass}`}
                                     />
-                                    ) : card.style.background_video_poster_url ? (
-                                      <div
-                                        className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                        style={{
-                                          backgroundImage: `url(${card.style.background_video_poster_url})`,
-                                          backgroundSize: fit === "fit" ? "contain" : "cover",
-                                          backgroundPosition:
-                                            focus === "top" ? "top" : focus === "bottom" ? "bottom" : "center",
-                                          backgroundRepeat: "no-repeat",
-                                        }}
-                                      />
-                                    ) : null;
+                                  ) : card.style.background_video_poster_url ? (
+                                    <img
+                                      src={card.style.background_video_poster_url}
+                                      alt=""
+                                      className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  ) : null;
 
                                     
                                   })()}

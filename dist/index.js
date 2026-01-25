@@ -10783,15 +10783,13 @@ function LandingPageViewer({
                                           className: `${baseClasses} ${fitClass} ${focusClass}`
                                         }
                                       ) : card2.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                        "div",
+                                        "img",
                                         {
+                                          src: card2.style.background_video_poster_url,
+                                          alt: "",
                                           className: `${baseClasses} ${fitClass} ${focusClass}`,
-                                          style: {
-                                            backgroundImage: `url(${card2.style.background_video_poster_url})`,
-                                            backgroundSize: fit === "fit" ? "contain" : "cover",
-                                            backgroundPosition: focus === "top" ? "top" : focus === "bottom" ? "bottom" : "center",
-                                            backgroundRepeat: "no-repeat"
-                                          }
+                                          loading: "lazy",
+                                          decoding: "async"
                                         }
                                       ) : null;
                                     })(),
