@@ -10303,7 +10303,8 @@ function LandingPageViewer({
                               alt: settings.display_name || link.title || "Profile",
                               className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
                               loading: "eager",
-                              decoding: "async"
+                              decoding: "async",
+                              fetchPriority: "high"
                             }
                           ) : null,
                           enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
