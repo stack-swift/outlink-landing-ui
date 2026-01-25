@@ -266,15 +266,23 @@ useEffect(() => {
   setHeroVideoReady(false);
 }, [enableMotionVideo]);
 
-// When we flip the switch, try to start playback (helps iOS/in-app webviews)
 useEffect(() => {
   if (!enableMotionVideo) return;
 
-  heroVideoRef.current?.play().catch(() => {});
+  // Warm via the <video> elements (no Range-header preflight)
+  const hero = heroVideoRef.current;
+  if (hero) {
+    hero.preload = "metadata";
+    hero.load();
+  }
 
-  ctaVideoMapRef.current = new Map(ctaVideoMapRef.current);
+  for (const v of ctaVideoMapRef.current.values()) {
+    v.preload = "metadata";
+    v.load();
+  }
 
-  // Mobile Safari often needs an explicit play() for videos mounted after interaction
+  // Then try to play
+  hero?.play().catch(() => {});
   for (const v of ctaVideoMapRef.current.values()) {
     v.play().catch(() => {});
   }

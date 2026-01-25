@@ -10122,11 +10122,18 @@ function LandingPageViewer({
     setHeroVideoReady(false);
   }, [enableMotionVideo]);
   useEffect8(() => {
-    var _a;
     if (!enableMotionVideo) return;
-    (_a = heroVideoRef.current) == null ? void 0 : _a.play().catch(() => {
+    const hero = heroVideoRef.current;
+    if (hero) {
+      hero.preload = "metadata";
+      hero.load();
+    }
+    for (const v of ctaVideoMapRef.current.values()) {
+      v.preload = "metadata";
+      v.load();
+    }
+    hero == null ? void 0 : hero.play().catch(() => {
     });
-    ctaVideoMapRef.current = new Map(ctaVideoMapRef.current);
     for (const v of ctaVideoMapRef.current.values()) {
       v.play().catch(() => {
       });
