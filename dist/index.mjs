@@ -9984,7 +9984,7 @@ function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState11(0);
   const [lightboxUrl, setLightboxUrl] = useState11(null);
   const galleryTouchStartX = useRef5(null);
-  const [enableMotionVideo, setEnableMotionVideo] = useState11(false);
+  const [enableMotionVideo, setEnableMotionVideo] = useState11(!isPreview);
   const [heroVideoReady, setHeroVideoReady] = useState11(false);
   const heroVideoRef = useRef5(null);
   const ctaVideoMapRef = useRef5(/* @__PURE__ */ new Map());
@@ -10100,23 +10100,6 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
-  useEffect8(() => {
-    if (isPreview) return;
-    if (enableMotionVideo) return;
-    const activate = () => setEnableMotionVideo(true);
-    window.addEventListener("pointerdown", activate, { once: true, passive: true });
-    window.addEventListener("touchstart", activate, { once: true, passive: true });
-    window.addEventListener("wheel", activate, { once: true, passive: true });
-    window.addEventListener("scroll", activate, { once: true, passive: true });
-    window.addEventListener("keydown", activate, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", activate);
-      window.removeEventListener("touchstart", activate);
-      window.removeEventListener("wheel", activate);
-      window.removeEventListener("scroll", activate);
-      window.removeEventListener("keydown", activate);
-    };
-  }, [isPreview, enableMotionVideo]);
   useEffect8(() => {
     if (!enableMotionVideo) return;
     setHeroVideoReady(false);

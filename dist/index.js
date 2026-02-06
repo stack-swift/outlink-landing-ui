@@ -10041,7 +10041,7 @@ function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react49.useState)(0);
   const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
   const galleryTouchStartX = (0, import_react49.useRef)(null);
-  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react49.useState)(false);
+  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react49.useState)(!isPreview);
   const [heroVideoReady, setHeroVideoReady] = (0, import_react49.useState)(false);
   const heroVideoRef = (0, import_react49.useRef)(null);
   const ctaVideoMapRef = (0, import_react49.useRef)(/* @__PURE__ */ new Map());
@@ -10157,23 +10157,6 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
-  (0, import_react49.useEffect)(() => {
-    if (isPreview) return;
-    if (enableMotionVideo) return;
-    const activate = () => setEnableMotionVideo(true);
-    window.addEventListener("pointerdown", activate, { once: true, passive: true });
-    window.addEventListener("touchstart", activate, { once: true, passive: true });
-    window.addEventListener("wheel", activate, { once: true, passive: true });
-    window.addEventListener("scroll", activate, { once: true, passive: true });
-    window.addEventListener("keydown", activate, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", activate);
-      window.removeEventListener("touchstart", activate);
-      window.removeEventListener("wheel", activate);
-      window.removeEventListener("scroll", activate);
-      window.removeEventListener("keydown", activate);
-    };
-  }, [isPreview, enableMotionVideo]);
   (0, import_react49.useEffect)(() => {
     if (!enableMotionVideo) return;
     setHeroVideoReady(false);

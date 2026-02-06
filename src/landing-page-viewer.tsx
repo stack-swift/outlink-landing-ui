@@ -81,7 +81,7 @@ export function LandingPageViewer({
   const galleryTouchStartX = useRef<number | null>(null);
 
   // Motion video gate: don't load MP4 until the user interacts (instant LCP from poster)
-const [enableMotionVideo, setEnableMotionVideo] = useState(false);
+  const [enableMotionVideo, setEnableMotionVideo] = useState(!isPreview);
 const [heroVideoReady, setHeroVideoReady] = useState(false);
 const heroVideoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -240,26 +240,26 @@ const heroPoster =
   }, [lightboxUrl]);
 
   // Enable MP4 only after first user interaction (scroll/tap/click/keypress)
-useEffect(() => {
-  if (isPreview) return;
-  if (enableMotionVideo) return;
+// useEffect(() => {
+//   if (isPreview) return;
+//   if (enableMotionVideo) return;
 
-  const activate = () => setEnableMotionVideo(true);
+//   const activate = () => setEnableMotionVideo(true);
 
-  window.addEventListener("pointerdown", activate, { once: true, passive: true });
-  window.addEventListener("touchstart", activate, { once: true, passive: true });
-  window.addEventListener("wheel", activate, { once: true, passive: true });
-  window.addEventListener("scroll", activate, { once: true, passive: true });
-  window.addEventListener("keydown", activate, { once: true });
+//   window.addEventListener("pointerdown", activate, { once: true, passive: true });
+//   window.addEventListener("touchstart", activate, { once: true, passive: true });
+//   window.addEventListener("wheel", activate, { once: true, passive: true });
+//   window.addEventListener("scroll", activate, { once: true, passive: true });
+//   window.addEventListener("keydown", activate, { once: true });
 
-  return () => {
-    window.removeEventListener("pointerdown", activate);
-    window.removeEventListener("touchstart", activate);
-    window.removeEventListener("wheel", activate);
-    window.removeEventListener("scroll", activate);
-    window.removeEventListener("keydown", activate);
-  };
-}, [isPreview, enableMotionVideo]);
+//   return () => {
+//     window.removeEventListener("pointerdown", activate);
+//     window.removeEventListener("touchstart", activate);
+//     window.removeEventListener("wheel", activate);
+//     window.removeEventListener("scroll", activate);
+//     window.removeEventListener("keydown", activate);
+//   };
+// }, [isPreview, enableMotionVideo]);
 
 useEffect(() => {
   if (!enableMotionVideo) return;
