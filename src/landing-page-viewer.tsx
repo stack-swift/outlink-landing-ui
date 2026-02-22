@@ -49,77 +49,6 @@ function wrapUrlForNavigation(
   return url;
 }
 
-function isInAppBrowser(ua: string) {
-  const u = (ua || "").toLowerCase();
-  return (
-    u.includes("instagram") ||
-    u.includes("iabmv/") ||
-    u.includes("fban") ||
-    u.includes("fbav")
-  );
-}
-
-function isIOS(ua: string) {
-  return /iphone|ipad|ipod/i.test(ua);
-}
-
-function isAndroid(ua: string) {
-  return /android/i.test(ua);
-}
-
-function getIOSMajorVersion(ua: string) {
-  const m = ua.match(/OS (\d+)(?:_\d+)?/i);
-  return m ? Number(m[1]) : 0;
-}
-
-function performSmartNavigation(url: string) {
-  if (!url || typeof window === "undefined") return;
-
-  const ua = navigator.userAgent || "";
-  const inApp = isInAppBrowser(ua);
-
-  // normal browsers: keep normal nav
-  if (!inApp || !/^https?:\/\//i.test(url)) {
-    window.location.href = url;
-    return;
-  }
-
-  const stripped = url.replace(/^https?:\/\//i, "");
-
-  if (isIOS(ua)) {
-    const safariUrl = `x-safari-https://${stripped}`;
-    const iosMajor = getIOSMajorVersion(ua);
-
-    // iOS 17+ pattern (closest to GetMySocial behavior)
-    if (iosMajor >= 17) {
-      try {
-        window.open(safariUrl, "_blank");
-      } catch {}
-    } else {
-      window.location.href = safariUrl;
-    }
-
-    // fallback if blocked
-    window.setTimeout(() => {
-      window.location.href = url;
-    }, 500);
-    return;
-  }
-
-  if (isAndroid(ua)) {
-    const intent = `intent://${stripped}#Intent;scheme=https;package=com.android.chrome;end`;
-    window.location.href = intent;
-
-    // fallback if blocked
-    window.setTimeout(() => {
-      window.location.href = url;
-    }, 500);
-    return;
-  }
-
-  window.location.href = url;
-}
-
 // Helper: send click event to analytics
 function trackClick(linkId: string | undefined, isPreview: boolean | undefined) {
   if (!linkId || isPreview || typeof window === "undefined") return;
@@ -232,7 +161,7 @@ const heroPoster =
     const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
 
-    performSmartNavigation(target);
+    window.location.href = target;
   };
 
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
@@ -366,9 +295,6 @@ useEffect(() => {
       if (link.link_type !== "whitehat") return;
       if (!settings.auto_redirect_enabled) return;
 
-      const ua = navigator.userAgent || "";
-if (isInAppBrowser(ua)) return;
-
       const cards = settings.cta_cards || [];
       if (!cards.length) return;
 
@@ -386,7 +312,7 @@ if (isInAppBrowser(ua)) return;
         trackClick(link.id, isPreview);
         const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
         if (!navUrl) return;
-        performSmartNavigation(navUrl);
+        window.location.href = navUrl;
       }, delayMs);
 
       return () => window.clearTimeout(timer);
@@ -945,7 +871,7 @@ if (isInAppBrowser(ua)) return;
                             );
                             if (!navUrl) return;
 
-                            performSmartNavigation(navUrl);
+                            window.location.href = navUrl;
                           };
 
                           const handleAgeConfirm = () => {
@@ -957,7 +883,7 @@ if (isInAppBrowser(ua)) return;
                             );
                             if (!navUrl) return;
 
-                            performSmartNavigation(navUrl);
+                            window.location.href = navUrl;
                           };
 
                           const handleAgeCancel = () => {
