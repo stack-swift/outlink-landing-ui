@@ -10018,6 +10018,55 @@ function wrapUrlForNavigation(url, isPreview) {
   }
   return url;
 }
+function isInAppBrowser(ua) {
+  const u2 = (ua || "").toLowerCase();
+  return u2.includes("instagram") || u2.includes("iabmv/") || u2.includes("fban") || u2.includes("fbav");
+}
+function isIOS(ua) {
+  return /iphone|ipad|ipod/i.test(ua);
+}
+function isAndroid(ua) {
+  return /android/i.test(ua);
+}
+function getIOSMajorVersion(ua) {
+  const m2 = ua.match(/OS (\d+)(?:_\d+)?/i);
+  return m2 ? Number(m2[1]) : 0;
+}
+function performSmartNavigation(url) {
+  if (!url || typeof window === "undefined") return;
+  const ua = navigator.userAgent || "";
+  const inApp = isInAppBrowser(ua);
+  if (!inApp || !/^https?:\/\//i.test(url)) {
+    window.location.href = url;
+    return;
+  }
+  const stripped = url.replace(/^https?:\/\//i, "");
+  if (isIOS(ua)) {
+    const safariUrl = `x-safari-https://${stripped}`;
+    const iosMajor = getIOSMajorVersion(ua);
+    if (iosMajor >= 17) {
+      try {
+        window.open(safariUrl, "_blank");
+      } catch {
+      }
+    } else {
+      window.location.href = safariUrl;
+    }
+    window.setTimeout(() => {
+      window.location.href = url;
+    }, 500);
+    return;
+  }
+  if (isAndroid(ua)) {
+    const intent = `intent://${stripped}#Intent;scheme=https;package=com.android.chrome;end`;
+    window.location.href = intent;
+    window.setTimeout(() => {
+      window.location.href = url;
+    }, 500);
+    return;
+  }
+  window.location.href = url;
+}
 function trackClick(linkId, isPreview) {
   if (!linkId || isPreview || typeof window === "undefined") return;
   fetch("/api/analytics/track", {
@@ -10103,7 +10152,7 @@ function LandingPageViewer({
     trackClick(link.id, isPreview);
     const target = wrapUrlForNavigation(link.destination_url, isPreview);
     if (!target) return;
-    window.location.href = target;
+    performSmartNavigation(target);
   };
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
@@ -10185,6 +10234,8 @@ function LandingPageViewer({
       if (isPreview) return;
       if (link.link_type !== "whitehat") return;
       if (!settings.auto_redirect_enabled) return;
+      const ua = navigator.userAgent || "";
+      if (isInAppBrowser(ua)) return;
       const cards = settings.cta_cards || [];
       if (!cards.length) return;
       const targetId = settings.auto_redirect_cta_id || cards[0] && cards[0].id || null;
@@ -10197,7 +10248,7 @@ function LandingPageViewer({
         trackClick(link.id, isPreview);
         const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
         if (!navUrl) return;
-        window.location.href = navUrl;
+        performSmartNavigation(navUrl);
       }, delayMs);
       return () => window.clearTimeout(timer);
     },
@@ -10721,7 +10772,7 @@ function LandingPageViewer({
                               isPreview
                             );
                             if (!navUrl) return;
-                            window.location.href = navUrl;
+                            performSmartNavigation(navUrl);
                           };
                           const handleAgeConfirm = () => {
                             trackClick(link.id, isPreview);
@@ -10730,7 +10781,7 @@ function LandingPageViewer({
                               isPreview
                             );
                             if (!navUrl) return;
-                            window.location.href = navUrl;
+                            performSmartNavigation(navUrl);
                           };
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
