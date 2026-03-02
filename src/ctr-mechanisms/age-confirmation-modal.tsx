@@ -5,10 +5,12 @@ import { Button } from "@heroui/button";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
-interface AgeConfirmationModalProps {
+export interface AgeConfirmationModalProps {
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  /** When set, "I'm 18+" is rendered as a native <a target="_blank"> so in-app browsers may open in system browser */
+  confirmHref?: string;
   children: React.ReactNode;
 }
 
@@ -16,6 +18,7 @@ export function AgeConfirmationModal({
   isOpen,
   onConfirm,
   onCancel,
+  confirmHref,
   children,
 }: AgeConfirmationModalProps) {
   const handleCancel = () => {
@@ -54,13 +57,25 @@ export function AgeConfirmationModal({
             </p>
           </div>
           <div className="flex gap-2 pt-1">
-            <Button
-              size="sm"
-              onPress={onConfirm}
-              className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
-            >
-              I'm 18+
-            </Button>
+            {confirmHref ? (
+              <a
+                href={confirmHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onConfirm}
+                className="inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity"
+              >
+                I'm 18+
+              </a>
+            ) : (
+              <Button
+                size="sm"
+                onPress={onConfirm}
+                className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
+              >
+                I'm 18+
+              </Button>
+            )}
             <Button
               size="sm"
               variant="bordered"

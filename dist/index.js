@@ -9948,6 +9948,7 @@ function AgeConfirmationModal({
   isOpen,
   onConfirm,
   onCancel,
+  confirmHref,
   children
 }) {
   const handleCancel = () => {
@@ -9978,7 +9979,17 @@ function AgeConfirmationModal({
             /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { className: "text-white/90 text-xs drop-shadow-sm leading-tight", children: "You must be 18+ to continue" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "flex gap-2 pt-1", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+            confirmHref ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+              "a",
+              {
+                href: confirmHref,
+                target: "_blank",
+                rel: "noopener noreferrer",
+                onClick: onConfirm,
+                className: "inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity",
+                children: "I'm 18+"
+              }
+            ) : /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
               button_default,
               {
                 size: "sm",
@@ -10037,6 +10048,7 @@ function LandingPageViewer({
   isPreview = false,
   isFreePlan = false
 }) {
+  var _a;
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react49.useState)(null);
   const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react49.useState)(0);
   const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
@@ -10099,6 +10111,7 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
+  const useDeeplinkLink = !isPreview && link.enable_deeplink !== false && isInAppBrowser();
   const navigateToUrl = (url) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
@@ -10149,11 +10162,11 @@ function LandingPageViewer({
     return (index + 1) * 10;
   };
   const getSectionSpacingClass = (key) => {
-    var _a;
+    var _a2;
     if (key === "branding") {
       return "mt-3";
     }
-    const spacing = ((_a = settings.section_spacing) == null ? void 0 : _a[key]) || "normal";
+    const spacing = ((_a2 = settings.section_spacing) == null ? void 0 : _a2[key]) || "normal";
     switch (spacing) {
       case "tight":
         return "mt-1";
@@ -10201,7 +10214,7 @@ function LandingPageViewer({
   }, [enableMotionVideo]);
   (0, import_react49.useEffect)(
     () => {
-      var _a;
+      var _a2;
       if (isPreview) return;
       if (link.link_type !== "whitehat") return;
       if (!settings.auto_redirect_enabled) return;
@@ -10211,7 +10224,7 @@ function LandingPageViewer({
       if (!targetId) return;
       const targetCard = cards.find((c2) => c2.id === targetId);
       if (!targetCard || !targetCard.url) return;
-      const delaySec = (_a = settings.auto_redirect_delay_seconds) != null ? _a : 10;
+      const delaySec = (_a2 = settings.auto_redirect_delay_seconds) != null ? _a2 : 10;
       const delayMs = Math.max(1, delaySec) * 1e3;
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
@@ -10552,28 +10565,31 @@ function LandingPageViewer({
                               animate: { opacity: 1 },
                               transition: { delay: 0.3, duration: 0.3 },
                               className: "flex flex-wrap items-center justify-center gap-3",
-                              children: settings.social_links.map((social, index) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                button_default,
-                                {
-                                  as: "a",
-                                  href: social.url,
-                                  target: "_blank",
-                                  rel: "noopener noreferrer",
-                                  isIconOnly: true,
-                                  size: "sm",
-                                  variant: "light",
-                                  className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
-                                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    import_react50.Icon,
-                                    {
-                                      icon: social.icon,
-                                      width: 20,
-                                      color: isLightMode ? "#ec4899" : "#e5e7eb"
-                                    }
-                                  )
-                                },
-                                index
-                              ))
+                              children: settings.social_links.map((social, index) => {
+                                var _a2;
+                                return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  button_default,
+                                  {
+                                    as: "a",
+                                    href: (_a2 = social.url) != null ? _a2 : "",
+                                    target: "_blank",
+                                    rel: "noopener noreferrer",
+                                    isIconOnly: true,
+                                    size: "sm",
+                                    variant: "light",
+                                    className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
+                                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                      import_react50.Icon,
+                                      {
+                                        icon: social.icon,
+                                        width: 20,
+                                        color: isLightMode ? "#ec4899" : "#e5e7eb"
+                                      }
+                                    )
+                                  },
+                                  index
+                                );
+                              })
                             }
                           ),
                           settings.show_follower_count && (settings.follower_count || 0) > 0 && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -10681,6 +10697,7 @@ function LandingPageViewer({
                         className: `w-full ${getSectionSpacingClass("cta_block")}`,
                         style: { order: getSectionOrder("cta_block") },
                         children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full grid grid-cols-2 gap-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
+                          var _a2;
                           const size = card2.style.size || "standard";
                           let sizeBodyClasses = "p-5 min-h-[120px]";
                           let sizeTitleClass = "text-lg";
@@ -10743,11 +10760,12 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
+                          const useCardAsLink = useDeeplinkLink && !card2.require_18plus;
                           const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             card_default,
                             {
-                              isPressable: true,
-                              onPress: handleCardClick,
+                              isPressable: !useCardAsLink,
+                              onPress: useCardAsLink ? void 0 : handleCardClick,
                               className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                               style: getCardStyle(),
                               children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(
@@ -10883,21 +10901,33 @@ function LandingPageViewer({
                               )
                             }
                           );
+                          const baseCardContent = useCardAsLink ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                            "a",
+                            {
+                              href: (_a2 = wrapUrlForNavigation(card2.url, isPreview) || card2.url) != null ? _a2 : "",
+                              target: "_blank",
+                              rel: "noopener noreferrer",
+                              onClick: () => trackClick(link.id, isPreview),
+                              className: "block",
+                              children: renderCardContent()
+                            }
+                          ) : renderCardContent();
                           const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             CTACardWithMechanisms,
                             {
                               card: card2,
                               onReveal: () => {
                               },
-                              children: renderCardContent()
+                              children: baseCardContent
                             }
-                          ) : renderCardContent();
+                          ) : baseCardContent;
                           const finalContent = showingAgeConfirmationFor === card2.id && !isPreview ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                             AgeConfirmationModal,
                             {
                               isOpen: true,
                               onConfirm: handleAgeConfirm,
                               onCancel: handleAgeCancel,
+                              confirmHref: useDeeplinkLink && card2.url ? card2.url : void 0,
                               children: cardWithMechanisms
                             }
                           ) : cardWithMechanisms;
@@ -10915,39 +10945,66 @@ function LandingPageViewer({
                             },
                             card2.id
                           );
-                        }) }) : (
-                          // Fallback to default button if no CTA cards
-                          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                            import_framer_motion12.motion.div,
-                            {
-                              initial: { opacity: 0, y: 10 },
-                              animate: { opacity: 1, y: 0 },
-                              transition: { delay: 0.6, duration: 0.3 },
-                              className: "w-full px-4",
-                              children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                card_default,
-                                {
-                                  isPressable: true,
-                                  onPress: handleButtonClick,
-                                  className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
-                                  children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
-                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                                      link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                                    ] }),
-                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                      import_react50.Icon,
-                                      {
-                                        icon: "solar:arrow-right-line-duotone",
-                                        width: 24,
-                                        className: "text-default-400 ml-4"
-                                      }
-                                    )
-                                  ] }) })
-                                }
-                              )
-                            }
-                          )
+                        }) }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                          import_framer_motion12.motion.div,
+                          {
+                            initial: { opacity: 0, y: 10 },
+                            animate: { opacity: 1, y: 0 },
+                            transition: { delay: 0.6, duration: 0.3 },
+                            className: "w-full px-4",
+                            children: useDeeplinkLink ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              "a",
+                              {
+                                href: (_a = wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) != null ? _a : "",
+                                target: "_blank",
+                                rel: "noopener noreferrer",
+                                onClick: () => trackClick(link.id, isPreview),
+                                className: "block",
+                                children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                  card_default,
+                                  {
+                                    isPressable: false,
+                                    className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
+                                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
+                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
+                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                        link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                      ] }),
+                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                        import_react50.Icon,
+                                        {
+                                          icon: "solar:arrow-right-line-duotone",
+                                          width: 24,
+                                          className: "text-default-400 ml-4"
+                                        }
+                                      )
+                                    ] }) })
+                                  }
+                                )
+                              }
+                            ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                              card_default,
+                              {
+                                isPressable: true,
+                                onPress: handleButtonClick,
+                                className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
+                                children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
+                                    /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                    link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                  ] }),
+                                  /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                                    import_react50.Icon,
+                                    {
+                                      icon: "solar:arrow-right-line-duotone",
+                                      width: 24,
+                                      className: "text-default-400 ml-4"
+                                    }
+                                  )
+                                ] }) })
+                              }
+                            )
+                          }
                         )
                       }
                     ),

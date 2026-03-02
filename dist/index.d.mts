@@ -126,8 +126,10 @@ interface AgeConfirmationModalProps {
     isOpen: boolean;
     onConfirm: () => void;
     onCancel: () => void;
+    /** When set, "I'm 18+" is rendered as a native <a target="_blank"> so in-app browsers may open in system browser */
+    confirmHref?: string;
     children: React.ReactNode;
 }
-declare function AgeConfirmationModal({ isOpen, onConfirm, onCancel, children, }: AgeConfirmationModalProps): react_jsx_runtime.JSX.Element;
+declare function AgeConfirmationModal({ isOpen, onConfirm, onCancel, confirmHref, children, }: AgeConfirmationModalProps): react_jsx_runtime.JSX.Element;
 
-export { AgeConfirmationModal, type CTACard, type CTACardStyle, CTACardWithMechanisms, type LandingPageSettings, LandingPageViewer, type LayoutSectionKey, type Link, ModernAudioPlayer, type SectionSpacing, type SocialLink };
+export { AgeConfirmationModal, type AgeConfirmationModalProps, type CTACard, type CTACardStyle, CTACardWithMechanisms, type LandingPageSettings, LandingPageViewer, type LayoutSectionKey, type Link, ModernAudioPlayer, type SectionSpacing, type SocialLink };

@@ -152,6 +152,11 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
+  const useDeeplinkLink =
+    !isPreview &&
+    (link as any).enable_deeplink !== false &&
+    isInAppBrowser();
+
   const navigateToUrl = (url: string) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
@@ -684,7 +689,7 @@ useEffect(() => {
                             <Button
                               key={index}
                               as="a"
-                              href={social.url}
+                              href={social.url ?? ""}
                               target="_blank"
                               rel="noopener noreferrer"
                               isIconOnly
@@ -895,10 +900,13 @@ useEffect(() => {
                             setShowingAgeConfirmationFor(null);
                           };
 
+                          const useCardAsLink =
+                            useDeeplinkLink && !card.require_18plus;
+
                           const renderCardContent = () => (
                             <Card
-                              isPressable
-                              onPress={handleCardClick}
+                              isPressable={!useCardAsLink}
+                              onPress={useCardAsLink ? undefined : handleCardClick}
                               className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
                               style={getCardStyle()}
                             >
@@ -1090,7 +1098,20 @@ useEffect(() => {
                             </Card>
                           );
 
-                          // Wrap with CTR mechanisms
+                          const baseCardContent = useCardAsLink ? (
+                            <a
+                              href={(wrapUrlForNavigation(card.url, isPreview) || card.url) ?? ""}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => trackClick(link.id, isPreview)}
+                              className="block"
+                            >
+                              {renderCardContent()}
+                            </a>
+                          ) : (
+                            renderCardContent()
+                          );
+
                           const cardWithMechanisms = card.ctr_mechanisms ? (
                             <CTACardWithMechanisms
                               card={card}
@@ -1098,13 +1119,12 @@ useEffect(() => {
                                 // just reveal, no navigation
                               }}
                             >
-                              {renderCardContent()}
+                              {baseCardContent}
                             </CTACardWithMechanisms>
                           ) : (
-                            renderCardContent()
+                            baseCardContent
                           );
 
-                          // Wrap with age confirmation if needed
                           const finalContent =
                             showingAgeConfirmationFor === card.id &&
                             !isPreview ? (
@@ -1112,6 +1132,7 @@ useEffect(() => {
                                 isOpen={true}
                                 onConfirm={handleAgeConfirm}
                                 onCancel={handleAgeCancel}
+                                confirmHref={useDeeplinkLink && card.url ? card.url : undefined}
                               >
                                 {cardWithMechanisms}
                               </AgeConfirmationModal>
@@ -1136,38 +1157,72 @@ useEffect(() => {
                         })}
                     </div>
                   ) : (
-                    // Fallback to default button if no CTA cards
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.6, duration: 0.3 }}
                       className="w-full px-4"
                     >
-                      <Card
-                        isPressable
-                        onPress={handleButtonClick}
-                        className="w-full hover:scale-[1.02] transition-transform shadow-lg"
-                      >
-                        <CardBody className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <h3 className="text-lg font-semibold text-foreground">
-                                {link.title || "Click here"}
-                              </h3>
-                              {link.description && (
-                                <p className="text-sm text-default-500 mt-1">
-                                  {link.description}
-                                </p>
-                              )}
+                      {useDeeplinkLink ? (
+                        <a
+                          href={(wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) ?? ""}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => trackClick(link.id, isPreview)}
+                          className="block"
+                        >
+                          <Card
+                            isPressable={false}
+                            className="w-full hover:scale-[1.02] transition-transform shadow-lg"
+                          >
+                            <CardBody className="p-6">
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <h3 className="text-lg font-semibold text-foreground">
+                                    {link.title || "Click here"}
+                                  </h3>
+                                  {link.description && (
+                                    <p className="text-sm text-default-500 mt-1">
+                                      {link.description}
+                                    </p>
+                                  )}
+                                </div>
+                                <Icon
+                                  icon="solar:arrow-right-line-duotone"
+                                  width={24}
+                                  className="text-default-400 ml-4"
+                                />
+                              </div>
+                            </CardBody>
+                          </Card>
+                        </a>
+                      ) : (
+                        <Card
+                          isPressable
+                          onPress={handleButtonClick}
+                          className="w-full hover:scale-[1.02] transition-transform shadow-lg"
+                        >
+                          <CardBody className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-foreground">
+                                  {link.title || "Click here"}
+                                </h3>
+                                {link.description && (
+                                  <p className="text-sm text-default-500 mt-1">
+                                    {link.description}
+                                  </p>
+                                )}
+                              </div>
+                              <Icon
+                                icon="solar:arrow-right-line-duotone"
+                                width={24}
+                                className="text-default-400 ml-4"
+                              />
                             </div>
-                            <Icon
-                              icon="solar:arrow-right-line-duotone"
-                              width={24}
-                              className="text-default-400 ml-4"
-                            />
-                          </div>
-                        </CardBody>
-                      </Card>
+                          </CardBody>
+                        </Card>
+                      )}
                     </motion.div>
                   )}
                 </div>
