@@ -10060,7 +10060,13 @@ function LandingPageViewer({
     if (enableDeeplink && isInAppBrowser()) {
       const deep = getDeepLinkUrl(finalUrl);
       if (deep) {
-        window.location.href = deep;
+        const a2 = document.createElement("a");
+        a2.href = deep;
+        a2.rel = "noopener noreferrer";
+        a2.target = "_blank";
+        document.body.appendChild(a2);
+        a2.click();
+        document.body.removeChild(a2);
         setTimeout(() => {
           window.location.href = finalUrl;
         }, 1500);
