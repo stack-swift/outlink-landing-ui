@@ -171,21 +171,20 @@ const heroPoster =
     if (!finalUrl) return;
     const enableDeeplink = (link as any).enable_deeplink !== false;
     if (enableDeeplink && isInAppBrowser()) {
-      const deep = getDeepLinkUrl(finalUrl);
-      if (deep) {
-        // Use anchor click so Instagram's WebView is more likely to allow opening external browser
-        const a = document.createElement("a");
-        a.href = deep;
-        a.rel = "noopener noreferrer";
-        a.target = "_blank";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => {
-          window.location.href = finalUrl;
-        }, 1500);
-        return;
-      }
+      // Try opening the HTTPS URL in a new window first; many in-app browsers hand that to the system browser
+      const fullUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+      const a = document.createElement("a");
+      a.href = fullUrl;
+      a.rel = "noopener noreferrer";
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Fallback: if still in WebView after a moment, navigate in-place
+      setTimeout(() => {
+        window.location.href = finalUrl;
+      }, 1500);
+      return;
     }
     window.location.href = finalUrl;
   };

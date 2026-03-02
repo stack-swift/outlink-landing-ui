@@ -10058,20 +10058,18 @@ function LandingPageViewer({
     if (!finalUrl) return;
     const enableDeeplink = link.enable_deeplink !== false;
     if (enableDeeplink && isInAppBrowser()) {
-      const deep = getDeepLinkUrl(finalUrl);
-      if (deep) {
-        const a2 = document.createElement("a");
-        a2.href = deep;
-        a2.rel = "noopener noreferrer";
-        a2.target = "_blank";
-        document.body.appendChild(a2);
-        a2.click();
-        document.body.removeChild(a2);
-        setTimeout(() => {
-          window.location.href = finalUrl;
-        }, 1500);
-        return;
-      }
+      const fullUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+      const a2 = document.createElement("a");
+      a2.href = fullUrl;
+      a2.rel = "noopener noreferrer";
+      a2.target = "_blank";
+      document.body.appendChild(a2);
+      a2.click();
+      document.body.removeChild(a2);
+      setTimeout(() => {
+        window.location.href = finalUrl;
+      }, 1500);
+      return;
     }
     window.location.href = finalUrl;
   };
