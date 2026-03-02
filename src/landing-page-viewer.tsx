@@ -1104,9 +1104,9 @@ useEffect(() => {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => trackClick(link.id, isPreview)}
-                              className="block"
+                              className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
                             >
-                              {renderCardContent()}
+                              {card.title || "Access Now"}
                             </a>
                           ) : (
                             renderCardContent()
@@ -1169,32 +1169,9 @@ useEffect(() => {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => trackClick(link.id, isPreview)}
-                          className="block"
+                          className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
                         >
-                          <Card
-                            isPressable={false}
-                            className="w-full hover:scale-[1.02] transition-transform shadow-lg"
-                          >
-                            <CardBody className="p-6">
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                  <h3 className="text-lg font-semibold text-foreground">
-                                    {link.title || "Click here"}
-                                  </h3>
-                                  {link.description && (
-                                    <p className="text-sm text-default-500 mt-1">
-                                      {link.description}
-                                    </p>
-                                  )}
-                                </div>
-                                <Icon
-                                  icon="solar:arrow-right-line-duotone"
-                                  width={24}
-                                  className="text-default-400 ml-4"
-                                />
-                              </div>
-                            </CardBody>
-                          </Card>
+                          {link.title || "Click here"}
                         </a>
                       ) : (
                         <Card

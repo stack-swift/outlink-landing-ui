@@ -10908,8 +10908,8 @@ function LandingPageViewer({
                               target: "_blank",
                               rel: "noopener noreferrer",
                               onClick: () => trackClick(link.id, isPreview),
-                              className: "block",
-                              children: renderCardContent()
+                              className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
+                              children: card2.title || "Access Now"
                             }
                           ) : renderCardContent();
                           const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
@@ -10959,28 +10959,8 @@ function LandingPageViewer({
                                 target: "_blank",
                                 rel: "noopener noreferrer",
                                 onClick: () => trackClick(link.id, isPreview),
-                                className: "block",
-                                children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  card_default,
-                                  {
-                                    isPressable: false,
-                                    className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
-                                    children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(card_body_default, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex items-center justify-between", children: [
-                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "flex-1", children: [
-                                        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                                        link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                                      ] }),
-                                      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                        import_react50.Icon,
-                                        {
-                                          icon: "solar:arrow-right-line-duotone",
-                                          width: 24,
-                                          className: "text-default-400 ml-4"
-                                        }
-                                      )
-                                    ] }) })
-                                  }
-                                )
+                                className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
+                                children: link.title || "Click here"
                               }
                             ) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
                               card_default,
