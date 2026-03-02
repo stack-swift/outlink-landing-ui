@@ -152,38 +152,22 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
-  const getDeepLinkUrl = (targetUrl: string): string | null => {
-    if (typeof window === "undefined" || !targetUrl) return null;
-    const full = targetUrl.startsWith("http")
-      ? targetUrl
-      : `${window.location.origin}${targetUrl.startsWith("/") ? "" : "/"}${targetUrl}`;
-    const trimmed = full.replace(/^https?:\/\//, "").split("#")[0];
-    const isAndroid = /Android/i.test(navigator.userAgent || "");
-    const isIOS = /iPhone|iPad/i.test(navigator.userAgent || "");
-    if (isAndroid) return `intent://${trimmed}#Intent;scheme=https;package=com.android.chrome;end`;
-    if (isIOS) return `x-safari-https://${trimmed}`;
-    return null;
-  };
-
   const navigateToUrl = (url: string) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
+    const fullUrl = finalUrl.startsWith("http")
+      ? finalUrl
+      : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
     const enableDeeplink = (link as any).enable_deeplink !== false;
+
     if (enableDeeplink && isInAppBrowser()) {
-      // Try opening the HTTPS URL in a new window first; many in-app browsers hand that to the system browser
-      const fullUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
-      const a = document.createElement("a");
-      a.href = fullUrl;
-      a.rel = "noopener noreferrer";
-      a.target = "_blank";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      // Fallback: if still in WebView after a moment, navigate in-place
-      setTimeout(() => {
-        window.location.href = finalUrl;
-      }, 1500);
+      const opened = window.open(fullUrl, "_blank", "noopener,noreferrer");
+      if (!opened) {
+        setTimeout(() => {
+          window.location.href = finalUrl;
+        }, 300);
+      }
       return;
     }
     window.location.href = finalUrl;
