@@ -10037,6 +10037,38 @@ function LandingPageViewer({
     }
     return "";
   };
+  const isInAppBrowser = () => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
+  };
+  const getDeepLinkUrl = (targetUrl) => {
+    if (typeof window === "undefined" || !targetUrl) return null;
+    const full = targetUrl.startsWith("http") ? targetUrl : `${window.location.origin}${targetUrl.startsWith("/") ? "" : "/"}${targetUrl}`;
+    const trimmed = full.replace(/^https?:\/\//, "").split("#")[0];
+    const isAndroid = /Android/i.test(navigator.userAgent || "");
+    const isIOS = /iPhone|iPad/i.test(navigator.userAgent || "");
+    if (isAndroid) return `intent://${trimmed}#Intent;scheme=https;package=com.android.chrome;end`;
+    if (isIOS) return `x-safari-https://${trimmed}`;
+    return null;
+  };
+  const navigateToUrl = (url) => {
+    if (!url) return;
+    const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
+    if (!finalUrl) return;
+    const enableDeeplink = link.enable_deeplink !== false;
+    if (enableDeeplink && isInAppBrowser()) {
+      const deep = getDeepLinkUrl(finalUrl);
+      if (deep) {
+        window.location.href = deep;
+        setTimeout(() => {
+          window.location.href = finalUrl;
+        }, 1500);
+        return;
+      }
+    }
+    window.location.href = finalUrl;
+  };
   const handleButtonClick = () => {
     if (onButtonClick) {
       onButtonClick();
@@ -10044,9 +10076,7 @@ function LandingPageViewer({
     if (isPreview) return;
     if (!link.destination_url) return;
     trackClick(link.id, isPreview);
-    const target = wrapUrlForNavigation(link.destination_url, isPreview);
-    if (!target) return;
-    window.location.href = target;
+    navigateToUrl(link.destination_url);
   };
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
@@ -10138,9 +10168,7 @@ function LandingPageViewer({
       const delayMs = Math.max(1, delaySec) * 1e3;
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
-        const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
-        if (!navUrl) return;
-        window.location.href = navUrl;
+        navigateToUrl(targetCard.url);
       }, delayMs);
       return () => window.clearTimeout(timer);
     },
@@ -10659,21 +10687,11 @@ function LandingPageViewer({
                               return;
                             }
                             trackClick(link.id, isPreview);
-                            const navUrl = wrapUrlForNavigation(
-                              card2.url,
-                              isPreview
-                            );
-                            if (!navUrl) return;
-                            window.location.href = navUrl;
+                            navigateToUrl(card2.url);
                           };
                           const handleAgeConfirm = () => {
                             trackClick(link.id, isPreview);
-                            const navUrl = wrapUrlForNavigation(
-                              card2.url,
-                              isPreview
-                            );
-                            if (!navUrl) return;
-                            window.location.href = navUrl;
+                            navigateToUrl(card2.url);
                           };
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);

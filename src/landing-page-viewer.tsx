@@ -146,22 +146,53 @@ const heroPoster =
     return "";
   };
 
+  const isInAppBrowser = (): boolean => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
+  };
+
+  const getDeepLinkUrl = (targetUrl: string): string | null => {
+    if (typeof window === "undefined" || !targetUrl) return null;
+    const full = targetUrl.startsWith("http")
+      ? targetUrl
+      : `${window.location.origin}${targetUrl.startsWith("/") ? "" : "/"}${targetUrl}`;
+    const trimmed = full.replace(/^https?:\/\//, "").split("#")[0];
+    const isAndroid = /Android/i.test(navigator.userAgent || "");
+    const isIOS = /iPhone|iPad/i.test(navigator.userAgent || "");
+    if (isAndroid) return `intent://${trimmed}#Intent;scheme=https;package=com.android.chrome;end`;
+    if (isIOS) return `x-safari-https://${trimmed}`;
+    return null;
+  };
+
+  const navigateToUrl = (url: string) => {
+    if (!url) return;
+    const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
+    if (!finalUrl) return;
+    const enableDeeplink = (link as any).enable_deeplink !== false;
+    if (enableDeeplink && isInAppBrowser()) {
+      const deep = getDeepLinkUrl(finalUrl);
+      if (deep) {
+        window.location.href = deep;
+        setTimeout(() => {
+          window.location.href = finalUrl;
+        }, 1500);
+        return;
+      }
+    }
+    window.location.href = finalUrl;
+  };
+
   const handleButtonClick = () => {
     if (onButtonClick) {
       onButtonClick();
     }
 
-    // Skip navigation in preview mode
     if (isPreview) return;
     if (!link.destination_url) return;
 
-    // record click
     trackClick(link.id, isPreview);
-
-    const target = wrapUrlForNavigation(link.destination_url, isPreview);
-    if (!target) return;
-
-    window.location.href = target;
+    navigateToUrl(link.destination_url);
   };
 
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
@@ -310,9 +341,7 @@ useEffect(() => {
 
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
-        const navUrl = wrapUrlForNavigation(targetCard.url, isPreview);
-        if (!navUrl) return;
-        window.location.href = navUrl;
+        navigateToUrl(targetCard.url);
       }, delayMs);
 
       return () => window.clearTimeout(timer);
@@ -864,26 +893,12 @@ useEffect(() => {
                             }
 
                             trackClick(link.id, isPreview);
-
-                            const navUrl = wrapUrlForNavigation(
-                              card.url,
-                              isPreview,
-                            );
-                            if (!navUrl) return;
-
-                            window.location.href = navUrl;
+                            navigateToUrl(card.url);
                           };
 
                           const handleAgeConfirm = () => {
                             trackClick(link.id, isPreview);
-
-                            const navUrl = wrapUrlForNavigation(
-                              card.url,
-                              isPreview,
-                            );
-                            if (!navUrl) return;
-
-                            window.location.href = navUrl;
+                            navigateToUrl(card.url);
                           };
 
                           const handleAgeCancel = () => {
