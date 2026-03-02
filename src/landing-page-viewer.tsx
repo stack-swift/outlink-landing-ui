@@ -164,18 +164,7 @@ const heroPoster =
     const fullUrl = finalUrl.startsWith("http")
       ? finalUrl
       : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
-    const enableDeeplink = (link as any).enable_deeplink !== false;
-
-    if (enableDeeplink && isInAppBrowser()) {
-      const opened = window.open(fullUrl, "_blank", "noopener,noreferrer");
-      if (!opened) {
-        setTimeout(() => {
-          window.location.href = finalUrl;
-        }, 300);
-      }
-      return;
-    }
-    window.location.href = finalUrl;
+    window.location.href = fullUrl;
   };
 
   const handleButtonClick = () => {
@@ -1101,8 +1090,6 @@ useEffect(() => {
                           const baseCardContent = useCardAsLink ? (
                             <a
                               href={(wrapUrlForNavigation(card.url, isPreview) || card.url) ?? ""}
-                              target="_blank"
-                              rel="noopener noreferrer"
                               onClick={() => trackClick(link.id, isPreview)}
                               className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
                             >
@@ -1166,8 +1153,6 @@ useEffect(() => {
                       {useDeeplinkLink ? (
                         <a
                           href={(wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) ?? ""}
-                          target="_blank"
-                          rel="noopener noreferrer"
                           onClick={() => trackClick(link.id, isPreview)}
                           className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
                         >

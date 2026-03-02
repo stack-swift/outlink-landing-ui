@@ -10117,17 +10117,7 @@ function LandingPageViewer({
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
     const fullUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
-    const enableDeeplink = link.enable_deeplink !== false;
-    if (enableDeeplink && isInAppBrowser()) {
-      const opened = window.open(fullUrl, "_blank", "noopener,noreferrer");
-      if (!opened) {
-        setTimeout(() => {
-          window.location.href = finalUrl;
-        }, 300);
-      }
-      return;
-    }
-    window.location.href = finalUrl;
+    window.location.href = fullUrl;
   };
   const handleButtonClick = () => {
     if (onButtonClick) {
@@ -10905,8 +10895,6 @@ function LandingPageViewer({
                             "a",
                             {
                               href: (_a2 = wrapUrlForNavigation(card2.url, isPreview) || card2.url) != null ? _a2 : "",
-                              target: "_blank",
-                              rel: "noopener noreferrer",
                               onClick: () => trackClick(link.id, isPreview),
                               className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
                               children: card2.title || "Access Now"
@@ -10956,8 +10944,6 @@ function LandingPageViewer({
                               "a",
                               {
                                 href: (_a = wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) != null ? _a : "",
-                                target: "_blank",
-                                rel: "noopener noreferrer",
                                 onClick: () => trackClick(link.id, isPreview),
                                 className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
                                 children: link.title || "Click here"
