@@ -152,19 +152,62 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
-  const useDeeplinkLink =
+  const shouldEscapeInAppBrowser =
     !isPreview &&
     (link as any).enable_deeplink !== false &&
     isInAppBrowser();
 
-  const navigateToUrl = (url: string) => {
+  const buildDeepLinkUrl = (absoluteUrl: string): string | null => {
+    if (typeof window === "undefined") return null;
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    if (isIOS) {
+      if (!absoluteUrl.startsWith("https://")) return null;
+      return `x-safari-${absoluteUrl}`;
+    }
+
+    if (isAndroid) {
+      try {
+        const parsed = new URL(absoluteUrl);
+        const scheme = parsed.protocol.replace(":", "") || "https";
+        const path = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+        return `intent://${parsed.host}${path}#Intent;scheme=${scheme};package=com.android.chrome;end`;
+      } catch {
+        return null;
+      }
+    }
+
+    return null;
+  };
+
+  const navigateToUrl = (
+    url: string,
+    opts?: {
+      fromUserGesture?: boolean;
+    },
+  ) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
-    const fullUrl = finalUrl.startsWith("http")
+    const absoluteUrl = finalUrl.startsWith("http")
       ? finalUrl
       : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
-    window.location.href = fullUrl;
+    const fromUserGesture = opts?.fromUserGesture === true;
+
+    if (shouldEscapeInAppBrowser && fromUserGesture) {
+      const deepLinkUrl = buildDeepLinkUrl(absoluteUrl);
+      if (deepLinkUrl) {
+        window.location.href = deepLinkUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1200);
+        return;
+      }
+    }
+
+    window.location.href = absoluteUrl;
   };
 
   const handleButtonClick = () => {
@@ -176,7 +219,7 @@ const heroPoster =
     if (!link.destination_url) return;
 
     trackClick(link.id, isPreview);
-    navigateToUrl(link.destination_url);
+    navigateToUrl(link.destination_url, { fromUserGesture: true });
   };
 
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
@@ -877,25 +920,22 @@ useEffect(() => {
                             }
 
                             trackClick(link.id, isPreview);
-                            navigateToUrl(card.url);
+                            navigateToUrl(card.url, { fromUserGesture: true });
                           };
 
                           const handleAgeConfirm = () => {
                             trackClick(link.id, isPreview);
-                            navigateToUrl(card.url);
+                            navigateToUrl(card.url, { fromUserGesture: true });
                           };
 
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
 
-                          const useCardAsLink =
-                            useDeeplinkLink && !card.require_18plus;
-
                           const renderCardContent = () => (
                             <Card
-                              isPressable={!useCardAsLink}
-                              onPress={useCardAsLink ? undefined : handleCardClick}
+                              isPressable
+                              onPress={handleCardClick}
                               className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
                               style={getCardStyle()}
                             >
@@ -1087,17 +1127,7 @@ useEffect(() => {
                             </Card>
                           );
 
-                          const baseCardContent = useCardAsLink ? (
-                            <a
-                              href={(wrapUrlForNavigation(card.url, isPreview) || card.url) ?? ""}
-                              onClick={() => trackClick(link.id, isPreview)}
-                              className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
-                            >
-                              {card.title || "Access Now"}
-                            </a>
-                          ) : (
-                            renderCardContent()
-                          );
+                          const baseCardContent = renderCardContent();
 
                           const cardWithMechanisms = card.ctr_mechanisms ? (
                             <CTACardWithMechanisms
@@ -1119,7 +1149,7 @@ useEffect(() => {
                                 isOpen={true}
                                 onConfirm={handleAgeConfirm}
                                 onCancel={handleAgeCancel}
-                                confirmHref={useDeeplinkLink && card.url ? card.url : undefined}
+                                confirmHref={undefined}
                               >
                                 {cardWithMechanisms}
                               </AgeConfirmationModal>
@@ -1150,41 +1180,31 @@ useEffect(() => {
                       transition={{ delay: 0.6, duration: 0.3 }}
                       className="w-full px-4"
                     >
-                      {useDeeplinkLink ? (
-                        <a
-                          href={(wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) ?? ""}
-                          onClick={() => trackClick(link.id, isPreview)}
-                          className="block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity"
-                        >
-                          {link.title || "Click here"}
-                        </a>
-                      ) : (
-                        <Card
-                          isPressable
-                          onPress={handleButtonClick}
-                          className="w-full hover:scale-[1.02] transition-transform shadow-lg"
-                        >
-                          <CardBody className="p-6">
-                            <div className="flex items-center justify-between">
-                              <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-foreground">
-                                  {link.title || "Click here"}
-                                </h3>
-                                {link.description && (
-                                  <p className="text-sm text-default-500 mt-1">
-                                    {link.description}
-                                  </p>
-                                )}
-                              </div>
-                              <Icon
-                                icon="solar:arrow-right-line-duotone"
-                                width={24}
-                                className="text-default-400 ml-4"
-                              />
+                      <Card
+                        isPressable
+                        onPress={handleButtonClick}
+                        className="w-full hover:scale-[1.02] transition-transform shadow-lg"
+                      >
+                        <CardBody className="p-6">
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1">
+                              <h3 className="text-lg font-semibold text-foreground">
+                                {link.title || "Click here"}
+                              </h3>
+                              {link.description && (
+                                <p className="text-sm text-default-500 mt-1">
+                                  {link.description}
+                                </p>
+                              )}
                             </div>
-                          </CardBody>
-                        </Card>
-                      )}
+                            <Icon
+                              icon="solar:arrow-right-line-duotone"
+                              width={24}
+                              className="text-default-400 ml-4"
+                            />
+                          </div>
+                        </CardBody>
+                      </Card>
                     </motion.div>
                   )}
                 </div>
