@@ -9991,7 +9991,6 @@ function LandingPageViewer({
   isPreview = false,
   isFreePlan = false
 }) {
-  var _a;
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = useState11(null);
   const [activeGalleryIndex, setActiveGalleryIndex] = useState11(0);
   const [lightboxUrl, setLightboxUrl] = useState11(null);
@@ -10054,13 +10053,64 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
-  const useDeeplinkLink = !isPreview && link.enable_deeplink !== false && isInAppBrowser();
-  const navigateToUrl = (url) => {
+  const shouldEscapeInAppBrowser = !isPreview && link.enable_deeplink !== false && isInAppBrowser();
+  const buildDeepLinkUrl = (absoluteUrl) => {
+    if (typeof window === "undefined") return null;
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    if (isIOS) {
+      if (!absoluteUrl.startsWith("https://")) return null;
+      return `x-safari-${absoluteUrl}`;
+    }
+    if (isAndroid) {
+      try {
+        const parsed = new URL(absoluteUrl);
+        const scheme = parsed.protocol.replace(":", "") || "https";
+        const path = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+        return `intent://${parsed.host}${path}#Intent;scheme=${scheme};package=com.android.chrome;end`;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+  const openInNewTabBestEffort = (absoluteUrl) => {
+    try {
+      const popup = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
+      if (popup) return;
+    } catch {
+    }
+    try {
+      const a2 = document.createElement("a");
+      a2.href = absoluteUrl;
+      a2.target = "_blank";
+      a2.rel = "noopener noreferrer";
+      a2.style.display = "none";
+      document.body.appendChild(a2);
+      a2.click();
+      document.body.removeChild(a2);
+    } catch {
+    }
+  };
+  const navigateToUrl = (url, opts) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
-    const fullUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
-    window.location.href = fullUrl;
+    const absoluteUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    const fromUserGesture = (opts == null ? void 0 : opts.fromUserGesture) === true;
+    if (shouldEscapeInAppBrowser && fromUserGesture) {
+      openInNewTabBestEffort(absoluteUrl);
+      const deepLinkUrl = buildDeepLinkUrl(absoluteUrl);
+      if (deepLinkUrl) {
+        window.location.href = deepLinkUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return;
+      }
+    }
+    window.location.href = absoluteUrl;
   };
   const handleButtonClick = () => {
     if (onButtonClick) {
@@ -10069,7 +10119,7 @@ function LandingPageViewer({
     if (isPreview) return;
     if (!link.destination_url) return;
     trackClick(link.id, isPreview);
-    navigateToUrl(link.destination_url);
+    navigateToUrl(link.destination_url, { fromUserGesture: true });
   };
   const mode = settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
@@ -10095,11 +10145,11 @@ function LandingPageViewer({
     return (index + 1) * 10;
   };
   const getSectionSpacingClass = (key) => {
-    var _a2;
+    var _a;
     if (key === "branding") {
       return "mt-3";
     }
-    const spacing = ((_a2 = settings.section_spacing) == null ? void 0 : _a2[key]) || "normal";
+    const spacing = ((_a = settings.section_spacing) == null ? void 0 : _a[key]) || "normal";
     switch (spacing) {
       case "tight":
         return "mt-1";
@@ -10147,7 +10197,7 @@ function LandingPageViewer({
   }, [enableMotionVideo]);
   useEffect8(
     () => {
-      var _a2;
+      var _a;
       if (isPreview) return;
       if (link.link_type !== "whitehat") return;
       if (!settings.auto_redirect_enabled) return;
@@ -10157,7 +10207,7 @@ function LandingPageViewer({
       if (!targetId) return;
       const targetCard = cards.find((c2) => c2.id === targetId);
       if (!targetCard || !targetCard.url) return;
-      const delaySec = (_a2 = settings.auto_redirect_delay_seconds) != null ? _a2 : 10;
+      const delaySec = (_a = settings.auto_redirect_delay_seconds) != null ? _a : 10;
       const delayMs = Math.max(1, delaySec) * 1e3;
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
@@ -10499,12 +10549,12 @@ function LandingPageViewer({
                               transition: { delay: 0.3, duration: 0.3 },
                               className: "flex flex-wrap items-center justify-center gap-3",
                               children: settings.social_links.map((social, index) => {
-                                var _a2;
+                                var _a;
                                 return /* @__PURE__ */ jsx20(
                                   button_default,
                                   {
                                     as: "a",
-                                    href: (_a2 = social.url) != null ? _a2 : "",
+                                    href: (_a = social.url) != null ? _a : "",
                                     target: "_blank",
                                     rel: "noopener noreferrer",
                                     isIconOnly: true,
@@ -10630,7 +10680,6 @@ function LandingPageViewer({
                         className: `w-full ${getSectionSpacingClass("cta_block")}`,
                         style: { order: getSectionOrder("cta_block") },
                         children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx20("div", { className: "w-full grid grid-cols-2 gap-3", children: settings.cta_cards.sort((a2, b) => a2.order - b.order).map((card2, index) => {
-                          var _a2;
                           const size = card2.style.size || "standard";
                           let sizeBodyClasses = "p-5 min-h-[120px]";
                           let sizeTitleClass = "text-lg";
@@ -10684,21 +10733,20 @@ function LandingPageViewer({
                               return;
                             }
                             trackClick(link.id, isPreview);
-                            navigateToUrl(card2.url);
+                            navigateToUrl(card2.url, { fromUserGesture: true });
                           };
                           const handleAgeConfirm = () => {
                             trackClick(link.id, isPreview);
-                            navigateToUrl(card2.url);
+                            navigateToUrl(card2.url, { fromUserGesture: true });
                           };
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
-                          const useCardAsLink = useDeeplinkLink && !card2.require_18plus;
                           const renderCardContent = () => /* @__PURE__ */ jsx20(
                             card_default,
                             {
-                              isPressable: !useCardAsLink,
-                              onPress: useCardAsLink ? void 0 : handleCardClick,
+                              isPressable: true,
+                              onPress: handleCardClick,
                               className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                               style: getCardStyle(),
                               children: /* @__PURE__ */ jsxs15(
@@ -10834,15 +10882,7 @@ function LandingPageViewer({
                               )
                             }
                           );
-                          const baseCardContent = useCardAsLink ? /* @__PURE__ */ jsx20(
-                            "a",
-                            {
-                              href: (_a2 = wrapUrlForNavigation(card2.url, isPreview) || card2.url) != null ? _a2 : "",
-                              onClick: () => trackClick(link.id, isPreview),
-                              className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
-                              children: card2.title || "Access Now"
-                            }
-                          ) : renderCardContent();
+                          const baseCardContent = renderCardContent();
                           const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ jsx20(
                             CTACardWithMechanisms,
                             {
@@ -10858,7 +10898,7 @@ function LandingPageViewer({
                               isOpen: true,
                               onConfirm: handleAgeConfirm,
                               onCancel: handleAgeCancel,
-                              confirmHref: useDeeplinkLink && card2.url ? card2.url : void 0,
+                              confirmHref: void 0,
                               children: cardWithMechanisms
                             }
                           ) : cardWithMechanisms;
@@ -10883,15 +10923,7 @@ function LandingPageViewer({
                             animate: { opacity: 1, y: 0 },
                             transition: { delay: 0.6, duration: 0.3 },
                             className: "w-full px-4",
-                            children: useDeeplinkLink ? /* @__PURE__ */ jsx20(
-                              "a",
-                              {
-                                href: (_a = wrapUrlForNavigation(link.destination_url, isPreview) || link.destination_url) != null ? _a : "",
-                                onClick: () => trackClick(link.id, isPreview),
-                                className: "block w-full rounded-xl shadow-lg p-5 sm:p-6 text-center font-semibold text-base sm:text-lg text-white bg-gradient-to-r from-pink-500 to-rose-500 hover:opacity-95 transition-opacity",
-                                children: link.title || "Click here"
-                              }
-                            ) : /* @__PURE__ */ jsx20(
+                            children: /* @__PURE__ */ jsx20(
                               card_default,
                               {
                                 isPressable: true,

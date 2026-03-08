@@ -182,6 +182,24 @@ const heroPoster =
     return null;
   };
 
+  const openInNewTabBestEffort = (absoluteUrl: string) => {
+    try {
+      const popup = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
+      if (popup) return;
+    } catch {}
+
+    try {
+      const a = document.createElement("a");
+      a.href = absoluteUrl;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {}
+  };
+
   const navigateToUrl = (
     url: string,
     opts?: {
@@ -197,12 +215,15 @@ const heroPoster =
     const fromUserGesture = opts?.fromUserGesture === true;
 
     if (shouldEscapeInAppBrowser && fromUserGesture) {
+      // IG/FB webviews are inconsistent; fire multiple escape strategies from the same tap.
+      openInNewTabBestEffort(absoluteUrl);
+
       const deepLinkUrl = buildDeepLinkUrl(absoluteUrl);
       if (deepLinkUrl) {
         window.location.href = deepLinkUrl;
         window.setTimeout(() => {
           window.location.href = absoluteUrl;
-        }, 1200);
+        }, 1400);
         return;
       }
     }
