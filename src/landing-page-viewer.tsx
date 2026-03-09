@@ -153,10 +153,11 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
+  const isWhitehatLink = (link as { link_type?: string }).link_type === "whitehat";
   const shouldEscapeInAppBrowser =
     !isPreview &&
-    (link as any).enable_deeplink !== false &&
-    isInAppBrowser();
+    isInAppBrowser() &&
+    (isWhitehatLink || (link as any).enable_deeplink !== false);
 
   const buildDeepLinkUrl = (absoluteUrl: string): string | null => {
     if (typeof window === "undefined") return null;
@@ -183,6 +184,17 @@ const heroPoster =
     return null;
   };
 
+  const buildChromeNavigateUrl = (absoluteUrl: string): string | null => {
+    try {
+      const parsed = new URL(absoluteUrl);
+      return `googlechrome://navigate?url=${encodeURIComponent(
+        `${parsed.protocol}//${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`,
+      )}`;
+    } catch {
+      return null;
+    }
+  };
+
   const openInNewTabBestEffort = (absoluteUrl: string) => {
     try {
       const popup = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
@@ -201,6 +213,54 @@ const heroPoster =
     } catch {}
   };
 
+  const attemptAppBrowserHandoff = (
+    absoluteUrl: string,
+  ): boolean => {
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    if (isIOS) {
+      const safariScheme = buildDeepLinkUrl(absoluteUrl);
+      if (!safariScheme) return false;
+
+      openInNewTabBestEffort(absoluteUrl);
+      openInNewTabBestEffort(safariScheme);
+      window.location.href = safariScheme;
+      window.setTimeout(() => {
+        window.location.href = absoluteUrl;
+      }, 1400);
+      return true;
+    }
+
+    if (isAndroid) {
+      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
+
+      if (chromeNavigateUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        openInNewTabBestEffort(chromeNavigateUrl);
+        window.location.href = chromeNavigateUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+
+      const intentUrl = buildDeepLinkUrl(absoluteUrl);
+      if (intentUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        openInNewTabBestEffort(intentUrl);
+        window.location.href = intentUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   const navigateToUrl = (
     url: string,
     opts?: {
@@ -216,15 +276,7 @@ const heroPoster =
     const fromUserGesture = opts?.fromUserGesture === true;
 
     if (shouldEscapeInAppBrowser && fromUserGesture) {
-      // IG/FB webviews are inconsistent; fire multiple escape strategies from the same tap.
-      openInNewTabBestEffort(absoluteUrl);
-
-      const deepLinkUrl = buildDeepLinkUrl(absoluteUrl);
-      if (deepLinkUrl) {
-        window.location.href = deepLinkUrl;
-        window.setTimeout(() => {
-          window.location.href = absoluteUrl;
-        }, 1400);
+      if (attemptAppBrowserHandoff(absoluteUrl)) {
         return;
       }
     }
@@ -244,19 +296,13 @@ const heroPoster =
 
   const getNativeLinkProps = (url: string) => {
     const { finalUrl, absoluteUrl } = getNavigationTargets(url);
-    const deepLinkUrl =
-      shouldEscapeInAppBrowser && absoluteUrl
-        ? buildDeepLinkUrl(absoluteUrl)
-        : null;
 
     const attemptExternalOpen = () => {
-      if (deepLinkUrl && absoluteUrl) {
-        openInNewTabBestEffort(absoluteUrl);
-        window.location.href = deepLinkUrl;
-        window.setTimeout(() => {
-          window.location.href = absoluteUrl;
-        }, 1400);
-        return true;
+      if (shouldEscapeInAppBrowser && absoluteUrl) {
+        if (attemptAppBrowserHandoff(absoluteUrl)) {
+          return true;
+        }
+        return false;
       }
 
       return false;
@@ -1005,7 +1051,7 @@ useEffect(() => {
                           };
 
                           const useNativeCardLink =
-                            shouldEscapeInAppBrowser &&
+                            !isPreview &&
                             !!card.url &&
                             !card.require_18plus;
 
@@ -1018,16 +1064,10 @@ useEffect(() => {
                               ? getNativeLinkProps(card.url)
                               : null;
 
-                          const renderCardContent = () => (
-                            <Card
-                              isPressable={!useNativeCardLink}
-                              onPress={useNativeCardLink ? undefined : handleCardClick}
-                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
-                              style={getCardStyle()}
+                          const renderCardBodyContent = () => (
+                            <div
+                              className={`${sizeBodyClasses} flex items-center justify-center relative`}
                             >
-                              <CardBody
-                                className={`${sizeBodyClasses} flex items-center justify-center relative`}
-                              >
                                 {/* Video Background */}
                                 {card.style.type === "video" &&
                                   card.style.background_video &&
@@ -1209,6 +1249,18 @@ useEffect(() => {
                                     )}
                                   </>
                                 )}
+                            </div>
+                          );
+
+                          const renderCardContent = () => (
+                            <Card
+                              isPressable
+                              onPress={handleCardClick}
+                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
+                              style={getCardStyle()}
+                            >
+                              <CardBody>
+                                {renderCardBodyContent()}
                               </CardBody>
                             </Card>
                           );
@@ -1219,9 +1271,10 @@ useEffect(() => {
                               target={cardLinkProps.target}
                               rel={cardLinkProps.rel}
                               onClick={cardLinkProps.onClick}
-                              className="block w-full"
+                              className="block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]"
+                              style={getCardStyle()}
                             >
-                              {renderCardContent()}
+                              {renderCardBodyContent()}
                             </a>
                           ) : (
                             renderCardContent()
@@ -1295,32 +1348,30 @@ useEffect(() => {
                       transition={{ delay: 0.6, duration: 0.3 }}
                       className="w-full px-4"
                     >
-                      {shouldEscapeInAppBrowser && link.destination_url ? (
+                      {!isPreview && link.destination_url ? (
                         <a
                           {...getNativeLinkProps(link.destination_url)}
-                          className="block w-full"
+                          className="block w-full rounded-xl bg-content1 shadow-lg transition-transform hover:scale-[1.02]"
                         >
-                          <Card className="w-full hover:scale-[1.02] transition-transform shadow-lg">
-                            <CardBody className="p-6">
-                              <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                  <h3 className="text-lg font-semibold text-foreground">
-                                    {link.title || "Click here"}
-                                  </h3>
-                                  {link.description && (
-                                    <p className="text-sm text-default-500 mt-1">
-                                      {link.description}
-                                    </p>
-                                  )}
-                                </div>
-                                <Icon
-                                  icon="solar:arrow-right-line-duotone"
-                                  width={24}
-                                  className="text-default-400 ml-4"
-                                />
+                          <div className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-foreground">
+                                  {link.title || "Click here"}
+                                </h3>
+                                {link.description && (
+                                  <p className="text-sm text-default-500 mt-1">
+                                    {link.description}
+                                  </p>
+                                )}
                               </div>
-                            </CardBody>
-                          </Card>
+                              <Icon
+                                icon="solar:arrow-right-line-duotone"
+                                width={24}
+                                className="text-default-400 ml-4"
+                              />
+                            </div>
+                          </div>
                         </a>
                       ) : (
                         <Card

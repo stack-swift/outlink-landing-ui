@@ -10055,7 +10055,8 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
-  const shouldEscapeInAppBrowser = !isPreview && link.enable_deeplink !== false && isInAppBrowser();
+  const isWhitehatLink = link.link_type === "whitehat";
+  const shouldEscapeInAppBrowser = !isPreview && isInAppBrowser() && (isWhitehatLink || link.enable_deeplink !== false);
   const buildDeepLinkUrl = (absoluteUrl) => {
     if (typeof window === "undefined") return null;
     const ua = navigator.userAgent || "";
@@ -10077,6 +10078,16 @@ function LandingPageViewer({
     }
     return null;
   };
+  const buildChromeNavigateUrl = (absoluteUrl) => {
+    try {
+      const parsed = new URL(absoluteUrl);
+      return `googlechrome://navigate?url=${encodeURIComponent(
+        `${parsed.protocol}//${parsed.host}${parsed.pathname}${parsed.search}${parsed.hash}`
+      )}`;
+    } catch {
+      return null;
+    }
+  };
   const openInNewTabBestEffort = (absoluteUrl) => {
     try {
       const popup = window.open(absoluteUrl, "_blank", "noopener,noreferrer");
@@ -10095,6 +10106,45 @@ function LandingPageViewer({
     } catch {
     }
   };
+  const attemptAppBrowserHandoff = (absoluteUrl) => {
+    const ua = navigator.userAgent || "";
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    if (isIOS) {
+      const safariScheme = buildDeepLinkUrl(absoluteUrl);
+      if (!safariScheme) return false;
+      openInNewTabBestEffort(absoluteUrl);
+      openInNewTabBestEffort(safariScheme);
+      window.location.href = safariScheme;
+      window.setTimeout(() => {
+        window.location.href = absoluteUrl;
+      }, 1400);
+      return true;
+    }
+    if (isAndroid) {
+      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
+      if (chromeNavigateUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        openInNewTabBestEffort(chromeNavigateUrl);
+        window.location.href = chromeNavigateUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+      const intentUrl = buildDeepLinkUrl(absoluteUrl);
+      if (intentUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        openInNewTabBestEffort(intentUrl);
+        window.location.href = intentUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+    }
+    return false;
+  };
   const navigateToUrl = (url, opts) => {
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
@@ -10102,13 +10152,7 @@ function LandingPageViewer({
     const absoluteUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
     const fromUserGesture = (opts == null ? void 0 : opts.fromUserGesture) === true;
     if (shouldEscapeInAppBrowser && fromUserGesture) {
-      openInNewTabBestEffort(absoluteUrl);
-      const deepLinkUrl = buildDeepLinkUrl(absoluteUrl);
-      if (deepLinkUrl) {
-        window.location.href = deepLinkUrl;
-        window.setTimeout(() => {
-          window.location.href = absoluteUrl;
-        }, 1400);
+      if (attemptAppBrowserHandoff(absoluteUrl)) {
         return;
       }
     }
@@ -10121,15 +10165,12 @@ function LandingPageViewer({
   };
   const getNativeLinkProps = (url) => {
     const { finalUrl, absoluteUrl } = getNavigationTargets(url);
-    const deepLinkUrl = shouldEscapeInAppBrowser && absoluteUrl ? buildDeepLinkUrl(absoluteUrl) : null;
     const attemptExternalOpen = () => {
-      if (deepLinkUrl && absoluteUrl) {
-        openInNewTabBestEffort(absoluteUrl);
-        window.location.href = deepLinkUrl;
-        window.setTimeout(() => {
-          window.location.href = absoluteUrl;
-        }, 1400);
-        return true;
+      if (shouldEscapeInAppBrowser && absoluteUrl) {
+        if (attemptAppBrowserHandoff(absoluteUrl)) {
+          return true;
+        }
+        return false;
       }
       return false;
     };
@@ -10780,147 +10821,148 @@ function LandingPageViewer({
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
-                          const useNativeCardLink = shouldEscapeInAppBrowser && !!card2.url && !card2.require_18plus;
+                          const useNativeCardLink = !isPreview && !!card2.url && !card2.require_18plus;
                           const cardLinkProps = useNativeCardLink ? getNativeLinkProps(card2.url) : null;
                           const ageConfirmLinkProps = shouldEscapeInAppBrowser && card2.url ? getNativeLinkProps(card2.url) : null;
+                          const renderCardBodyContent = () => /* @__PURE__ */ jsxs15(
+                            "div",
+                            {
+                              className: `${sizeBodyClasses} flex items-center justify-center relative`,
+                              children: [
+                                card2.style.type === "video" && card2.style.background_video && (() => {
+                                  const fit = card2.style.background_fit || "fill";
+                                  const focus = card2.style.background_focus || "top";
+                                  const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                                  const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                                  let focusClass = "";
+                                  if (fit === "fill") {
+                                    if (focus === "top")
+                                      focusClass = "object-top";
+                                    else if (focus === "bottom")
+                                      focusClass = "object-bottom";
+                                    else focusClass = "object-center";
+                                  }
+                                  return enableMotionVideo ? /* @__PURE__ */ jsx20(
+                                    "video",
+                                    {
+                                      ref: setCtaVideoRef(card2.id),
+                                      src: card2.style.background_video,
+                                      poster: card2.style.background_video_poster_url || void 0,
+                                      preload: "none",
+                                      autoPlay: true,
+                                      loop: true,
+                                      muted: true,
+                                      playsInline: true,
+                                      className: `${baseClasses} ${fitClass} ${focusClass}`
+                                    }
+                                  ) : card2.style.background_video_poster_url ? /* @__PURE__ */ jsx20(
+                                    "img",
+                                    {
+                                      src: card2.style.background_video_poster_url,
+                                      alt: "",
+                                      className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                      loading: "lazy",
+                                      decoding: "async"
+                                    }
+                                  ) : null;
+                                })(),
+                                /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
+                                  isOnlyfansLogo && /* @__PURE__ */ jsx20("div", { className: "mb-2", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col items-center gap-1", children: [
+                                    card2.style.prefix_text && /* @__PURE__ */ jsx20(
+                                      "p",
+                                      {
+                                        className: "text-base font-semibold",
+                                        style: {
+                                          color: card2.style.logo_color || "#ffffff"
+                                        },
+                                        children: card2.style.prefix_text
+                                      }
+                                    ),
+                                    /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-center gap-2", children: [
+                                      /* @__PURE__ */ jsx20(
+                                        "img",
+                                        {
+                                          src: "/of-logo.svg",
+                                          alt: "Creator icon",
+                                          className: "h-5 w-auto",
+                                          loading: "lazy"
+                                        }
+                                      ),
+                                      /* @__PURE__ */ jsx20(
+                                        "img",
+                                        {
+                                          src: "/of.webp",
+                                          alt: "Creator link",
+                                          className: "h-5 w-auto",
+                                          loading: "lazy"
+                                        }
+                                      )
+                                    ] })
+                                  ] }) }),
+                                  !isBrandedNonOF && card2.title && card2.title.trim() !== "" && /* @__PURE__ */ jsx20(
+                                    "h3",
+                                    {
+                                      className: `${sizeTitleClass} font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                      style: {
+                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
+                                      },
+                                      children: card2.title
+                                    }
+                                  ),
+                                  !isBrandedNonOF && card2.description && /* @__PURE__ */ jsx20(
+                                    "p",
+                                    {
+                                      className: `${sizeDescriptionClass} mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                      style: {
+                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
+                                      },
+                                      children: card2.description
+                                    }
+                                  )
+                                ] }),
+                                isBrandedNonOF && /* @__PURE__ */ jsxs15(Fragment8, { children: [
+                                  card2.style.logo_icon && /* @__PURE__ */ jsx20("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ jsx20(
+                                    "div",
+                                    {
+                                      className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
+                                      style: {
+                                        backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
+                                      },
+                                      children: /* @__PURE__ */ jsx20(
+                                        Icon9,
+                                        {
+                                          icon: card2.style.logo_icon,
+                                          width: 18,
+                                          style: {
+                                            color: card2.style.logo_color || "#ffffff"
+                                          }
+                                        }
+                                      )
+                                    }
+                                  ) }),
+                                  card2.style.logo_name && /* @__PURE__ */ jsx20("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ jsx20(
+                                    "p",
+                                    {
+                                      className: "text-xs font-semibold",
+                                      style: {
+                                        color: card2.style.logo_color || "#ffffff",
+                                        textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
+                                      },
+                                      children: card2.style.logo_name
+                                    }
+                                  ) })
+                                ] })
+                              ]
+                            }
+                          );
                           const renderCardContent = () => /* @__PURE__ */ jsx20(
                             card_default,
                             {
-                              isPressable: !useNativeCardLink,
-                              onPress: useNativeCardLink ? void 0 : handleCardClick,
+                              isPressable: true,
+                              onPress: handleCardClick,
                               className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                               style: getCardStyle(),
-                              children: /* @__PURE__ */ jsxs15(
-                                card_body_default,
-                                {
-                                  className: `${sizeBodyClasses} flex items-center justify-center relative`,
-                                  children: [
-                                    card2.style.type === "video" && card2.style.background_video && (() => {
-                                      const fit = card2.style.background_fit || "fill";
-                                      const focus = card2.style.background_focus || "top";
-                                      const baseClasses = "absolute inset-0 w-full h-full opacity-60";
-                                      const fitClass = fit === "fit" ? "object-contain" : "object-cover";
-                                      let focusClass = "";
-                                      if (fit === "fill") {
-                                        if (focus === "top")
-                                          focusClass = "object-top";
-                                        else if (focus === "bottom")
-                                          focusClass = "object-bottom";
-                                        else focusClass = "object-center";
-                                      }
-                                      return enableMotionVideo ? /* @__PURE__ */ jsx20(
-                                        "video",
-                                        {
-                                          ref: setCtaVideoRef(card2.id),
-                                          src: card2.style.background_video,
-                                          poster: card2.style.background_video_poster_url || void 0,
-                                          preload: "none",
-                                          autoPlay: true,
-                                          loop: true,
-                                          muted: true,
-                                          playsInline: true,
-                                          className: `${baseClasses} ${fitClass} ${focusClass}`
-                                        }
-                                      ) : card2.style.background_video_poster_url ? /* @__PURE__ */ jsx20(
-                                        "img",
-                                        {
-                                          src: card2.style.background_video_poster_url,
-                                          alt: "",
-                                          className: `${baseClasses} ${fitClass} ${focusClass}`,
-                                          loading: "lazy",
-                                          decoding: "async"
-                                        }
-                                      ) : null;
-                                    })(),
-                                    /* @__PURE__ */ jsxs15("div", { className: "text-center w-full relative z-10", children: [
-                                      isOnlyfansLogo && /* @__PURE__ */ jsx20("div", { className: "mb-2", children: /* @__PURE__ */ jsxs15("div", { className: "flex flex-col items-center gap-1", children: [
-                                        card2.style.prefix_text && /* @__PURE__ */ jsx20(
-                                          "p",
-                                          {
-                                            className: "text-base font-semibold",
-                                            style: {
-                                              color: card2.style.logo_color || "#ffffff"
-                                            },
-                                            children: card2.style.prefix_text
-                                          }
-                                        ),
-                                        /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-center gap-2", children: [
-                                          /* @__PURE__ */ jsx20(
-                                            "img",
-                                            {
-                                              src: "/of-logo.svg",
-                                              alt: "Creator icon",
-                                              className: "h-5 w-auto",
-                                              loading: "lazy"
-                                            }
-                                          ),
-                                          /* @__PURE__ */ jsx20(
-                                            "img",
-                                            {
-                                              src: "/of.webp",
-                                              alt: "Creator link",
-                                              className: "h-5 w-auto",
-                                              loading: "lazy"
-                                            }
-                                          )
-                                        ] })
-                                      ] }) }),
-                                      !isBrandedNonOF && card2.title && card2.title.trim() !== "" && /* @__PURE__ */ jsx20(
-                                        "h3",
-                                        {
-                                          className: `${sizeTitleClass} font-semibold ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white" : "text-foreground"}`,
-                                          style: {
-                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
-                                          },
-                                          children: card2.title
-                                        }
-                                      ),
-                                      !isBrandedNonOF && card2.description && /* @__PURE__ */ jsx20(
-                                        "p",
-                                        {
-                                          className: `${sizeDescriptionClass} mt-1 ${card2.style.type === "image" || card2.style.type === "gradient" || card2.style.type === "solid" || card2.style.type === "video" ? "text-white/90" : "text-default-500"}`,
-                                          style: {
-                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
-                                          },
-                                          children: card2.description
-                                        }
-                                      )
-                                    ] }),
-                                    isBrandedNonOF && /* @__PURE__ */ jsxs15(Fragment8, { children: [
-                                      card2.style.logo_icon && /* @__PURE__ */ jsx20("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ jsx20(
-                                        "div",
-                                        {
-                                          className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
-                                          style: {
-                                            backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
-                                          },
-                                          children: /* @__PURE__ */ jsx20(
-                                            Icon9,
-                                            {
-                                              icon: card2.style.logo_icon,
-                                              width: 18,
-                                              style: {
-                                                color: card2.style.logo_color || "#ffffff"
-                                              }
-                                            }
-                                          )
-                                        }
-                                      ) }),
-                                      card2.style.logo_name && /* @__PURE__ */ jsx20("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ jsx20(
-                                        "p",
-                                        {
-                                          className: "text-xs font-semibold",
-                                          style: {
-                                            color: card2.style.logo_color || "#ffffff",
-                                            textShadow: card2.style.type === "image" || card2.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
-                                          },
-                                          children: card2.style.logo_name
-                                        }
-                                      ) })
-                                    ] })
-                                  ]
-                                }
-                              )
+                              children: /* @__PURE__ */ jsx20(card_body_default, { children: renderCardBodyContent() })
                             }
                           );
                           const baseCardContent = cardLinkProps ? /* @__PURE__ */ jsx20(
@@ -10930,8 +10972,9 @@ function LandingPageViewer({
                               target: cardLinkProps.target,
                               rel: cardLinkProps.rel,
                               onClick: cardLinkProps.onClick,
-                              className: "block w-full",
-                              children: renderCardContent()
+                              className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]",
+                              style: getCardStyle(),
+                              children: renderCardBodyContent()
                             }
                           ) : renderCardContent();
                           const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ jsx20(
@@ -10989,12 +11032,12 @@ function LandingPageViewer({
                             animate: { opacity: 1, y: 0 },
                             transition: { delay: 0.6, duration: 0.3 },
                             className: "w-full px-4",
-                            children: shouldEscapeInAppBrowser && link.destination_url ? /* @__PURE__ */ jsx20(
+                            children: !isPreview && link.destination_url ? /* @__PURE__ */ jsx20(
                               "a",
                               {
                                 ...getNativeLinkProps(link.destination_url),
-                                className: "block w-full",
-                                children: /* @__PURE__ */ jsx20(card_default, { className: "w-full hover:scale-[1.02] transition-transform shadow-lg", children: /* @__PURE__ */ jsx20(card_body_default, { className: "p-6", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-between", children: [
+                                className: "block w-full rounded-xl bg-content1 shadow-lg transition-transform hover:scale-[1.02]",
+                                children: /* @__PURE__ */ jsx20("div", { className: "p-6", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-between", children: [
                                   /* @__PURE__ */ jsxs15("div", { className: "flex-1", children: [
                                     /* @__PURE__ */ jsx20("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
                                     link.description && /* @__PURE__ */ jsx20("p", { className: "text-sm text-default-500 mt-1", children: link.description })
@@ -11007,7 +11050,7 @@ function LandingPageViewer({
                                       className: "text-default-400 ml-4"
                                     }
                                   )
-                                ] }) }) })
+                                ] }) })
                               }
                             ) : /* @__PURE__ */ jsx20(
                               card_default,
