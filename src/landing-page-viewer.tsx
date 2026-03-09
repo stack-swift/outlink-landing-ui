@@ -153,7 +153,9 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
-  const isWhitehatLink = (link as { link_type?: string }).link_type === "whitehat";
+  const isWhitehatLink =
+    ((link as { link_type?: string }).link_type || "").toLowerCase() ===
+    "whitehat";
   const shouldEscapeInAppBrowser =
     !isPreview &&
     isInAppBrowser() &&

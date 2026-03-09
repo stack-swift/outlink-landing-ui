@@ -10112,7 +10112,7 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
-  const isWhitehatLink = link.link_type === "whitehat";
+  const isWhitehatLink = (link.link_type || "").toLowerCase() === "whitehat";
   const shouldEscapeInAppBrowser = !isPreview && isInAppBrowser() && (isWhitehatLink || link.enable_deeplink !== false);
   const buildDeepLinkUrl = (absoluteUrl) => {
     if (typeof window === "undefined") return null;
