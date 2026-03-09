@@ -153,13 +153,20 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
+  const isMobileBrowser = (): boolean => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return /Mobi|iPhone|iPad|iPod|Android/i.test(ua);
+  };
+
   const isWhitehatLink =
     ((link as { link_type?: string }).link_type || "").toLowerCase() ===
     "whitehat";
   const shouldEscapeInAppBrowser =
     !isPreview &&
-    isInAppBrowser() &&
-    (isWhitehatLink || (link as any).enable_deeplink !== false);
+    (isWhitehatLink || isInAppBrowser()) &&
+    (isWhitehatLink || (link as any).enable_deeplink !== false) &&
+    (!isWhitehatLink || isMobileBrowser());
 
   const buildDeepLinkUrl = (absoluteUrl: string): string | null => {
     if (typeof window === "undefined") return null;

@@ -10055,8 +10055,13 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
+  const isMobileBrowser = () => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return /Mobi|iPhone|iPad|iPod|Android/i.test(ua);
+  };
   const isWhitehatLink = (link.link_type || "").toLowerCase() === "whitehat";
-  const shouldEscapeInAppBrowser = !isPreview && isInAppBrowser() && (isWhitehatLink || link.enable_deeplink !== false);
+  const shouldEscapeInAppBrowser = !isPreview && (isWhitehatLink || isInAppBrowser()) && (isWhitehatLink || link.enable_deeplink !== false) && (!isWhitehatLink || isMobileBrowser());
   const buildDeepLinkUrl = (absoluteUrl) => {
     if (typeof window === "undefined") return null;
     const ua = navigator.userAgent || "";
