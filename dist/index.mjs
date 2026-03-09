@@ -9892,6 +9892,7 @@ function AgeConfirmationModal({
   onConfirm,
   onCancel,
   confirmHref,
+  confirmTargetBlank = false,
   children
 }) {
   const handleCancel = () => {
@@ -9926,8 +9927,8 @@ function AgeConfirmationModal({
               "a",
               {
                 href: confirmHref,
-                target: "_blank",
-                rel: "noopener noreferrer",
+                target: confirmTargetBlank ? "_blank" : void 0,
+                rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
                 onClick: onConfirm,
                 className: "inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity",
                 children: "I'm 18+"
@@ -9976,6 +9977,7 @@ function trackClick(linkId, isPreview) {
   if (!linkId || isPreview || typeof window === "undefined") return;
   fetch("/api/analytics/track", {
     method: "POST",
+    keepalive: true,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       link_id: linkId,
@@ -10111,6 +10113,31 @@ function LandingPageViewer({
       }
     }
     window.location.href = absoluteUrl;
+  };
+  const getNavigationTargets = (url) => {
+    const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
+    const absoluteUrl = typeof window === "undefined" || finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    return { finalUrl, absoluteUrl };
+  };
+  const getNativeLinkProps = (url) => {
+    const { finalUrl, absoluteUrl } = getNavigationTargets(url);
+    const deepLinkUrl = shouldEscapeInAppBrowser && absoluteUrl ? buildDeepLinkUrl(absoluteUrl) : null;
+    return {
+      href: deepLinkUrl || finalUrl,
+      target: deepLinkUrl ? void 0 : shouldEscapeInAppBrowser ? "_blank" : void 0,
+      rel: shouldEscapeInAppBrowser ? "noopener noreferrer" : void 0,
+      onClick: () => {
+        trackClick(link.id, isPreview);
+        if (onButtonClick) {
+          onButtonClick();
+        }
+        if (deepLinkUrl && absoluteUrl) {
+          window.setTimeout(() => {
+            window.location.href = absoluteUrl;
+          }, 1400);
+        }
+      }
+    };
   };
   const handleButtonClick = () => {
     if (onButtonClick) {
@@ -10736,17 +10763,21 @@ function LandingPageViewer({
                             navigateToUrl(card2.url, { fromUserGesture: true });
                           };
                           const handleAgeConfirm = () => {
+                            setShowingAgeConfirmationFor(null);
                             trackClick(link.id, isPreview);
                             navigateToUrl(card2.url, { fromUserGesture: true });
                           };
                           const handleAgeCancel = () => {
                             setShowingAgeConfirmationFor(null);
                           };
+                          const useNativeCardLink = shouldEscapeInAppBrowser && !!card2.url && !card2.require_18plus;
+                          const cardLinkProps = useNativeCardLink ? getNativeLinkProps(card2.url) : null;
+                          const ageConfirmLinkProps = shouldEscapeInAppBrowser && card2.url ? getNativeLinkProps(card2.url) : null;
                           const renderCardContent = () => /* @__PURE__ */ jsx20(
                             card_default,
                             {
-                              isPressable: true,
-                              onPress: handleCardClick,
+                              isPressable: !useNativeCardLink,
+                              onPress: useNativeCardLink ? void 0 : handleCardClick,
                               className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
                               style: getCardStyle(),
                               children: /* @__PURE__ */ jsxs15(
@@ -10882,7 +10913,17 @@ function LandingPageViewer({
                               )
                             }
                           );
-                          const baseCardContent = renderCardContent();
+                          const baseCardContent = cardLinkProps ? /* @__PURE__ */ jsx20(
+                            "a",
+                            {
+                              href: cardLinkProps.href,
+                              target: cardLinkProps.target,
+                              rel: cardLinkProps.rel,
+                              onClick: cardLinkProps.onClick,
+                              className: "block w-full",
+                              children: renderCardContent()
+                            }
+                          ) : renderCardContent();
                           const cardWithMechanisms = card2.ctr_mechanisms ? /* @__PURE__ */ jsx20(
                             CTACardWithMechanisms,
                             {
@@ -10896,9 +10937,17 @@ function LandingPageViewer({
                             AgeConfirmationModal,
                             {
                               isOpen: true,
-                              onConfirm: handleAgeConfirm,
+                              onConfirm: () => {
+                                setShowingAgeConfirmationFor(null);
+                                if (ageConfirmLinkProps) {
+                                  ageConfirmLinkProps.onClick();
+                                  return;
+                                }
+                                handleAgeConfirm();
+                              },
                               onCancel: handleAgeCancel,
-                              confirmHref: void 0,
+                              confirmHref: ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.href,
+                              confirmTargetBlank: (ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.target) === "_blank",
                               children: cardWithMechanisms
                             }
                           ) : cardWithMechanisms;
@@ -10923,7 +10972,27 @@ function LandingPageViewer({
                             animate: { opacity: 1, y: 0 },
                             transition: { delay: 0.6, duration: 0.3 },
                             className: "w-full px-4",
-                            children: /* @__PURE__ */ jsx20(
+                            children: shouldEscapeInAppBrowser && link.destination_url ? /* @__PURE__ */ jsx20(
+                              "a",
+                              {
+                                ...getNativeLinkProps(link.destination_url),
+                                className: "block w-full",
+                                children: /* @__PURE__ */ jsx20(card_default, { className: "w-full hover:scale-[1.02] transition-transform shadow-lg", children: /* @__PURE__ */ jsx20(card_body_default, { className: "p-6", children: /* @__PURE__ */ jsxs15("div", { className: "flex items-center justify-between", children: [
+                                  /* @__PURE__ */ jsxs15("div", { className: "flex-1", children: [
+                                    /* @__PURE__ */ jsx20("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                    link.description && /* @__PURE__ */ jsx20("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                  ] }),
+                                  /* @__PURE__ */ jsx20(
+                                    Icon9,
+                                    {
+                                      icon: "solar:arrow-right-line-duotone",
+                                      width: 24,
+                                      className: "text-default-400 ml-4"
+                                    }
+                                  )
+                                ] }) }) })
+                              }
+                            ) : /* @__PURE__ */ jsx20(
                               card_default,
                               {
                                 isPressable: true,

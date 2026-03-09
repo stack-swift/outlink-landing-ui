@@ -55,6 +55,7 @@ function trackClick(linkId: string | undefined, isPreview: boolean | undefined) 
 
   fetch("/api/analytics/track", {
     method: "POST",
+    keepalive: true,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       link_id: linkId,
@@ -229,6 +230,43 @@ const heroPoster =
     }
 
     window.location.href = absoluteUrl;
+  };
+
+  const getNavigationTargets = (url: string) => {
+    const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
+    const absoluteUrl =
+      typeof window === "undefined" || finalUrl.startsWith("http")
+        ? finalUrl
+        : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+
+    return { finalUrl, absoluteUrl };
+  };
+
+  const getNativeLinkProps = (url: string) => {
+    const { finalUrl, absoluteUrl } = getNavigationTargets(url);
+    const deepLinkUrl =
+      shouldEscapeInAppBrowser && absoluteUrl
+        ? buildDeepLinkUrl(absoluteUrl)
+        : null;
+
+    return {
+      href: deepLinkUrl || finalUrl,
+      target: deepLinkUrl ? undefined : shouldEscapeInAppBrowser ? "_blank" : undefined,
+      rel: shouldEscapeInAppBrowser ? "noopener noreferrer" : undefined,
+      onClick: () => {
+        trackClick(link.id, isPreview);
+
+        if (onButtonClick) {
+          onButtonClick();
+        }
+
+        if (deepLinkUrl && absoluteUrl) {
+          window.setTimeout(() => {
+            window.location.href = absoluteUrl;
+          }, 1400);
+        }
+      },
+    };
   };
 
   const handleButtonClick = () => {
@@ -945,6 +983,7 @@ useEffect(() => {
                           };
 
                           const handleAgeConfirm = () => {
+                            setShowingAgeConfirmationFor(null);
                             trackClick(link.id, isPreview);
                             navigateToUrl(card.url, { fromUserGesture: true });
                           };
@@ -953,10 +992,24 @@ useEffect(() => {
                             setShowingAgeConfirmationFor(null);
                           };
 
+                          const useNativeCardLink =
+                            shouldEscapeInAppBrowser &&
+                            !!card.url &&
+                            !card.require_18plus;
+
+                          const cardLinkProps = useNativeCardLink
+                            ? getNativeLinkProps(card.url)
+                            : null;
+
+                          const ageConfirmLinkProps =
+                            shouldEscapeInAppBrowser && card.url
+                              ? getNativeLinkProps(card.url)
+                              : null;
+
                           const renderCardContent = () => (
                             <Card
-                              isPressable
-                              onPress={handleCardClick}
+                              isPressable={!useNativeCardLink}
+                              onPress={useNativeCardLink ? undefined : handleCardClick}
                               className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
                               style={getCardStyle()}
                             >
@@ -1148,7 +1201,19 @@ useEffect(() => {
                             </Card>
                           );
 
-                          const baseCardContent = renderCardContent();
+                          const baseCardContent = cardLinkProps ? (
+                            <a
+                              href={cardLinkProps.href}
+                              target={cardLinkProps.target}
+                              rel={cardLinkProps.rel}
+                              onClick={cardLinkProps.onClick}
+                              className="block w-full"
+                            >
+                              {renderCardContent()}
+                            </a>
+                          ) : (
+                            renderCardContent()
+                          );
 
                           const cardWithMechanisms = card.ctr_mechanisms ? (
                             <CTACardWithMechanisms
@@ -1168,9 +1233,19 @@ useEffect(() => {
                             !isPreview ? (
                               <AgeConfirmationModal
                                 isOpen={true}
-                                onConfirm={handleAgeConfirm}
+                                onConfirm={() => {
+                                  setShowingAgeConfirmationFor(null);
+                                  if (ageConfirmLinkProps) {
+                                    ageConfirmLinkProps.onClick();
+                                    return;
+                                  }
+                                  handleAgeConfirm();
+                                }}
                                 onCancel={handleAgeCancel}
-                                confirmHref={undefined}
+                                confirmHref={ageConfirmLinkProps?.href}
+                                confirmTargetBlank={
+                                  ageConfirmLinkProps?.target === "_blank"
+                                }
                               >
                                 {cardWithMechanisms}
                               </AgeConfirmationModal>
@@ -1201,31 +1276,60 @@ useEffect(() => {
                       transition={{ delay: 0.6, duration: 0.3 }}
                       className="w-full px-4"
                     >
-                      <Card
-                        isPressable
-                        onPress={handleButtonClick}
-                        className="w-full hover:scale-[1.02] transition-transform shadow-lg"
-                      >
-                        <CardBody className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                              <h3 className="text-lg font-semibold text-foreground">
-                                {link.title || "Click here"}
-                              </h3>
-                              {link.description && (
-                                <p className="text-sm text-default-500 mt-1">
-                                  {link.description}
-                                </p>
-                              )}
+                      {shouldEscapeInAppBrowser && link.destination_url ? (
+                        <a
+                          {...getNativeLinkProps(link.destination_url)}
+                          className="block w-full"
+                        >
+                          <Card className="w-full hover:scale-[1.02] transition-transform shadow-lg">
+                            <CardBody className="p-6">
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <h3 className="text-lg font-semibold text-foreground">
+                                    {link.title || "Click here"}
+                                  </h3>
+                                  {link.description && (
+                                    <p className="text-sm text-default-500 mt-1">
+                                      {link.description}
+                                    </p>
+                                  )}
+                                </div>
+                                <Icon
+                                  icon="solar:arrow-right-line-duotone"
+                                  width={24}
+                                  className="text-default-400 ml-4"
+                                />
+                              </div>
+                            </CardBody>
+                          </Card>
+                        </a>
+                      ) : (
+                        <Card
+                          isPressable
+                          onPress={handleButtonClick}
+                          className="w-full hover:scale-[1.02] transition-transform shadow-lg"
+                        >
+                          <CardBody className="p-6">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-foreground">
+                                  {link.title || "Click here"}
+                                </h3>
+                                {link.description && (
+                                  <p className="text-sm text-default-500 mt-1">
+                                    {link.description}
+                                  </p>
+                                )}
+                              </div>
+                              <Icon
+                                icon="solar:arrow-right-line-duotone"
+                                width={24}
+                                className="text-default-400 ml-4"
+                              />
                             </div>
-                            <Icon
-                              icon="solar:arrow-right-line-duotone"
-                              width={24}
-                              className="text-default-400 ml-4"
-                            />
-                          </div>
-                        </CardBody>
-                      </Card>
+                          </CardBody>
+                        </Card>
+                      )}
                     </motion.div>
                   )}
                 </div>

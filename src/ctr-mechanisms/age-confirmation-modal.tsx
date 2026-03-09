@@ -11,6 +11,7 @@ export interface AgeConfirmationModalProps {
   onCancel: () => void;
   /** When set, "I'm 18+" is rendered as a native <a target="_blank"> so in-app browsers may open in system browser */
   confirmHref?: string;
+  confirmTargetBlank?: boolean;
   children: React.ReactNode;
 }
 
@@ -19,6 +20,7 @@ export function AgeConfirmationModal({
   onConfirm,
   onCancel,
   confirmHref,
+  confirmTargetBlank = false,
   children,
 }: AgeConfirmationModalProps) {
   const handleCancel = () => {
@@ -60,8 +62,8 @@ export function AgeConfirmationModal({
             {confirmHref ? (
               <a
                 href={confirmHref}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={confirmTargetBlank ? "_blank" : undefined}
+                rel={confirmTargetBlank ? "noopener noreferrer" : undefined}
                 onClick={onConfirm}
                 className="inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity"
               >
@@ -90,5 +92,4 @@ export function AgeConfirmationModal({
     </div>
   );
 }
-
 
