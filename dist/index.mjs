@@ -10122,19 +10122,29 @@ function LandingPageViewer({
   const getNativeLinkProps = (url) => {
     const { finalUrl, absoluteUrl } = getNavigationTargets(url);
     const deepLinkUrl = shouldEscapeInAppBrowser && absoluteUrl ? buildDeepLinkUrl(absoluteUrl) : null;
+    const attemptExternalOpen = () => {
+      if (deepLinkUrl && absoluteUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        window.location.href = deepLinkUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+      return false;
+    };
     return {
-      href: deepLinkUrl || finalUrl,
-      target: deepLinkUrl ? void 0 : shouldEscapeInAppBrowser ? "_blank" : void 0,
+      href: absoluteUrl || finalUrl,
+      target: shouldEscapeInAppBrowser ? "_blank" : void 0,
       rel: shouldEscapeInAppBrowser ? "noopener noreferrer" : void 0,
-      onClick: () => {
+      attemptExternalOpen,
+      onClick: (event) => {
         trackClick(link.id, isPreview);
         if (onButtonClick) {
           onButtonClick();
         }
-        if (deepLinkUrl && absoluteUrl) {
-          window.setTimeout(() => {
-            window.location.href = absoluteUrl;
-          }, 1400);
+        if (attemptExternalOpen()) {
+          event.preventDefault();
         }
       }
     };
@@ -10940,7 +10950,14 @@ function LandingPageViewer({
                               onConfirm: () => {
                                 setShowingAgeConfirmationFor(null);
                                 if (ageConfirmLinkProps) {
-                                  ageConfirmLinkProps.onClick();
+                                  trackClick(link.id, isPreview);
+                                  if (onButtonClick) {
+                                    onButtonClick();
+                                  }
+                                  if (ageConfirmLinkProps.attemptExternalOpen()) {
+                                    return;
+                                  }
+                                  window.location.href = ageConfirmLinkProps.href;
                                   return;
                                 }
                                 handleAgeConfirm();
