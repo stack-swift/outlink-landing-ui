@@ -10127,21 +10127,21 @@ function LandingPageViewer({
       return true;
     }
     if (isAndroid) {
-      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
-      if (chromeNavigateUrl) {
-        openInNewTabBestEffort(absoluteUrl);
-        openInNewTabBestEffort(chromeNavigateUrl);
-        window.location.href = chromeNavigateUrl;
-        window.setTimeout(() => {
-          window.location.href = absoluteUrl;
-        }, 1400);
-        return true;
-      }
       const intentUrl = buildDeepLinkUrl(absoluteUrl);
       if (intentUrl) {
         openInNewTabBestEffort(absoluteUrl);
         openInNewTabBestEffort(intentUrl);
         window.location.href = intentUrl;
+        window.setTimeout(() => {
+          window.location.href = absoluteUrl;
+        }, 1400);
+        return true;
+      }
+      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
+      if (chromeNavigateUrl) {
+        openInNewTabBestEffort(absoluteUrl);
+        openInNewTabBestEffort(chromeNavigateUrl);
+        window.location.href = chromeNavigateUrl;
         window.setTimeout(() => {
           window.location.href = absoluteUrl;
         }, 1400);

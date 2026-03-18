@@ -243,23 +243,23 @@ const heroPoster =
     }
 
     if (isAndroid) {
-      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
+      const intentUrl = buildDeepLinkUrl(absoluteUrl);
 
-      if (chromeNavigateUrl) {
+      if (intentUrl) {
         openInNewTabBestEffort(absoluteUrl);
-        openInNewTabBestEffort(chromeNavigateUrl);
-        window.location.href = chromeNavigateUrl;
+        openInNewTabBestEffort(intentUrl);
+        window.location.href = intentUrl;
         window.setTimeout(() => {
           window.location.href = absoluteUrl;
         }, 1400);
         return true;
       }
 
-      const intentUrl = buildDeepLinkUrl(absoluteUrl);
-      if (intentUrl) {
+      const chromeNavigateUrl = buildChromeNavigateUrl(absoluteUrl);
+      if (chromeNavigateUrl) {
         openInNewTabBestEffort(absoluteUrl);
-        openInNewTabBestEffort(intentUrl);
-        window.location.href = intentUrl;
+        openInNewTabBestEffort(chromeNavigateUrl);
+        window.location.href = chromeNavigateUrl;
         window.setTimeout(() => {
           window.location.href = absoluteUrl;
         }, 1400);
