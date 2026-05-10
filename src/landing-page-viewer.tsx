@@ -153,6 +153,12 @@ const heroPoster =
     return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
   };
 
+  const isInstagramInAppBrowser = (): boolean => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return ua.includes("Instagram") || ua.includes("IABMV");
+  };
+
   const isMobileBrowser = (): boolean => {
     if (typeof window === "undefined") return false;
     const ua = navigator.userAgent || "";
@@ -228,6 +234,12 @@ const heroPoster =
     const ua = navigator.userAgent || "";
     const isIOS = /iPhone|iPad|iPod/i.test(ua);
     const isAndroid = /Android/i.test(ua);
+
+    if (isInstagramInAppBrowser()) {
+      window.location.href =
+        `instagram://extbrowser/?url=${encodeURIComponent(absoluteUrl)}`;
+      return true;
+    }
 
     if (isIOS) {
       const safariScheme = buildDeepLinkUrl(absoluteUrl);
