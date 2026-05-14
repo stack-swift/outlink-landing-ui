@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Button } from "@heroui/button";
-import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { ButtonGlass } from "shadcn-glass-ui/components";
 
 export interface AgeConfirmationModalProps {
   isOpen: boolean;
@@ -23,8 +22,35 @@ export function AgeConfirmationModal({
   confirmTargetBlank = false,
   children,
 }: AgeConfirmationModalProps) {
+  const glassVars = {
+    "--btn-primary-bg":
+      "linear-gradient(135deg, rgba(255,255,255,0.24), rgba(236,72,153,0.72) 46%, rgba(190,24,93,0.72))",
+    "--btn-primary-hover-bg":
+      "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(236,72,153,0.82) 46%, rgba(190,24,93,0.78))",
+    "--btn-primary-text": "#ffffff",
+    "--btn-primary-shadow":
+      "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(120,20,70,0.24), 0 10px 24px rgba(236,72,153,0.24)",
+    "--btn-primary-glow": "0 0 28px rgba(236,72,153,0.34)",
+    "--btn-secondary-bg":
+      "linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07) 48%, rgba(12,18,29,0.46))",
+    "--btn-secondary-hover-bg":
+      "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1) 48%, rgba(12,18,29,0.52))",
+    "--btn-secondary-text": "#ffffff",
+    "--btn-secondary-border": "rgba(255,255,255,0)",
+    "--btn-secondary-glow": "0 0 22px rgba(255,255,255,0.12)",
+    "--focus-glow": "0 0 0 2px rgba(255,255,255,0.32)",
+  } as React.CSSProperties;
+
   const handleCancel = () => {
     onCancel();
+  };
+
+  const handleConfirm = () => {
+    onConfirm();
+
+    if (confirmHref && !confirmTargetBlank) {
+      window.location.href = confirmHref;
+    }
   };
 
   if (!isOpen) {
@@ -43,53 +69,54 @@ export function AgeConfirmationModal({
         <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-center space-y-1.5"
+          className="flex flex-col items-center text-center"
         >
-          <Icon
-            icon="solar:shield-warning-bold-duotone"
-            width={36}
-            className="mx-auto drop-shadow-lg text-[#EC4899]"
-          />
-          <div className="space-y-0.5">
-            <p className="text-white font-semibold text-sm drop-shadow-md">
+          <div>
+            <p className="text-center text-sm font-semibold text-white drop-shadow-md">
               Adult Content (18+)
             </p>
-            <p className="text-white/90 text-xs drop-shadow-sm leading-tight">
-              You must be 18+ to continue
-            </p>
           </div>
-          <div className="flex gap-2 pt-1">
+          <div
+            className="mt-2 flex justify-center gap-2.5"
+            style={glassVars}
+          >
             {confirmHref ? (
-              <a
+              <ButtonGlass
+                asChild
+                className="h-9 min-w-[86px] px-4 text-sm font-bold"
+                size="sm"
+                variant="default"
+              >
+                <a
                 href={confirmHref}
                 target={confirmTargetBlank ? "_blank" : undefined}
                 rel={confirmTargetBlank ? "noopener noreferrer" : undefined}
-                onClick={onConfirm}
-                className="inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity"
+                onClick={confirmTargetBlank ? onConfirm : handleConfirm}
               >
-                I'm 18+
-              </a>
+                  I&apos;m 18+
+                </a>
+              </ButtonGlass>
             ) : (
-              <Button
+              <ButtonGlass
+                className="h-9 min-w-[86px] px-4 text-sm font-bold"
+                onClick={handleConfirm}
                 size="sm"
-                onPress={onConfirm}
-                className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
+                variant="default"
               >
-                I'm 18+
-              </Button>
+                I&apos;m 18+
+              </ButtonGlass>
             )}
-            <Button
+            <ButtonGlass
+              className="h-9 min-w-[72px] border-0 px-4 text-sm font-bold"
+              onClick={handleCancel}
               size="sm"
-              variant="bordered"
-              onPress={handleCancel}
-              className="font-bold shadow-lg bg-white/10 text-white border-white/20"
+              variant="secondary"
             >
               Exit
-            </Button>
+            </ButtonGlass>
           </div>
         </motion.div>
       </div>
     </div>
   );
 }
-

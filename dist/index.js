@@ -56,7 +56,7 @@ __export(index_exports, {
 module.exports = __toCommonJS(index_exports);
 
 // src/landing-page-viewer.tsx
-var import_react49 = require("react");
+var import_react48 = require("react");
 
 // node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs
 var import_jsx_runtime = require("react/jsx-runtime");
@@ -9056,7 +9056,7 @@ Chip.displayName = "HeroUI.Chip";
 var chip_default = Chip;
 
 // src/landing-page-viewer.tsx
-var import_react50 = require("@iconify/react");
+var import_react49 = require("@iconify/react");
 var import_framer_motion12 = require("framer-motion");
 
 // src/modern-audio-player.tsx
@@ -9941,8 +9941,8 @@ function CTACardWithMechanisms({
 }
 
 // src/ctr-mechanisms/age-confirmation-modal.tsx
-var import_react48 = require("@iconify/react");
 var import_framer_motion11 = require("framer-motion");
+var import_components = require("shadcn-glass-ui/components");
 var import_jsx_runtime19 = require("react/jsx-runtime");
 function AgeConfirmationModal({
   isOpen,
@@ -9952,8 +9952,27 @@ function AgeConfirmationModal({
   confirmTargetBlank = false,
   children
 }) {
+  const glassVars = {
+    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.24), rgba(236,72,153,0.72) 46%, rgba(190,24,93,0.72))",
+    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(236,72,153,0.82) 46%, rgba(190,24,93,0.78))",
+    "--btn-primary-text": "#ffffff",
+    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(120,20,70,0.24), 0 10px 24px rgba(236,72,153,0.24)",
+    "--btn-primary-glow": "0 0 28px rgba(236,72,153,0.34)",
+    "--btn-secondary-bg": "linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07) 48%, rgba(12,18,29,0.46))",
+    "--btn-secondary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1) 48%, rgba(12,18,29,0.52))",
+    "--btn-secondary-text": "#ffffff",
+    "--btn-secondary-border": "rgba(255,255,255,0)",
+    "--btn-secondary-glow": "0 0 22px rgba(255,255,255,0.12)",
+    "--focus-glow": "0 0 0 2px rgba(255,255,255,0.32)"
+  };
   const handleCancel = () => {
     onCancel();
+  };
+  const handleConfirm = () => {
+    onConfirm();
+    if (confirmHref && !confirmTargetBlank) {
+      window.location.href = confirmHref;
+    }
   };
   if (!isOpen) {
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_jsx_runtime19.Fragment, { children });
@@ -9965,51 +9984,56 @@ function AgeConfirmationModal({
       {
         initial: { y: 10, opacity: 0 },
         animate: { y: 0, opacity: 1 },
-        className: "text-center space-y-1.5",
+        className: "flex flex-col items-center text-center",
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-            import_react48.Icon,
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { className: "text-center text-sm font-semibold text-white drop-shadow-md", children: "Adult Content (18+)" }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+            "div",
             {
-              icon: "solar:shield-warning-bold-duotone",
-              width: 36,
-              className: "mx-auto drop-shadow-lg text-[#EC4899]"
+              className: "mt-2 flex justify-center gap-2.5",
+              style: glassVars,
+              children: [
+                confirmHref ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                  import_components.ButtonGlass,
+                  {
+                    asChild: true,
+                    className: "h-9 min-w-[86px] px-4 text-sm font-bold",
+                    size: "sm",
+                    variant: "default",
+                    children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                      "a",
+                      {
+                        href: confirmHref,
+                        target: confirmTargetBlank ? "_blank" : void 0,
+                        rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
+                        onClick: confirmTargetBlank ? onConfirm : handleConfirm,
+                        children: "I'm 18+"
+                      }
+                    )
+                  }
+                ) : /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                  import_components.ButtonGlass,
+                  {
+                    className: "h-9 min-w-[86px] px-4 text-sm font-bold",
+                    onClick: handleConfirm,
+                    size: "sm",
+                    variant: "default",
+                    children: "I'm 18+"
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+                  import_components.ButtonGlass,
+                  {
+                    className: "h-9 min-w-[72px] border-0 px-4 text-sm font-bold",
+                    onClick: handleCancel,
+                    size: "sm",
+                    variant: "secondary",
+                    children: "Exit"
+                  }
+                )
+              ]
             }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "space-y-0.5", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { className: "text-white font-semibold text-sm drop-shadow-md", children: "Adult Content (18+)" }),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("p", { className: "text-white/90 text-xs drop-shadow-sm leading-tight", children: "You must be 18+ to continue" })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "flex gap-2 pt-1", children: [
-            confirmHref ? /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-              "a",
-              {
-                href: confirmHref,
-                target: confirmTargetBlank ? "_blank" : void 0,
-                rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
-                onClick: onConfirm,
-                className: "inline-flex items-center justify-center px-4 py-2 text-sm font-bold shadow-lg rounded-lg bg-[#ec4899] hover:bg-[#db2777] text-white transition-opacity",
-                children: "I'm 18+"
-              }
-            ) : /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-              button_default,
-              {
-                size: "sm",
-                onPress: onConfirm,
-                className: "font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white",
-                children: "I'm 18+"
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
-              button_default,
-              {
-                size: "sm",
-                variant: "bordered",
-                onPress: handleCancel,
-                className: "font-bold shadow-lg bg-white/10 text-white border-white/20",
-                children: "Exit"
-              }
-            )
-          ] })
+          )
         ]
       }
     ) })
@@ -10050,14 +10074,14 @@ function LandingPageViewer({
   isPreview = false,
   isFreePlan = false
 }) {
-  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react49.useState)(null);
-  const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react49.useState)(0);
-  const [lightboxUrl, setLightboxUrl] = (0, import_react49.useState)(null);
-  const galleryTouchStartX = (0, import_react49.useRef)(null);
-  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react49.useState)(!isPreview);
-  const [heroVideoReady, setHeroVideoReady] = (0, import_react49.useState)(false);
-  const heroVideoRef = (0, import_react49.useRef)(null);
-  const ctaVideoMapRef = (0, import_react49.useRef)(/* @__PURE__ */ new Map());
+  const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = (0, import_react48.useState)(null);
+  const [activeGalleryIndex, setActiveGalleryIndex] = (0, import_react48.useState)(0);
+  const [lightboxUrl, setLightboxUrl] = (0, import_react48.useState)(null);
+  const galleryTouchStartX = (0, import_react48.useRef)(null);
+  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react48.useState)(!isPreview);
+  const [heroVideoReady, setHeroVideoReady] = (0, import_react48.useState)(false);
+  const heroVideoRef = (0, import_react48.useRef)(null);
+  const ctaVideoMapRef = (0, import_react48.useRef)(/* @__PURE__ */ new Map());
   const setCtaVideoRef = (id) => (el) => {
     if (!el) {
       ctaVideoMapRef.current.delete(id);
@@ -10066,7 +10090,7 @@ function LandingPageViewer({
     ctaVideoMapRef.current.set(id, el);
   };
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
-  (0, import_react49.useEffect)(() => {
+  (0, import_react48.useEffect)(() => {
     if (!heroPoster) return;
     const l = document.createElement("link");
     l.rel = "preload";
@@ -10312,7 +10336,7 @@ function LandingPageViewer({
   const rawGallery = settings.gallery_images;
   const galleryImages = Array.isArray(rawGallery) ? rawGallery.slice(0, 6) : [];
   const hasGallery = galleryImages.length > 0;
-  (0, import_react49.useEffect)(() => {
+  (0, import_react48.useEffect)(() => {
     if (!lightboxUrl) return;
     const handler = (e) => {
       if (e.key === "Escape") {
@@ -10322,11 +10346,11 @@ function LandingPageViewer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
-  (0, import_react49.useEffect)(() => {
+  (0, import_react48.useEffect)(() => {
     if (!enableMotionVideo) return;
     setHeroVideoReady(false);
   }, [enableMotionVideo]);
-  (0, import_react49.useEffect)(() => {
+  (0, import_react48.useEffect)(() => {
     if (!enableMotionVideo) return;
     const hero = heroVideoRef.current;
     if (hero) {
@@ -10344,7 +10368,7 @@ function LandingPageViewer({
       });
     }
   }, [enableMotionVideo]);
-  (0, import_react49.useEffect)(
+  (0, import_react48.useEffect)(
     () => {
       var _a;
       if (isPreview) return;
@@ -10424,7 +10448,7 @@ function LandingPageViewer({
                   children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
                     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
                     /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                      import_react50.Icon,
+                      import_react49.Icon,
                       {
                         icon: "solar:arrow-right-linear",
                         width: 12,
@@ -10488,7 +10512,7 @@ function LandingPageViewer({
                       ] });
                     }
                     return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                      import_react50.Icon,
+                      import_react49.Icon,
                       {
                         icon: "solar:clapperboard-play-bold-duotone",
                         className: "w-16 h-16 text-default-300"
@@ -10513,7 +10537,7 @@ function LandingPageViewer({
                       }
                     )
                   ] }) : /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                    import_react50.Icon,
+                    import_react49.Icon,
                     {
                       icon: "solar:user-bold-duotone",
                       className: "w-24 h-24 text-default-300"
@@ -10548,7 +10572,7 @@ function LandingPageViewer({
                               }
                             ),
                             settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                              import_react50.Icon,
+                              import_react49.Icon,
                               {
                                 icon: "solar:verified-check-bold",
                                 width: 24,
@@ -10561,7 +10585,7 @@ function LandingPageViewer({
                                 variant: "flat",
                                 className: "bg-[#ec4899]/10 text-[#ec4899]",
                                 startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  import_react50.Icon,
+                                  import_react49.Icon,
                                   {
                                     icon: "solar:verified-check-bold",
                                     width: 16,
@@ -10610,7 +10634,7 @@ function LandingPageViewer({
                                 style: { borderColor: themeColors.background },
                                 showFallback: true,
                                 fallback: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  import_react50.Icon,
+                                  import_react49.Icon,
                                   {
                                     icon: "solar:user-bold-duotone",
                                     className: "w-20 h-20 text-default-500"
@@ -10643,7 +10667,7 @@ function LandingPageViewer({
                               }
                             ),
                             settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                              import_react50.Icon,
+                              import_react49.Icon,
                               {
                                 icon: "solar:verified-check-bold",
                                 width: 24,
@@ -10656,7 +10680,7 @@ function LandingPageViewer({
                                 variant: "flat",
                                 className: "bg-[#ec4899]/10 text-[#ec4899]",
                                 startContent: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                  import_react50.Icon,
+                                  import_react49.Icon,
                                   {
                                     icon: "solar:verified-check-bold",
                                     width: 16,
@@ -10711,7 +10735,7 @@ function LandingPageViewer({
                                     variant: "light",
                                     className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
                                     children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                      import_react50.Icon,
+                                      import_react49.Icon,
                                       {
                                         icon: social.icon,
                                         width: 20,
@@ -11000,7 +11024,7 @@ function LandingPageViewer({
                                         backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
                                       },
                                       children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                        import_react50.Icon,
+                                        import_react49.Icon,
                                         {
                                           icon: card2.style.logo_icon,
                                           width: 18,
@@ -11114,7 +11138,7 @@ function LandingPageViewer({
                                     link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
                                   ] }),
                                   /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    import_react50.Icon,
+                                    import_react49.Icon,
                                     {
                                       icon: "solar:arrow-right-line-duotone",
                                       width: 24,
@@ -11135,7 +11159,7 @@ function LandingPageViewer({
                                     link.description && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
                                   ] }),
                                   /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-                                    import_react50.Icon,
+                                    import_react49.Icon,
                                     {
                                       icon: "solar:arrow-right-line-duotone",
                                       width: 24,
