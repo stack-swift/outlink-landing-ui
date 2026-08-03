@@ -1160,871 +1160,844 @@ function LandingPageViewer({
     if (isVideoMode || isFullMode) return "h-[546px] md:h-[546px]";
     return "h-[320px] md:h-[320px]";
   })();
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
     "div",
     {
       className: "min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden",
       style: { paddingTop: "env(safe-area-inset-top)" },
-      children: [
-        isVideoMode && (settings.header_video_poster_url || settings.avatar_url) ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          "div",
-          {
-            className: "hidden md:block absolute inset-0 z-0",
-            style: {
-              backgroundImage: `url(${settings.header_video_poster_url || settings.avatar_url})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(80px) brightness(0.4)",
-              transform: "scale(1.1)"
-            }
-          }
-        ) : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-          "div",
-          {
-            className: "hidden md:block absolute inset-0 z-0",
-            style: {
-              backgroundImage: `url(${settings.avatar_url})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(80px) brightness(0.4)",
-              transform: "scale(1.1)"
-            }
-          }
-        ) : null,
-        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-          "div",
-          {
-            className: "relative z-10 w-full md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
-            style: { backgroundColor: themeColors.background, maxWidth: "36rem" },
-            children: [
-              isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                import_framer_motion10.motion.div,
-                {
-                  initial: { opacity: 0 },
-                  animate: { opacity: 1 },
-                  transition: { duration: 0.6 },
-                  className: `relative w-full ${heroHeightClass}`,
-                  children: isVideoMode ? (() => {
-                    if (settings.header_video_url) {
-                      const focus = settings.header_video_focus || "center";
-                      let focusClass = "object-center";
-                      if (focus === "top") focusClass = "object-top";
-                      else if (focus === "bottom") focusClass = "object-bottom";
-                      return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "relative w-full h-full overflow-hidden", children: [
-                          heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            "img",
-                            {
-                              src: heroPoster,
-                              alt: settings.display_name || link.title || "Profile",
-                              className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
-                              loading: "eager",
-                              decoding: "async",
-                              fetchPriority: "high"
-                            }
-                          ) : null,
-                          enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            "video",
-                            {
-                              ref: heroVideoRef,
-                              src: settings.header_video_url,
-                              poster: heroPoster,
-                              preload: "none",
-                              autoPlay: true,
-                              loop: true,
-                              muted: true,
-                              playsInline: true,
-                              onPlaying: () => setHeroVideoReady(true),
-                              className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-100" : "opacity-0"}`
-                            }
-                          ) : null
-                        ] }),
-                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                          "div",
+      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+        "div",
+        {
+          className: "relative z-10 w-full md:w-[36rem] md:max-w-[36rem] md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
+          style: { backgroundColor: themeColors.background },
+          children: [
+            isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              import_framer_motion10.motion.div,
+              {
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                transition: { duration: 0.6 },
+                className: `relative w-full ${heroHeightClass}`,
+                children: isVideoMode ? (() => {
+                  if (settings.header_video_url) {
+                    const focus = settings.header_video_focus || "center";
+                    let focusClass = "object-center";
+                    if (focus === "top") focusClass = "object-top";
+                    else if (focus === "bottom") focusClass = "object-bottom";
+                    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "relative w-full h-full overflow-hidden", children: [
+                        heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          "img",
                           {
-                            className: "absolute inset-x-0 bottom-0 h-48 pointer-events-none",
-                            style: {
-                              background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
-                            }
+                            src: heroPoster,
+                            alt: settings.display_name || link.title || "Profile",
+                            className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
+                            loading: "eager",
+                            decoding: "async",
+                            fetchPriority: "high"
                           }
-                        )
-                      ] });
-                    }
-                    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      import_react26.Icon,
-                      {
-                        icon: "solar:clapperboard-play-bold-duotone",
-                        className: "w-16 h-16 text-default-300"
-                      }
-                    ) });
-                  })() : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      "img",
-                      {
-                        src: settings.avatar_url,
-                        alt: settings.display_name || link.title || "Profile",
-                        className: "w-full h-full object-cover object-center md:object-contain"
-                      }
-                    ) }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      "div",
-                      {
-                        className: "absolute inset-x-0 bottom-0 h-32 pointer-events-none",
-                        style: {
-                          background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
+                        ) : null,
+                        enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          "video",
+                          {
+                            ref: heroVideoRef,
+                            src: settings.header_video_url,
+                            poster: heroPoster,
+                            preload: "none",
+                            autoPlay: true,
+                            loop: true,
+                            muted: true,
+                            playsInline: true,
+                            onPlaying: () => setHeroVideoReady(true),
+                            className: `absolute inset-0 w-full h-full object-cover ${focusClass} transition-opacity duration-200 ${heroVideoReady ? "opacity-100" : "opacity-0"}`
+                          }
+                        ) : null
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        "div",
+                        {
+                          className: "absolute inset-x-0 bottom-0 h-48 pointer-events-none",
+                          style: {
+                            background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
+                          }
                         }
-                      }
-                    )
-                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      )
+                    ] });
+                  }
+                  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                     import_react26.Icon,
                     {
-                      icon: "solar:user-bold-duotone",
-                      className: "w-24 h-24 text-default-300"
+                      icon: "solar:clapperboard-play-bold-duotone",
+                      className: "w-16 h-16 text-default-300"
                     }
-                  ) })
-                }
-              ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full pt-8" }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                "div",
-                {
-                  className: "flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10",
-                  style: { marginTop: isFullMode ? "0" : "0" },
-                  children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full max-w-md", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-4", children: [
-                    (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                      import_framer_motion10.motion.div,
-                      {
-                        initial: { opacity: 0, y: 10 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { delay: 0.2, duration: 0.3 },
-                        className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                          "header"
-                        )}`,
-                        style: { order: getSectionOrder("header") },
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center gap-2", children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              "h1",
-                              {
-                                className: "text-2xl sm:text-3xl font-bold",
-                                style: { color: themeColors.textPrimary },
-                                children: settings.display_name || link.title || "Profile"
-                              }
-                            ),
-                            settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react26.Icon,
-                              {
-                                icon: "solar:verified-check-bold",
-                                width: 24,
-                                style: { color: "#C9A24B" }
-                              }
-                            ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react25.Chip,
-                              {
-                                size: "sm",
-                                variant: "flat",
-                                className: "bg-[#C9A24B]/10 text-[#C9A24B]",
-                                startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                  import_react26.Icon,
-                                  {
-                                    icon: "solar:verified-check-bold",
-                                    width: 16,
-                                    style: { color: "#C9A24B" }
-                                  }
-                                ),
-                                children: "Verified"
-                              }
-                            ) })
-                          ] }),
-                          settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                            "p",
-                            {
-                              className: "text-sm",
-                              style: { color: themeColors.textSecondary },
-                              children: [
-                                link.domain,
-                                "/",
-                                link.path
-                              ]
-                            }
-                          )
-                        ]
+                  ) });
+                })() : settings.avatar_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative w-full h-full overflow-hidden", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "img",
+                    {
+                      src: settings.avatar_url,
+                      alt: settings.display_name || link.title || "Profile",
+                      className: "w-full h-full object-cover object-center md:object-contain"
+                    }
+                  ) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "div",
+                    {
+                      className: "absolute inset-x-0 bottom-0 h-32 pointer-events-none",
+                      style: {
+                        background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
                       }
-                    ),
-                    mode === "avatar" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      import_framer_motion10.motion.div,
-                      {
-                        initial: { scale: 0.8 },
-                        animate: { scale: 1 },
-                        transition: { delay: 0.1, duration: 0.3 },
-                        className: "relative",
-                        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                          "div",
-                          {
-                            className: "rounded-full p-1",
-                            style: {
-                              background: "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)"
-                            },
-                            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react22.Avatar,
-                              {
-                                src: settings.avatar_url || void 0,
-                                alt: settings.display_name || link.title || "Profile",
-                                className: "w-32 h-32 text-large border-4",
-                                style: { borderColor: themeColors.background },
-                                showFallback: true,
-                                fallback: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                  import_react26.Icon,
-                                  {
-                                    icon: "solar:user-bold-duotone",
-                                    className: "w-20 h-20 text-default-500"
-                                  }
-                                )
-                              }
-                            )
-                          }
-                        )
-                      }
-                    ),
-                    mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                      import_framer_motion10.motion.div,
-                      {
-                        initial: { opacity: 0, y: 10 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { delay: 0.2, duration: 0.3 },
-                        className: `flex flex-col items-center gap-1 ${getSectionSpacingClass(
-                          "header"
-                        )}`,
-                        style: { order: getSectionOrder("header") },
-                        children: [
-                          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center gap-2", children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              "h1",
-                              {
-                                className: "text-2xl sm:text-3xl font-bold",
-                                style: { color: themeColors.textPrimary },
-                                children: settings.display_name || link.title || "Profile"
-                              }
-                            ),
-                            settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react26.Icon,
-                              {
-                                icon: "solar:verified-check-bold",
-                                width: 24,
-                                style: { color: "#C9A24B" }
-                              }
-                            ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react25.Chip,
-                              {
-                                size: "sm",
-                                variant: "flat",
-                                className: "bg-[#C9A24B]/10 text-[#C9A24B]",
-                                startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                  import_react26.Icon,
-                                  {
-                                    icon: "solar:verified-check-bold",
-                                    width: 16,
-                                    style: { color: "#C9A24B" }
-                                  }
-                                ),
-                                children: "Verified"
-                              }
-                            ) })
-                          ] }),
-                          settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                            "p",
+                    }
+                  )
+                ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full h-full bg-default-100 flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                  import_react26.Icon,
+                  {
+                    icon: "solar:user-bold-duotone",
+                    className: "w-24 h-24 text-default-300"
+                  }
+                ) })
+              }
+            ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full pt-8" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "div",
+              {
+                className: "flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10",
+                style: { marginTop: isFullMode ? "0" : "0" },
+                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full max-w-md", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-4", children: [
+                  (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                    import_framer_motion10.motion.div,
+                    {
+                      initial: { opacity: 0, y: 10 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { delay: 0.2, duration: 0.3 },
+                      className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                        "header"
+                      )}`,
+                      style: { order: getSectionOrder("header") },
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center gap-2", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            "h1",
                             {
-                              className: "text-sm",
-                              style: { color: themeColors.textSecondary },
-                              children: [
-                                link.domain,
-                                "/",
-                                link.path
-                              ]
-                            }
-                          )
-                        ]
-                      }
-                    ),
-                    isSectionEnabled("social_block") && (settings.social_links && settings.social_links.length > 0 || settings.show_follower_count && (settings.follower_count || 0) > 0) && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                      "div",
-                      {
-                        className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
-                          "social_block"
-                        )}`,
-                        style: { order: getSectionOrder("social_block") },
-                        children: [
-                          settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            import_framer_motion10.motion.div,
-                            {
-                              initial: { opacity: 0 },
-                              animate: { opacity: 1 },
-                              transition: { delay: 0.3, duration: 0.3 },
-                              className: "flex flex-wrap items-center justify-center gap-3",
-                              children: settings.social_links.map((social, index) => {
-                                var _a;
-                                return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                  import_react24.Button,
-                                  {
-                                    as: "a",
-                                    href: (_a = social.url) != null ? _a : "",
-                                    target: "_blank",
-                                    rel: "noopener noreferrer",
-                                    isIconOnly: true,
-                                    size: "sm",
-                                    variant: "light",
-                                    className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
-                                    children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                      import_react26.Icon,
-                                      {
-                                        icon: social.icon,
-                                        width: 20,
-                                        color: isLightMode ? "#C9A24B" : "#e5e7eb"
-                                      }
-                                    )
-                                  },
-                                  index
-                                );
-                              })
+                              className: "text-2xl sm:text-3xl font-bold",
+                              style: { color: themeColors.textPrimary },
+                              children: settings.display_name || link.title || "Profile"
                             }
                           ),
-                          settings.show_follower_count && (settings.follower_count || 0) > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            import_framer_motion10.motion.div,
+                          settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react26.Icon,
                             {
-                              initial: { opacity: 0 },
-                              animate: { opacity: 1 },
-                              transition: { delay: 0.4, duration: 0.3 },
-                              className: "text-center",
-                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                                "p",
+                              icon: "solar:verified-check-bold",
+                              width: 24,
+                              style: { color: "#C9A24B" }
+                            }
+                          ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react25.Chip,
+                            {
+                              size: "sm",
+                              variant: "flat",
+                              className: "bg-[#C9A24B]/10 text-[#C9A24B]",
+                              startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                import_react26.Icon,
                                 {
-                                  className: "text-sm",
-                                  style: { color: themeColors.textSecondary },
-                                  children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                      "span",
-                                      {
-                                        className: "font-semibold",
-                                        style: { color: themeColors.textPrimary },
-                                        children: settings.follower_count.toLocaleString()
-                                      }
-                                    ),
-                                    " ",
-                                    "Total Followers"
-                                  ]
+                                  icon: "solar:verified-check-bold",
+                                  width: 16,
+                                  style: { color: "#C9A24B" }
+                                }
+                              ),
+                              children: "Verified"
+                            }
+                          ) })
+                        ] }),
+                        settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                          "p",
+                          {
+                            className: "text-sm",
+                            style: { color: themeColors.textSecondary },
+                            children: [
+                              link.domain,
+                              "/",
+                              link.path
+                            ]
+                          }
+                        )
+                      ]
+                    }
+                  ),
+                  mode === "avatar" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    import_framer_motion10.motion.div,
+                    {
+                      initial: { scale: 0.8 },
+                      animate: { scale: 1 },
+                      transition: { delay: 0.1, duration: 0.3 },
+                      className: "relative",
+                      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        "div",
+                        {
+                          className: "rounded-full p-1",
+                          style: {
+                            background: "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)"
+                          },
+                          children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react22.Avatar,
+                            {
+                              src: settings.avatar_url || void 0,
+                              alt: settings.display_name || link.title || "Profile",
+                              className: "w-32 h-32 text-large border-4",
+                              style: { borderColor: themeColors.background },
+                              showFallback: true,
+                              fallback: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                import_react26.Icon,
+                                {
+                                  icon: "solar:user-bold-duotone",
+                                  className: "w-20 h-20 text-default-500"
                                 }
                               )
                             }
                           )
-                        ]
-                      }
-                    ),
-                    isSectionEnabled("voice_note") && settings.voice_note_url && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      import_framer_motion10.motion.div,
-                      {
-                        initial: { opacity: 0, y: 10 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { delay: 0.45, duration: 0.3 },
-                        className: `w-full max-w-sm ${getSectionSpacingClass(
-                          "voice_note"
-                        )}`,
-                        style: { order: getSectionOrder("voice_note") },
-                        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                          ModernAudioPlayer,
-                          {
-                            src: settings.voice_note_url,
-                            theme: settings.theme_mode
-                          }
-                        )
-                      }
-                    ),
-                    lightboxUrl && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      "div",
-                      {
-                        className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
-                        onClick: () => setLightboxUrl(null),
-                        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                          "div",
-                          {
-                            className: "max-w-3xl max-h-[90vh] px-4",
-                            onClick: (e) => e.stopPropagation(),
-                            children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                "img",
+                        }
+                      )
+                    }
+                  ),
+                  mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                    import_framer_motion10.motion.div,
+                    {
+                      initial: { opacity: 0, y: 10 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { delay: 0.2, duration: 0.3 },
+                      className: `flex flex-col items-center gap-1 ${getSectionSpacingClass(
+                        "header"
+                      )}`,
+                      style: { order: getSectionOrder("header") },
+                      children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center gap-2", children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            "h1",
+                            {
+                              className: "text-2xl sm:text-3xl font-bold",
+                              style: { color: themeColors.textPrimary },
+                              children: settings.display_name || link.title || "Profile"
+                            }
+                          ),
+                          settings.verified_badge && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_jsx_runtime10.Fragment, { children: settings.verified_badge_style === "solid" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react26.Icon,
+                            {
+                              icon: "solar:verified-check-bold",
+                              width: 24,
+                              style: { color: "#C9A24B" }
+                            }
+                          ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react25.Chip,
+                            {
+                              size: "sm",
+                              variant: "flat",
+                              className: "bg-[#C9A24B]/10 text-[#C9A24B]",
+                              startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                import_react26.Icon,
                                 {
-                                  src: lightboxUrl,
-                                  alt: "Gallery full view",
-                                  className: "w-full h-full object-contain rounded-2xl"
+                                  icon: "solar:verified-check-bold",
+                                  width: 16,
+                                  style: { color: "#C9A24B" }
                                 }
                               ),
-                              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                "button",
-                                {
-                                  type: "button",
-                                  className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
-                                  onClick: () => setLightboxUrl(null),
-                                  children: "Close"
-                                }
-                              ) })
+                              children: "Verified"
+                            }
+                          ) })
+                        ] }),
+                        settings.show_domain_handle && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                          "p",
+                          {
+                            className: "text-sm",
+                            style: { color: themeColors.textSecondary },
+                            children: [
+                              link.domain,
+                              "/",
+                              link.path
                             ]
                           }
                         )
-                      }
-                    ),
-                    isSectionEnabled("bio") && settings.bio && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      import_framer_motion10.motion.p,
-                      {
-                        initial: { opacity: 0 },
-                        animate: { opacity: 1 },
-                        transition: { delay: 0.5, duration: 0.3 },
-                        className: `text-center max-w-sm ${getSectionSpacingClass(
-                          "bio"
-                        )}`,
-                        style: {
-                          color: themeColors.textSecondary,
-                          order: getSectionOrder("bio")
-                        },
-                        children: settings.bio
-                      }
-                    ),
-                    isSectionEnabled("cta_block") && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      "div",
-                      {
-                        className: `w-full ${getSectionSpacingClass("cta_block")}`,
-                        style: { order: getSectionOrder("cta_block") },
-                        children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full grid grid-cols-2 gap-3", children: settings.cta_cards.sort((a, b) => a.order - b.order).map((card, index) => {
-                          const size = card.style.size || "standard";
-                          let sizeBodyClasses = "p-5 min-h-[120px]";
-                          let sizeTitleClass = "text-lg";
-                          let sizeDescriptionClass = "text-sm";
-                          let sizeColSpanClass = "";
-                          if (size === "small") {
-                            sizeBodyClasses = "p-4 min-h-[110px]";
-                            sizeTitleClass = "text-base";
-                            sizeDescriptionClass = "text-xs";
-                            sizeColSpanClass = "";
-                          } else if (size === "standard") {
-                            sizeBodyClasses = "p-5 min-h-[150px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "col-span-2";
-                          } else if (size === "large") {
-                            sizeBodyClasses = "p-6 min-h-[260px]";
-                            sizeTitleClass = "text-lg";
-                            sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "col-span-2";
-                          }
-                          const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
-                          const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
-                          const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
-                          const getCardStyle = () => {
-                            switch (card.style.type) {
-                              case "solid":
-                                return {
-                                  background: card.style.background_color || "#666"
-                                };
-                              case "gradient":
-                                return {
-                                  background: card.style.background_gradient ? `linear-gradient(135deg, ${card.style.background_gradient.start}, ${card.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
-                                };
-                              case "image":
-                                return {
-                                  backgroundImage: card.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})` : "none",
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center"
-                                };
-                              case "video":
-                                return { background: "#000" };
-                              default:
-                                return {};
-                            }
-                          };
-                          const handleCardClick = () => {
-                            if (isPreview) return;
-                            if (card.require_18plus) {
-                              setShowingAgeConfirmationFor(card.id);
-                              return;
-                            }
-                            trackClick(link.id, isPreview);
-                            navigateToUrl(card.url, { fromUserGesture: true });
-                          };
-                          const handleAgeConfirm = () => {
-                            setShowingAgeConfirmationFor(null);
-                            trackClick(link.id, isPreview);
-                            navigateToUrl(card.url, { fromUserGesture: true });
-                          };
-                          const handleAgeCancel = () => {
-                            setShowingAgeConfirmationFor(null);
-                          };
-                          const useNativeCardLink = !isPreview && !!card.url && !card.require_18plus;
-                          const cardLinkProps = useNativeCardLink ? getNativeLinkProps(card.url) : null;
-                          const ageConfirmLinkProps = shouldEscapeInAppBrowser && card.url ? getNativeLinkProps(card.url) : null;
-                          const renderCardBodyContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
-                            "div",
-                            {
-                              className: `${sizeBodyClasses} flex items-center justify-center relative`,
-                              children: [
-                                card.style.type === "video" && card.style.background_video && (() => {
-                                  const fit = card.style.background_fit || "fill";
-                                  const focus = card.style.background_focus || "top";
-                                  const baseClasses = "absolute inset-0 w-full h-full opacity-60";
-                                  const fitClass = fit === "fit" ? "object-contain" : "object-cover";
-                                  let focusClass = "";
-                                  if (fit === "fill") {
-                                    if (focus === "top")
-                                      focusClass = "object-top";
-                                    else if (focus === "bottom")
-                                      focusClass = "object-bottom";
-                                    else focusClass = "object-center";
-                                  }
-                                  return enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "video",
-                                    {
-                                      ref: setCtaVideoRef(card.id),
-                                      src: card.style.background_video,
-                                      poster: card.style.background_video_poster_url || void 0,
-                                      preload: "none",
-                                      autoPlay: true,
-                                      loop: true,
-                                      muted: true,
-                                      playsInline: true,
-                                      className: `${baseClasses} ${fitClass} ${focusClass}`
-                                    }
-                                  ) : card.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "img",
-                                    {
-                                      src: card.style.background_video_poster_url,
-                                      alt: "",
-                                      className: `${baseClasses} ${fitClass} ${focusClass}`,
-                                      loading: "lazy",
-                                      decoding: "async"
-                                    }
-                                  ) : null;
-                                })(),
-                                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                  isPremiumLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
-                                    card.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                      "p",
-                                      {
-                                        className: "text-base font-semibold",
-                                        style: {
-                                          color: card.style.logo_color || "#ffffff"
-                                        },
-                                        children: card.style.prefix_text
-                                      }
-                                    ),
-                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
-                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                        "img",
-                                        {
-                                          src: "/of-logo.svg",
-                                          alt: "Creator icon",
-                                          className: "h-5 w-auto",
-                                          loading: "lazy"
-                                        }
-                                      ),
-                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                        "img",
-                                        {
-                                          src: "/of.webp",
-                                          alt: "Creator link",
-                                          className: "h-5 w-auto",
-                                          loading: "lazy"
-                                        }
-                                      )
-                                    ] })
-                                  ] }) }),
-                                  !isBrandedNonPremium && card.title && card.title.trim() !== "" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "h3",
-                                    {
-                                      className: `${sizeTitleClass} font-semibold ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white" : "text-foreground"}`,
-                                      style: {
-                                        textShadow: card.style.type === "image" || card.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
-                                      },
-                                      children: card.title
-                                    }
-                                  ),
-                                  !isBrandedNonPremium && card.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "p",
-                                    {
-                                      className: `${sizeDescriptionClass} mt-1 ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white/90" : "text-default-500"}`,
-                                      style: {
-                                        textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
-                                      },
-                                      children: card.description
-                                    }
-                                  )
-                                ] }),
-                                isBrandedNonPremium && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                                  card.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "div",
-                                    {
-                                      className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
-                                      style: {
-                                        backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
-                                      },
-                                      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                        import_react26.Icon,
-                                        {
-                                          icon: card.style.logo_icon,
-                                          width: 18,
-                                          style: {
-                                            color: card.style.logo_color || "#ffffff"
-                                          }
-                                        }
-                                      )
-                                    }
-                                  ) }),
-                                  card.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "p",
-                                    {
-                                      className: "text-xs font-semibold",
-                                      style: {
-                                        color: card.style.logo_color || "#ffffff",
-                                        textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
-                                      },
-                                      children: card.style.logo_name
-                                    }
-                                  ) })
-                                ] })
-                              ]
-                            }
-                          );
-                          const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            import_react23.Card,
-                            {
-                              isPressable: true,
-                              onPress: handleCardClick,
-                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
-                              style: getCardStyle(),
-                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { children: renderCardBodyContent() })
-                            }
-                          );
-                          const baseCardContent = cardLinkProps ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            "a",
-                            {
-                              href: cardLinkProps.href,
-                              target: cardLinkProps.target,
-                              rel: cardLinkProps.rel,
-                              onClick: cardLinkProps.onClick,
-                              className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]",
-                              style: getCardStyle(),
-                              children: renderCardBodyContent()
-                            }
-                          ) : renderCardContent();
-                          const cardWithMechanisms = card.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            CTACardWithMechanisms,
-                            {
-                              card,
-                              onReveal: () => {
-                              },
-                              children: baseCardContent
-                            }
-                          ) : baseCardContent;
-                          const finalContent = showingAgeConfirmationFor === card.id && !isPreview ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            AgeConfirmationModal,
-                            {
-                              isOpen: true,
-                              onConfirm: () => {
-                                setShowingAgeConfirmationFor(null);
-                                if (ageConfirmLinkProps) {
-                                  trackClick(link.id, isPreview);
-                                  if (onButtonClick) {
-                                    onButtonClick();
-                                  }
-                                  if (ageConfirmLinkProps.attemptExternalOpen()) {
-                                    return;
-                                  }
-                                  window.location.href = ageConfirmLinkProps.href;
-                                  return;
-                                }
-                                handleAgeConfirm();
-                              },
-                              onCancel: handleAgeCancel,
-                              confirmHref: ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.href,
-                              confirmTargetBlank: (ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.target) === "_blank",
-                              children: cardWithMechanisms
-                            }
-                          ) : cardWithMechanisms;
-                          return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                            import_framer_motion10.motion.div,
-                            {
-                              initial: { opacity: 0, y: 10 },
-                              animate: { opacity: 1, y: 0 },
-                              transition: {
-                                delay: 0.6 + index * 0.1,
-                                duration: 0.3
-                              },
-                              className: `relative ${sizeColSpanClass}`,
-                              children: finalContent
-                            },
-                            card.id
-                          );
-                        }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      ]
+                    }
+                  ),
+                  isSectionEnabled("social_block") && (settings.social_links && settings.social_links.length > 0 || settings.show_follower_count && (settings.follower_count || 0) > 0) && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                    "div",
+                    {
+                      className: `flex flex-col items-center gap-2 ${getSectionSpacingClass(
+                        "social_block"
+                      )}`,
+                      style: { order: getSectionOrder("social_block") },
+                      children: [
+                        settings.social_links && settings.social_links.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           import_framer_motion10.motion.div,
                           {
-                            initial: { opacity: 0, y: 10 },
-                            animate: { opacity: 1, y: 0 },
-                            transition: { delay: 0.6, duration: 0.3 },
-                            className: "w-full px-4",
-                            children: !isPreview && link.destination_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              "a",
-                              {
-                                ...getNativeLinkProps(link.destination_url),
-                                className: "block w-full rounded-xl bg-content1 shadow-lg transition-transform hover:scale-[1.02]",
-                                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-between", children: [
-                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex-1", children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                                    link.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                                  ] }),
-                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            initial: { opacity: 0 },
+                            animate: { opacity: 1 },
+                            transition: { delay: 0.3, duration: 0.3 },
+                            className: "flex flex-wrap items-center justify-center gap-3",
+                            children: settings.social_links.map((social, index) => {
+                              var _a;
+                              return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                import_react24.Button,
+                                {
+                                  as: "a",
+                                  href: (_a = social.url) != null ? _a : "",
+                                  target: "_blank",
+                                  rel: "noopener noreferrer",
+                                  isIconOnly: true,
+                                  size: "sm",
+                                  variant: "light",
+                                  className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
+                                  children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     import_react26.Icon,
                                     {
-                                      icon: "solar:arrow-right-line-duotone",
-                                      width: 24,
-                                      className: "text-default-400 ml-4"
+                                      icon: social.icon,
+                                      width: 20,
+                                      color: isLightMode ? "#C9A24B" : "#e5e7eb"
                                     }
                                   )
-                                ] }) })
-                              }
-                            ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              import_react23.Card,
+                                },
+                                index
+                              );
+                            })
+                          }
+                        ),
+                        settings.show_follower_count && (settings.follower_count || 0) > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          import_framer_motion10.motion.div,
+                          {
+                            initial: { opacity: 0 },
+                            animate: { opacity: 1 },
+                            transition: { delay: 0.4, duration: 0.3 },
+                            className: "text-center",
+                            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                              "p",
                               {
-                                isPressable: true,
-                                onPress: handleButtonClick,
-                                className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
-                                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-between", children: [
-                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex-1", children: [
-                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
-                                    link.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
-                                  ] }),
+                                className: "text-sm",
+                                style: { color: themeColors.textSecondary },
+                                children: [
                                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    import_react26.Icon,
+                                    "span",
                                     {
-                                      icon: "solar:arrow-right-line-duotone",
-                                      width: 24,
-                                      className: "text-default-400 ml-4"
+                                      className: "font-semibold",
+                                      style: { color: themeColors.textPrimary },
+                                      children: settings.follower_count.toLocaleString()
                                     }
-                                  )
-                                ] }) })
+                                  ),
+                                  " ",
+                                  "Total Followers"
+                                ]
                               }
                             )
                           }
                         )
-                      }
-                    ),
-                    isSectionEnabled("gallery") && hasGallery && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      import_framer_motion10.motion.div,
-                      {
-                        initial: { opacity: 0, y: 10 },
-                        animate: { opacity: 1, y: 0 },
-                        transition: { delay: 0.7, duration: 0.3 },
-                        className: `w-full ${getSectionSpacingClass("gallery")}`,
-                        style: { order: getSectionOrder("gallery") },
-                        children: (() => {
-                          const total = galleryImages.length;
-                          if (total === 0) return null;
-                          const index = Math.min(activeGalleryIndex, total - 1);
-                          const goPrev = () => {
-                            if (total <= 1) return;
-                            setActiveGalleryIndex(
-                              (prev) => (prev - 1 + total) % total
-                            );
-                          };
-                          const goNext = () => {
-                            if (total <= 1) return;
-                            setActiveGalleryIndex((prev) => (prev + 1) % total);
-                          };
-                          const handleTouchStart = (e) => {
-                            galleryTouchStartX.current = e.touches[0].clientX;
-                          };
-                          const handleTouchEnd = (e) => {
-                            if (galleryTouchStartX.current == null) return;
-                            const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
-                            const threshold = 40;
-                            if (deltaX > threshold) {
-                              goPrev();
-                            } else if (deltaX < -threshold) {
-                              goNext();
-                            }
-                            galleryTouchStartX.current = null;
-                          };
-                          return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                      ]
+                    }
+                  ),
+                  isSectionEnabled("voice_note") && settings.voice_note_url && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    import_framer_motion10.motion.div,
+                    {
+                      initial: { opacity: 0, y: 10 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { delay: 0.45, duration: 0.3 },
+                      className: `w-full max-w-sm ${getSectionSpacingClass(
+                        "voice_note"
+                      )}`,
+                      style: { order: getSectionOrder("voice_note") },
+                      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        ModernAudioPlayer,
+                        {
+                          src: settings.voice_note_url,
+                          theme: settings.theme_mode
+                        }
+                      )
+                    }
+                  ),
+                  lightboxUrl && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "div",
+                    {
+                      className: "fixed inset-0 z-[9999] flex items-center justify-center bg-black/80",
+                      onClick: () => setLightboxUrl(null),
+                      children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                        "div",
+                        {
+                          className: "max-w-3xl max-h-[90vh] px-4",
+                          onClick: (e) => e.stopPropagation(),
+                          children: [
                             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                              "div",
+                              "img",
                               {
-                                className: "relative w-full flex items-center justify-center",
-                                onTouchStart: handleTouchStart,
-                                onTouchEnd: handleTouchEnd,
-                                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
-                                  const cards = [];
-                                  for (let offset = -2; offset <= 2; offset++) {
-                                    const imgIndex = (index + offset + total) % total;
-                                    const url = galleryImages[imgIndex];
-                                    const absOffset = Math.abs(offset);
-                                    const isActive = offset === 0;
-                                    const translateX = offset * 120;
-                                    const scale = isActive ? 1 : 0.85;
-                                    const opacity = isActive ? 1 : 0.35;
-                                    const blur = isActive ? "none" : "blur(3px)";
-                                    const zIndex = 20 - absOffset;
-                                    cards.push(
-                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                        "div",
-                                        {
-                                          className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
-                                          style: {
-                                            width: "13rem",
-                                            height: "17rem",
-                                            transform: `translateX(${translateX}%) scale(${scale})`,
-                                            opacity,
-                                            filter: blur,
-                                            zIndex
-                                          },
-                                          onClick: () => {
-                                            if (isActive) {
-                                              setLightboxUrl(url);
-                                            } else {
-                                              setActiveGalleryIndex(imgIndex);
-                                            }
-                                          },
-                                          children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                            "img",
-                                            {
-                                              src: url,
-                                              alt: `Gallery ${imgIndex + 1}`,
-                                              className: "w-full h-full object-cover",
-                                              loading: "lazy"
-                                            }
-                                          )
-                                        },
-                                        `${url}-${imgIndex}`
-                                      )
-                                    );
-                                  }
-                                  return cards;
-                                })() })
+                                src: lightboxUrl,
+                                alt: "Gallery full view",
+                                className: "w-full h-full object-contain rounded-2xl"
                               }
                             ),
-                            total > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-5 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-3 flex justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                               "button",
                               {
                                 type: "button",
-                                onClick: () => setActiveGalleryIndex(dotIndex),
-                                className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#C9A24B]" : "w-1.5 bg-[#C9A24B]/40"}`
-                              },
-                              `${url}-${dotIndex}`
-                            )) })
-                          ] });
-                        })()
-                      }
-                    )
-                  ] }) })
-                }
-              )
-            ]
-          }
-        )
-      ]
+                                className: "px-4 py-1.5 rounded-full bg-white/90 text-sm font-medium text-black hover:bg-white",
+                                onClick: () => setLightboxUrl(null),
+                                children: "Close"
+                              }
+                            ) })
+                          ]
+                        }
+                      )
+                    }
+                  ),
+                  isSectionEnabled("bio") && settings.bio && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    import_framer_motion10.motion.p,
+                    {
+                      initial: { opacity: 0 },
+                      animate: { opacity: 1 },
+                      transition: { delay: 0.5, duration: 0.3 },
+                      className: `text-center max-w-sm ${getSectionSpacingClass(
+                        "bio"
+                      )}`,
+                      style: {
+                        color: themeColors.textSecondary,
+                        order: getSectionOrder("bio")
+                      },
+                      children: settings.bio
+                    }
+                  ),
+                  isSectionEnabled("cta_block") && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "div",
+                    {
+                      className: `w-full ${getSectionSpacingClass("cta_block")}`,
+                      style: { order: getSectionOrder("cta_block") },
+                      children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "w-full grid grid-cols-2 gap-3", children: settings.cta_cards.sort((a, b) => a.order - b.order).map((card, index) => {
+                        const size = card.style.size || "standard";
+                        let sizeBodyClasses = "p-5 min-h-[120px]";
+                        let sizeTitleClass = "text-lg";
+                        let sizeDescriptionClass = "text-sm";
+                        let sizeColSpanClass = "";
+                        if (size === "small") {
+                          sizeBodyClasses = "p-4 min-h-[110px]";
+                          sizeTitleClass = "text-base";
+                          sizeDescriptionClass = "text-xs";
+                          sizeColSpanClass = "";
+                        } else if (size === "standard") {
+                          sizeBodyClasses = "p-5 min-h-[150px]";
+                          sizeTitleClass = "text-lg";
+                          sizeDescriptionClass = "text-sm";
+                          sizeColSpanClass = "col-span-2";
+                        } else if (size === "large") {
+                          sizeBodyClasses = "p-6 min-h-[260px]";
+                          sizeTitleClass = "text-lg";
+                          sizeDescriptionClass = "text-sm";
+                          sizeColSpanClass = "col-span-2";
+                        }
+                        const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
+                        const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
+                        const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
+                        const getCardStyle = () => {
+                          switch (card.style.type) {
+                            case "solid":
+                              return {
+                                background: card.style.background_color || "#666"
+                              };
+                            case "gradient":
+                              return {
+                                background: card.style.background_gradient ? `linear-gradient(135deg, ${card.style.background_gradient.start}, ${card.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
+                              };
+                            case "image":
+                              return {
+                                backgroundImage: card.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})` : "none",
+                                backgroundSize: "cover",
+                                backgroundPosition: "center"
+                              };
+                            case "video":
+                              return { background: "#000" };
+                            default:
+                              return {};
+                          }
+                        };
+                        const handleCardClick = () => {
+                          if (isPreview) return;
+                          if (card.require_18plus) {
+                            setShowingAgeConfirmationFor(card.id);
+                            return;
+                          }
+                          trackClick(link.id, isPreview);
+                          navigateToUrl(card.url, { fromUserGesture: true });
+                        };
+                        const handleAgeConfirm = () => {
+                          setShowingAgeConfirmationFor(null);
+                          trackClick(link.id, isPreview);
+                          navigateToUrl(card.url, { fromUserGesture: true });
+                        };
+                        const handleAgeCancel = () => {
+                          setShowingAgeConfirmationFor(null);
+                        };
+                        const useNativeCardLink = !isPreview && !!card.url && !card.require_18plus;
+                        const cardLinkProps = useNativeCardLink ? getNativeLinkProps(card.url) : null;
+                        const ageConfirmLinkProps = shouldEscapeInAppBrowser && card.url ? getNativeLinkProps(card.url) : null;
+                        const renderCardBodyContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                          "div",
+                          {
+                            className: `${sizeBodyClasses} flex items-center justify-center relative`,
+                            children: [
+                              card.style.type === "video" && card.style.background_video && (() => {
+                                const fit = card.style.background_fit || "fill";
+                                const focus = card.style.background_focus || "top";
+                                const baseClasses = "absolute inset-0 w-full h-full opacity-60";
+                                const fitClass = fit === "fit" ? "object-contain" : "object-cover";
+                                let focusClass = "";
+                                if (fit === "fill") {
+                                  if (focus === "top")
+                                    focusClass = "object-top";
+                                  else if (focus === "bottom")
+                                    focusClass = "object-bottom";
+                                  else focusClass = "object-center";
+                                }
+                                return enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "video",
+                                  {
+                                    ref: setCtaVideoRef(card.id),
+                                    src: card.style.background_video,
+                                    poster: card.style.background_video_poster_url || void 0,
+                                    preload: "none",
+                                    autoPlay: true,
+                                    loop: true,
+                                    muted: true,
+                                    playsInline: true,
+                                    className: `${baseClasses} ${fitClass} ${focusClass}`
+                                  }
+                                ) : card.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "img",
+                                  {
+                                    src: card.style.background_video_poster_url,
+                                    alt: "",
+                                    className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                    loading: "lazy",
+                                    decoding: "async"
+                                  }
+                                ) : null;
+                              })(),
+                              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "text-center w-full relative z-10", children: [
+                                isPremiumLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
+                                  card.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                    "p",
+                                    {
+                                      className: "text-base font-semibold",
+                                      style: {
+                                        color: card.style.logo_color || "#ffffff"
+                                      },
+                                      children: card.style.prefix_text
+                                    }
+                                  ),
+                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-center gap-2", children: [
+                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      "img",
+                                      {
+                                        src: "/of-logo.svg",
+                                        alt: "Creator icon",
+                                        className: "h-5 w-auto",
+                                        loading: "lazy"
+                                      }
+                                    ),
+                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      "img",
+                                      {
+                                        src: "/of.webp",
+                                        alt: "Creator link",
+                                        className: "h-5 w-auto",
+                                        loading: "lazy"
+                                      }
+                                    )
+                                  ] })
+                                ] }) }),
+                                !isBrandedNonPremium && card.title && card.title.trim() !== "" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "h3",
+                                  {
+                                    className: `${sizeTitleClass} font-semibold ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white" : "text-foreground"}`,
+                                    style: {
+                                      textShadow: card.style.type === "image" || card.style.type === "video" ? "0 2px 8px rgba(0,0,0,0.5)" : "none"
+                                    },
+                                    children: card.title
+                                  }
+                                ),
+                                !isBrandedNonPremium && card.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "p",
+                                  {
+                                    className: `${sizeDescriptionClass} mt-1 ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white/90" : "text-default-500"}`,
+                                    style: {
+                                      textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
+                                    },
+                                    children: card.description
+                                  }
+                                )
+                              ] }),
+                              isBrandedNonPremium && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                                card.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "div",
+                                  {
+                                    className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
+                                    style: {
+                                      backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
+                                    },
+                                    children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      import_react26.Icon,
+                                      {
+                                        icon: card.style.logo_icon,
+                                        width: 18,
+                                        style: {
+                                          color: card.style.logo_color || "#ffffff"
+                                        }
+                                      }
+                                    )
+                                  }
+                                ) }),
+                                card.style.logo_name && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "p",
+                                  {
+                                    className: "text-xs font-semibold",
+                                    style: {
+                                      color: card.style.logo_color || "#ffffff",
+                                      textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
+                                    },
+                                    children: card.style.logo_name
+                                  }
+                                ) })
+                              ] })
+                            ]
+                          }
+                        );
+                        const renderCardContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          import_react23.Card,
+                          {
+                            isPressable: true,
+                            onPress: handleCardClick,
+                            className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
+                            style: getCardStyle(),
+                            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { children: renderCardBodyContent() })
+                          }
+                        );
+                        const baseCardContent = cardLinkProps ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          "a",
+                          {
+                            href: cardLinkProps.href,
+                            target: cardLinkProps.target,
+                            rel: cardLinkProps.rel,
+                            onClick: cardLinkProps.onClick,
+                            className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]",
+                            style: getCardStyle(),
+                            children: renderCardBodyContent()
+                          }
+                        ) : renderCardContent();
+                        const cardWithMechanisms = card.ctr_mechanisms ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          CTACardWithMechanisms,
+                          {
+                            card,
+                            onReveal: () => {
+                            },
+                            children: baseCardContent
+                          }
+                        ) : baseCardContent;
+                        const finalContent = showingAgeConfirmationFor === card.id && !isPreview ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          AgeConfirmationModal,
+                          {
+                            isOpen: true,
+                            onConfirm: () => {
+                              setShowingAgeConfirmationFor(null);
+                              if (ageConfirmLinkProps) {
+                                trackClick(link.id, isPreview);
+                                if (onButtonClick) {
+                                  onButtonClick();
+                                }
+                                if (ageConfirmLinkProps.attemptExternalOpen()) {
+                                  return;
+                                }
+                                window.location.href = ageConfirmLinkProps.href;
+                                return;
+                              }
+                              handleAgeConfirm();
+                            },
+                            onCancel: handleAgeCancel,
+                            confirmHref: ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.href,
+                            confirmTargetBlank: (ageConfirmLinkProps == null ? void 0 : ageConfirmLinkProps.target) === "_blank",
+                            children: cardWithMechanisms
+                          }
+                        ) : cardWithMechanisms;
+                        return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          import_framer_motion10.motion.div,
+                          {
+                            initial: { opacity: 0, y: 10 },
+                            animate: { opacity: 1, y: 0 },
+                            transition: {
+                              delay: 0.6 + index * 0.1,
+                              duration: 0.3
+                            },
+                            className: `relative ${sizeColSpanClass}`,
+                            children: finalContent
+                          },
+                          card.id
+                        );
+                      }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        import_framer_motion10.motion.div,
+                        {
+                          initial: { opacity: 0, y: 10 },
+                          animate: { opacity: 1, y: 0 },
+                          transition: { delay: 0.6, duration: 0.3 },
+                          className: "w-full px-4",
+                          children: !isPreview && link.destination_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            "a",
+                            {
+                              ...getNativeLinkProps(link.destination_url),
+                              className: "block w-full rounded-xl bg-content1 shadow-lg transition-transform hover:scale-[1.02]",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-between", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex-1", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                  link.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                ] }),
+                                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  import_react26.Icon,
+                                  {
+                                    icon: "solar:arrow-right-line-duotone",
+                                    width: 24,
+                                    className: "text-default-400 ml-4"
+                                  }
+                                )
+                              ] }) })
+                            }
+                          ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            import_react23.Card,
+                            {
+                              isPressable: true,
+                              onPress: handleButtonClick,
+                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg",
+                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { className: "p-6", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-between", children: [
+                                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex-1", children: [
+                                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h3", { className: "text-lg font-semibold text-foreground", children: link.title || "Click here" }),
+                                  link.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "text-sm text-default-500 mt-1", children: link.description })
+                                ] }),
+                                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  import_react26.Icon,
+                                  {
+                                    icon: "solar:arrow-right-line-duotone",
+                                    width: 24,
+                                    className: "text-default-400 ml-4"
+                                  }
+                                )
+                              ] }) })
+                            }
+                          )
+                        }
+                      )
+                    }
+                  ),
+                  isSectionEnabled("gallery") && hasGallery && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    import_framer_motion10.motion.div,
+                    {
+                      initial: { opacity: 0, y: 10 },
+                      animate: { opacity: 1, y: 0 },
+                      transition: { delay: 0.7, duration: 0.3 },
+                      className: `w-full ${getSectionSpacingClass("gallery")}`,
+                      style: { order: getSectionOrder("gallery") },
+                      children: (() => {
+                        const total = galleryImages.length;
+                        if (total === 0) return null;
+                        const index = Math.min(activeGalleryIndex, total - 1);
+                        const goPrev = () => {
+                          if (total <= 1) return;
+                          setActiveGalleryIndex(
+                            (prev) => (prev - 1 + total) % total
+                          );
+                        };
+                        const goNext = () => {
+                          if (total <= 1) return;
+                          setActiveGalleryIndex((prev) => (prev + 1) % total);
+                        };
+                        const handleTouchStart = (e) => {
+                          galleryTouchStartX.current = e.touches[0].clientX;
+                        };
+                        const handleTouchEnd = (e) => {
+                          if (galleryTouchStartX.current == null) return;
+                          const deltaX = e.changedTouches[0].clientX - galleryTouchStartX.current;
+                          const threshold = 40;
+                          if (deltaX > threshold) {
+                            goPrev();
+                          } else if (deltaX < -threshold) {
+                            goNext();
+                          }
+                          galleryTouchStartX.current = null;
+                        };
+                        return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            "div",
+                            {
+                              className: "relative w-full flex items-center justify-center",
+                              onTouchStart: handleTouchStart,
+                              onTouchEnd: handleTouchEnd,
+                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative w-full max-w-md h-64 sm:h-72 overflow-visible flex items-center justify-center", children: (() => {
+                                const cards = [];
+                                for (let offset = -2; offset <= 2; offset++) {
+                                  const imgIndex = (index + offset + total) % total;
+                                  const url = galleryImages[imgIndex];
+                                  const absOffset = Math.abs(offset);
+                                  const isActive = offset === 0;
+                                  const translateX = offset * 120;
+                                  const scale = isActive ? 1 : 0.85;
+                                  const opacity = isActive ? 1 : 0.35;
+                                  const blur = isActive ? "none" : "blur(3px)";
+                                  const zIndex = 20 - absOffset;
+                                  cards.push(
+                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      "div",
+                                      {
+                                        className: "absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out",
+                                        style: {
+                                          width: "13rem",
+                                          height: "17rem",
+                                          transform: `translateX(${translateX}%) scale(${scale})`,
+                                          opacity,
+                                          filter: blur,
+                                          zIndex
+                                        },
+                                        onClick: () => {
+                                          if (isActive) {
+                                            setLightboxUrl(url);
+                                          } else {
+                                            setActiveGalleryIndex(imgIndex);
+                                          }
+                                        },
+                                        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                          "img",
+                                          {
+                                            src: url,
+                                            alt: `Gallery ${imgIndex + 1}`,
+                                            className: "w-full h-full object-cover",
+                                            loading: "lazy"
+                                          }
+                                        )
+                                      },
+                                      `${url}-${imgIndex}`
+                                    )
+                                  );
+                                }
+                                return cards;
+                              })() })
+                            }
+                          ),
+                          total > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-5 flex justify-center gap-1.5", children: galleryImages.map((url, dotIndex) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                            "button",
+                            {
+                              type: "button",
+                              onClick: () => setActiveGalleryIndex(dotIndex),
+                              className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#C9A24B]" : "w-1.5 bg-[#C9A24B]/40"}`
+                            },
+                            `${url}-${dotIndex}`
+                          )) })
+                        ] });
+                      })()
+                    }
+                  )
+                ] }) })
+              }
+            )
+          ]
+        }
+      )
     }
   );
 }

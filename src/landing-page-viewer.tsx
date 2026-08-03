@@ -524,36 +524,12 @@ useEffect(() => {
       className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-           {/* Blurred background for desktop - only shows on larger screens
-          IMPORTANT: don't use a background <video> here (it downloads the hero clip twice). */}
-      {isVideoMode && (settings.header_video_poster_url || settings.avatar_url) ? (
-        <div
-          className="hidden md:block absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${settings.header_video_poster_url || settings.avatar_url})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "blur(80px) brightness(0.4)",
-            transform: "scale(1.1)",
-          }}
-        />
-      ) : settings.avatar_url ? (
-        <div
-          className="hidden md:block absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${settings.avatar_url})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            filter: "blur(80px) brightness(0.4)",
-            transform: "scale(1.1)",
-          }}
-        />
-      ) : null}
+      {/* Keep desktop clean: the hero media belongs inside the profile frame only. */}
 
       {/* Mobile-sized container */}
       <div
-        className="relative z-10 w-full md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-        style={{ backgroundColor: themeColors.background, maxWidth: "36rem" }}
+        className="relative z-10 w-full md:w-[36rem] md:max-w-[36rem] md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+        style={{ backgroundColor: themeColors.background }}
       >
         {/* Hero area */}
         {isFullMode || isVideoMode ? (
