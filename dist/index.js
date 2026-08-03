@@ -726,6 +726,7 @@ function AgeConfirmationModal({
   confirmTargetBlank = false,
   children
 }) {
+  const confirmButtonClass = "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-gradient-to-r from-[#D5AF53] via-[#C9C193] to-[#4FB6C4] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(201,162,75,0.28)] ring-1 ring-white/25 transition hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E9E2D0]/60";
   const glassVars = {
     "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(201,162,75,0.78) 46%, rgba(79,182,196,0.62))",
     "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(216,197,130,0.88) 46%, rgba(135,221,229,0.72))",
@@ -768,30 +769,21 @@ function AgeConfirmationModal({
               style: glassVars,
               children: [
                 confirmHref ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-                  import_components.ButtonGlass,
+                  "a",
                   {
-                    asChild: true,
-                    className: "h-9 min-w-[86px] px-4 text-sm font-bold",
-                    size: "sm",
-                    variant: "default",
-                    children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-                      "a",
-                      {
-                        href: confirmHref,
-                        target: confirmTargetBlank ? "_blank" : void 0,
-                        rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
-                        onClick: confirmTargetBlank ? onConfirm : handleConfirm,
-                        children: "I'm 18+"
-                      }
-                    )
+                    href: confirmHref,
+                    target: confirmTargetBlank ? "_blank" : void 0,
+                    rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
+                    onClick: confirmTargetBlank ? onConfirm : handleConfirm,
+                    className: confirmButtonClass,
+                    children: "I'm 18+"
                   }
                 ) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-                  import_components.ButtonGlass,
+                  "button",
                   {
-                    className: "h-9 min-w-[86px] px-4 text-sm font-bold",
+                    type: "button",
+                    className: confirmButtonClass,
                     onClick: handleConfirm,
-                    size: "sm",
-                    variant: "default",
                     children: "I'm 18+"
                   }
                 ),
@@ -1202,8 +1194,8 @@ function LandingPageViewer({
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "div",
           {
-            className: "relative z-10 w-full md:max-w-xl md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
-            style: { backgroundColor: themeColors.background },
+            className: "relative z-10 w-full md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
+            style: { backgroundColor: themeColors.background, maxWidth: "36rem" },
             children: [
               isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                 import_framer_motion10.motion.div,
@@ -1271,7 +1263,7 @@ function LandingPageViewer({
                       {
                         src: settings.avatar_url,
                         alt: settings.display_name || link.title || "Profile",
-                        className: "w-full h-full object-cover object-center"
+                        className: "w-full h-full object-cover object-center md:object-contain"
                       }
                     ) }),
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(

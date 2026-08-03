@@ -552,8 +552,8 @@ useEffect(() => {
 
       {/* Mobile-sized container */}
       <div
-        className="relative z-10 w-full md:max-w-xl md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-        style={{ backgroundColor: themeColors.background }}
+        className="relative z-10 w-full md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+        style={{ backgroundColor: themeColors.background, maxWidth: "36rem" }}
       >
         {/* Hero area */}
         {isFullMode || isVideoMode ? (
@@ -630,7 +630,7 @@ useEffect(() => {
                       <img
                         src={settings.avatar_url}
                         alt={settings.display_name || link.title || "Profile"}
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-cover object-center md:object-contain"
                       />
                     </div>
                     <div

@@ -22,6 +22,9 @@ export function AgeConfirmationModal({
   confirmTargetBlank = false,
   children,
 }: AgeConfirmationModalProps) {
+  const confirmButtonClass =
+    "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-gradient-to-r from-[#D5AF53] via-[#C9C193] to-[#4FB6C4] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(201,162,75,0.28)] ring-1 ring-white/25 transition hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E9E2D0]/60";
+
   const glassVars = {
     "--btn-primary-bg":
       "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(201,162,75,0.78) 46%, rgba(79,182,196,0.62))",
@@ -81,30 +84,23 @@ export function AgeConfirmationModal({
             style={glassVars}
           >
             {confirmHref ? (
-              <ButtonGlass
-                asChild
-                className="h-9 min-w-[86px] px-4 text-sm font-bold"
-                size="sm"
-                variant="default"
-              >
-                <a
+              <a
                 href={confirmHref}
                 target={confirmTargetBlank ? "_blank" : undefined}
                 rel={confirmTargetBlank ? "noopener noreferrer" : undefined}
                 onClick={confirmTargetBlank ? onConfirm : handleConfirm}
-              >
-                  I&apos;m 18+
-                </a>
-              </ButtonGlass>
-            ) : (
-              <ButtonGlass
-                className="h-9 min-w-[86px] px-4 text-sm font-bold"
-                onClick={handleConfirm}
-                size="sm"
-                variant="default"
+                className={confirmButtonClass}
               >
                 I&apos;m 18+
-              </ButtonGlass>
+              </a>
+            ) : (
+              <button
+                type="button"
+                className={confirmButtonClass}
+                onClick={handleConfirm}
+              >
+                I&apos;m 18+
+              </button>
             )}
             <ButtonGlass
               className="h-9 min-w-[72px] border-0 px-4 text-sm font-bold"
