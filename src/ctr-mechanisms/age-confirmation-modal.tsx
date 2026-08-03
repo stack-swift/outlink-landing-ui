@@ -24,18 +24,18 @@ export function AgeConfirmationModal({
 }: AgeConfirmationModalProps) {
   const glassVars = {
     "--btn-primary-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.24), rgba(236,72,153,0.72) 46%, rgba(190,24,93,0.72))",
+      "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(201,162,75,0.78) 46%, rgba(79,182,196,0.62))",
     "--btn-primary-hover-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(236,72,153,0.82) 46%, rgba(190,24,93,0.78))",
-    "--btn-primary-text": "#ffffff",
+      "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(216,197,130,0.88) 46%, rgba(135,221,229,0.72))",
+    "--btn-primary-text": "#0A0A0C",
     "--btn-primary-shadow":
-      "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(120,20,70,0.24), 0 10px 24px rgba(236,72,153,0.24)",
-    "--btn-primary-glow": "0 0 28px rgba(236,72,153,0.34)",
+      "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(92,70,18,0.22), 0 10px 24px rgba(201,162,75,0.22)",
+    "--btn-primary-glow": "0 0 28px rgba(201,162,75,0.28)",
     "--btn-secondary-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07) 48%, rgba(12,18,29,0.46))",
+      "linear-gradient(135deg, rgba(233,226,208,0.14), rgba(233,226,208,0.06) 48%, rgba(16,16,20,0.54))",
     "--btn-secondary-hover-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1) 48%, rgba(12,18,29,0.52))",
-    "--btn-secondary-text": "#ffffff",
+      "linear-gradient(135deg, rgba(233,226,208,0.2), rgba(233,226,208,0.1) 48%, rgba(16,16,20,0.6))",
+    "--btn-secondary-text": "#E9E2D0",
     "--btn-secondary-border": "rgba(255,255,255,0)",
     "--btn-secondary-glow": "0 0 22px rgba(255,255,255,0.12)",
     "--focus-glow": "0 0 0 2px rgba(255,255,255,0.32)",

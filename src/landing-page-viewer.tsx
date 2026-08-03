@@ -372,7 +372,6 @@ const heroPoster =
     "voice_note",
     "cta_block",
     "gallery",
-    "branding",
   ];
 
   let layoutSections: LayoutSectionKey[] =
@@ -380,14 +379,10 @@ const heroPoster =
       ? (settings.layout_sections as LayoutSectionKey[])
       : DEFAULT_LAYOUT_SECTIONS;
 
-  // Ensure branding footer is always present and fixed at the end
-  layoutSections = [
-    ...layoutSections.filter((k) => k !== "branding"),
-    "branding",
-  ];
+  layoutSections = layoutSections.filter((k) => k !== "branding");
 
   const isSectionEnabled = (key: LayoutSectionKey) =>
-    key === "branding" ? true : layoutSections.includes(key);
+    layoutSections.includes(key);
 
   const getSectionOrder = (key: LayoutSectionKey) => {
     const index = layoutSections.indexOf(key);
@@ -397,10 +392,6 @@ const heroPoster =
   };
 
   const getSectionSpacingClass = (key: LayoutSectionKey) => {
-    if (key === "branding") {
-      // Branding spacing is locked
-      return "mt-3";
-    }
     const spacing =
       (settings.section_spacing?.[key] as SectionSpacing | undefined) ||
       "normal";
@@ -564,27 +555,6 @@ useEffect(() => {
         className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
         style={{ backgroundColor: themeColors.background }}
       >
-        {/* Free-plan ribbon */}
-        {isFreePlan && (
-          <a
-            href="https://app.halevora.link/signup"
-            target="_blank"
-            rel="noreferrer"
-            className="absolute inset-x-0 top-0 z-20"
-          >
-            <div className="w-full bg-gradient-to-r from-[#C9A24B] to-[#4FB6C4] py-2 px-4 shadow-md flex items-center justify-center gap-2">
-              <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
-                Claim your domain
-              </span>
-              <Icon
-                icon="solar:arrow-right-linear"
-                width={12}
-                className="text-white"
-              />
-            </div>
-          </a>
-        )}
-
         {/* Hero area */}
         {isFullMode || isVideoMode ? (
           <motion.div
@@ -1551,33 +1521,6 @@ useEffect(() => {
                       </>
                     );
                   })()}
-                </motion.div>
-              )}
-
-              {/* Branding / Powered by  of layout */}
-              {isSectionEnabled("branding") && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 0.3 }}
-                  className={`${getSectionSpacingClass(
-                    "branding",
-                  )} pb-8 flex justify-center`}
-                  style={{ order: getSectionOrder("branding") }}
-                >
-                  <a
-                    href="https://halevora.link/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
-                  >
-                    <img
-                      src="/icon.svg"
-                      alt="Halevora logo"
-                      className="h-4 w-4"
-                    />
-                    <span>Powered by Halevora</span>
-                  </a>
                 </motion.div>
               )}
             </div>

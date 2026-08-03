@@ -574,7 +574,7 @@ function CTACardWithMechanisms({
   if (((_a = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _a.pulse_animation) || ((_b = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _b.glow_effect)) {
     const className = `
       ${mechanisms.visual_effects.pulse_animation ? "animate-pulse" : ""}
-      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-[rgba(236,72,153,0.5)]" : ""}
+      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-[rgba(201,162,75,0.38)]" : ""}
     `.trim();
     content = /* @__PURE__ */ jsx8(
       motion8.div,
@@ -688,14 +688,14 @@ function AgeConfirmationModal({
   children
 }) {
   const glassVars = {
-    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.24), rgba(236,72,153,0.72) 46%, rgba(190,24,93,0.72))",
-    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(236,72,153,0.82) 46%, rgba(190,24,93,0.78))",
-    "--btn-primary-text": "#ffffff",
-    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(120,20,70,0.24), 0 10px 24px rgba(236,72,153,0.24)",
-    "--btn-primary-glow": "0 0 28px rgba(236,72,153,0.34)",
-    "--btn-secondary-bg": "linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07) 48%, rgba(12,18,29,0.46))",
-    "--btn-secondary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.1) 48%, rgba(12,18,29,0.52))",
-    "--btn-secondary-text": "#ffffff",
+    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(201,162,75,0.78) 46%, rgba(79,182,196,0.62))",
+    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(216,197,130,0.88) 46%, rgba(135,221,229,0.72))",
+    "--btn-primary-text": "#0A0A0C",
+    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(92,70,18,0.22), 0 10px 24px rgba(201,162,75,0.22)",
+    "--btn-primary-glow": "0 0 28px rgba(201,162,75,0.28)",
+    "--btn-secondary-bg": "linear-gradient(135deg, rgba(233,226,208,0.14), rgba(233,226,208,0.06) 48%, rgba(16,16,20,0.54))",
+    "--btn-secondary-hover-bg": "linear-gradient(135deg, rgba(233,226,208,0.2), rgba(233,226,208,0.1) 48%, rgba(16,16,20,0.6))",
+    "--btn-secondary-text": "#E9E2D0",
     "--btn-secondary-border": "rgba(255,255,255,0)",
     "--btn-secondary-glow": "0 0 22px rgba(255,255,255,0.12)",
     "--focus-glow": "0 0 0 2px rgba(255,255,255,0.32)"
@@ -1038,15 +1038,11 @@ function LandingPageViewer({
     "social_block",
     "voice_note",
     "cta_block",
-    "gallery",
-    "branding"
+    "gallery"
   ];
   let layoutSections = settings.layout_sections && settings.layout_sections.length ? settings.layout_sections : DEFAULT_LAYOUT_SECTIONS;
-  layoutSections = [
-    ...layoutSections.filter((k) => k !== "branding"),
-    "branding"
-  ];
-  const isSectionEnabled = (key) => key === "branding" ? true : layoutSections.includes(key);
+  layoutSections = layoutSections.filter((k) => k !== "branding");
+  const isSectionEnabled = (key) => layoutSections.includes(key);
   const getSectionOrder = (key) => {
     const index = layoutSections.indexOf(key);
     if (index === -1) return 999;
@@ -1054,9 +1050,6 @@ function LandingPageViewer({
   };
   const getSectionSpacingClass = (key) => {
     var _a;
-    if (key === "branding") {
-      return "mt-3";
-    }
     const spacing = ((_a = settings.section_spacing) == null ? void 0 : _a[key]) || "normal";
     switch (spacing) {
       case "tight":
@@ -1173,26 +1166,6 @@ function LandingPageViewer({
             className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
             style: { backgroundColor: themeColors.background },
             children: [
-              isFreePlan && /* @__PURE__ */ jsx10(
-                "a",
-                {
-                  href: "https://app.halevora.link/signup",
-                  target: "_blank",
-                  rel: "noreferrer",
-                  className: "absolute inset-x-0 top-0 z-20",
-                  children: /* @__PURE__ */ jsxs8("div", { className: "w-full bg-gradient-to-r from-[#C9A24B] to-[#4FB6C4] py-2 px-4 shadow-md flex items-center justify-center gap-2", children: [
-                    /* @__PURE__ */ jsx10("span", { className: "text-[10px] font-semibold tracking-[0.15em] text-white uppercase", children: "Claim your domain" }),
-                    /* @__PURE__ */ jsx10(
-                      Icon8,
-                      {
-                        icon: "solar:arrow-right-linear",
-                        width: 12,
-                        className: "text-white"
-                      }
-                    )
-                  ] })
-                }
-              ),
               isFullMode || isVideoMode ? /* @__PURE__ */ jsx10(
                 motion10.div,
                 {
@@ -2012,38 +1985,6 @@ function LandingPageViewer({
                             )) })
                           ] });
                         })()
-                      }
-                    ),
-                    isSectionEnabled("branding") && /* @__PURE__ */ jsx10(
-                      motion10.div,
-                      {
-                        initial: { opacity: 0 },
-                        animate: { opacity: 1 },
-                        transition: { delay: 0.8, duration: 0.3 },
-                        className: `${getSectionSpacingClass(
-                          "branding"
-                        )} pb-8 flex justify-center`,
-                        style: { order: getSectionOrder("branding") },
-                        children: /* @__PURE__ */ jsxs8(
-                          "a",
-                          {
-                            href: "https://halevora.link/",
-                            target: "_blank",
-                            rel: "noreferrer",
-                            className: "inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors",
-                            children: [
-                              /* @__PURE__ */ jsx10(
-                                "img",
-                                {
-                                  src: "/icon.svg",
-                                  alt: "Halevora logo",
-                                  className: "h-4 w-4"
-                                }
-                              ),
-                              /* @__PURE__ */ jsx10("span", { children: "Powered by Halevora" })
-                            ]
-                          }
-                        )
                       }
                     )
                   ] }) })
