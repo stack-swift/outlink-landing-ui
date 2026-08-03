@@ -1151,7 +1151,7 @@ function LandingPageViewer({
       const delayMs = Math.max(1, delaySec) * 1e3;
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
-        navigateToUrl(targetCard.url);
+        navigateToUrl(targetCard.url, { fromUserGesture: true });
       }, delayMs);
       return () => window.clearTimeout(timer);
     },
@@ -1165,7 +1165,7 @@ function LandingPageViewer({
     ]
   );
   const heroHeightClass = (() => {
-    if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
+    if (isVideoMode || isFullMode) return "h-[546px] md:h-[546px]";
     return "h-[320px] md:h-[320px]";
   })();
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
@@ -1202,7 +1202,7 @@ function LandingPageViewer({
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
           "div",
           {
-            className: "relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
+            className: "relative z-10 w-full md:max-w-xl md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
             style: { backgroundColor: themeColors.background },
             children: [
               isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -1621,8 +1621,8 @@ function LandingPageViewer({
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
-                          const isOnlyfansLogo = (card.style.logo_icon || "").toLowerCase().includes("onlyfans") || card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
-                          const isBrandedNonOF = !!card.style.logo_icon && !isOnlyfansLogo;
+                          const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
+                          const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
                           const getCardStyle = () => {
                             switch (card.style.type) {
@@ -1709,7 +1709,7 @@ function LandingPageViewer({
                                   ) : null;
                                 })(),
                                 /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                  isOnlyfansLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
+                                  isPremiumLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex flex-col items-center gap-1", children: [
                                     card.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                       "p",
                                       {
@@ -1741,7 +1741,7 @@ function LandingPageViewer({
                                       )
                                     ] })
                                   ] }) }),
-                                  !isBrandedNonOF && card.title && card.title.trim() !== "" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  !isBrandedNonPremium && card.title && card.title.trim() !== "" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     "h3",
                                     {
                                       className: `${sizeTitleClass} font-semibold ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white" : "text-foreground"}`,
@@ -1751,7 +1751,7 @@ function LandingPageViewer({
                                       children: card.title
                                     }
                                   ),
-                                  !isBrandedNonOF && card.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  !isBrandedNonPremium && card.description && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     "p",
                                     {
                                       className: `${sizeDescriptionClass} mt-1 ${card.style.type === "image" || card.style.type === "gradient" || card.style.type === "solid" || card.style.type === "video" ? "text-white/90" : "text-default-500"}`,
@@ -1762,7 +1762,7 @@ function LandingPageViewer({
                                     }
                                   )
                                 ] }),
-                                isBrandedNonOF && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                                isBrandedNonPremium && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
                                   card.style.logo_icon && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     "div",
                                     {

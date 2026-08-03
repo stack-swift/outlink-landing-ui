@@ -497,7 +497,7 @@ useEffect(() => {
 
       const timer = window.setTimeout(() => {
         trackClick(link.id, isPreview);
-        navigateToUrl(targetCard.url);
+        navigateToUrl(targetCard.url, { fromUserGesture: true });
       }, delayMs);
 
       return () => window.clearTimeout(timer);
@@ -514,7 +514,7 @@ useEffect(() => {
 
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
-    if (isVideoMode || isFullMode) return "h-[420px] md:h-[420px]";
+    if (isVideoMode || isFullMode) return "h-[546px] md:h-[546px]";
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();
@@ -552,7 +552,7 @@ useEffect(() => {
 
       {/* Mobile-sized container */}
       <div
-        className="relative z-10 w-full md:max-w-md md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+        className="relative z-10 w-full md:max-w-xl md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
         style={{ backgroundColor: themeColors.background }}
       >
         {/* Hero area */}
@@ -974,17 +974,14 @@ useEffect(() => {
                             sizeColSpanClass = "col-span-2";
                           }
 
-                          const isOnlyfansLogo =
-                            (card.style.logo_icon || "")
-                              .toLowerCase()
-                              .includes("onlyfans") ||
+                          const isPremiumLogo =
                             card.style.logo_icon === "of-local" ||
                             (card.style.logo_name || "")
                               .toLowerCase()
                               === "icon";
 
-                          const isBrandedNonOF =
-                            !!card.style.logo_icon && !isOnlyfansLogo;
+                          const isBrandedNonPremium =
+                            !!card.style.logo_icon && !isPremiumLogo;
 
                           const isSnapchatLogo =
                             (card.style.logo_icon || "")
@@ -1111,8 +1108,8 @@ useEffect(() => {
 
                                 {/* Center content */}
                                 <div className="text-center w-full relative z-10">
-                                  {/* OnlyFans special layout – stacked in center */}
-                                  {isOnlyfansLogo && (
+                                  {/* Premium logo layout stays stacked in center */}
+                                  {isPremiumLogo && (
                                     <div className="mb-2">
                                       <div className="flex flex-col items-center gap-1">
                                         {card.style.prefix_text && (
@@ -1145,8 +1142,8 @@ useEffect(() => {
                                     </div>
                                   )}
 
-                                  {/* Centered title/description ONLY for non‑branded or OnlyFans */}
-                                  {!isBrandedNonOF &&
+                                  {/* Centered title/description for non-branded or premium-logo cards */}
+                                  {!isBrandedNonPremium &&
                                     card.title &&
                                     card.title.trim() !== "" && (
                                       <h3
@@ -1170,7 +1167,7 @@ useEffect(() => {
                                       </h3>
                                     )}
 
-                                  {!isBrandedNonOF && card.description && (
+                                  {!isBrandedNonPremium && card.description && (
                                     <p
                                       className={`${sizeDescriptionClass} mt-1 ${
                                         card.style.type === "image" ||
@@ -1193,8 +1190,8 @@ useEffect(() => {
                                   )}
                                 </div>
 
-                                {/* Brand overlay for non‑OF branded buttons */}
-                                {isBrandedNonOF && (
+                                {/* Brand overlay for non-premium branded buttons */}
+                                {isBrandedNonPremium && (
                                   <>
                                     {card.style.logo_icon && (
                                       <div className="absolute top-2 right-2 z-20">
