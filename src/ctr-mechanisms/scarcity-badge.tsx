@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
@@ -58,7 +58,7 @@ export function ScarcityBadge({
   color="default"
   variant="solid"
   size="sm"
-  className="font-semibold bg-[#ec4899] text-white border-none"
+  className="font-semibold bg-[#C9A24B] text-white border-none"
   startContent={
     <span className="flex items-center">
       <motion.span

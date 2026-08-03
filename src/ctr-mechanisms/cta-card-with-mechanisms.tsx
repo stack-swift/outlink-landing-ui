@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { CTACard } from "../../src/types";
-import { Chip } from "@heroui/chip";
+import { Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { ClickToReveal } from "./click-to-reveal";
 import { CountdownReveal } from "./countdown-reveal";

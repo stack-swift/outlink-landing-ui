@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@heroui/button";
+import { Button } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 
@@ -66,9 +66,9 @@ export function BlurOverlay({
           </div>
           <Button
             size="sm"
-            // Brand pink for reveal button
+            // Brand gold for reveal button
             onPress={handleReveal}
-            className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
+            className="font-bold shadow-lg bg-[#C9A24B] hover:bg-[#B88F38] text-white"
             startContent={<Icon icon="solar:eye-linear" width={16} />}
           >
             Reveal Now

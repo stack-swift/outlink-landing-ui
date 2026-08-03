@@ -1,9 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@heroui/modal";
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@heroui/react";
 import { Icon } from "@iconify/react";
 
 interface AccessCodeModalProps {
@@ -47,7 +53,7 @@ export function AccessCodeModal({
               This content is protected. Enter the access code to continue.
             </p>
             {hint && (
-              <p className="text-sm" style={{ color: "#ec4899" }}>
+              <p className="text-sm" style={{ color: "#C9A24B" }}>
                 <Icon
                   icon="solar:info-circle-bold"
                   width={16}
@@ -80,7 +86,7 @@ export function AccessCodeModal({
             onPress={handleSubmit}
             isDisabled={!inputValue}
             fullWidth
-            className="bg-[#ec4899] hover:bg-[#db2777] text-white"
+            className="bg-[#C9A24B] hover:bg-[#B88F38] text-white"
           >
             Unlock
           </Button>
@@ -89,5 +95,4 @@ export function AccessCodeModal({
     </Modal>
   );
 }
-
 

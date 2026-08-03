@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Progress } from "@heroui/progress";
+import { Progress } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 
@@ -67,7 +67,7 @@ export function ProgressBarReveal({
               className="w-[150px] mx-auto"
               color="primary"
               classNames={{
-                indicator: "bg-[#ec4899]",
+                indicator: "bg-[#C9A24B]",
               }}
               size="sm"
             />

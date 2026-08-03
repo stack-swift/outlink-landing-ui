@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef } from "react";
 
-import { Avatar } from "@heroui/avatar";
-import { Card, CardBody } from "@heroui/card";
-import { Button } from "@heroui/button";
-import { Chip } from "@heroui/chip";
+import { Avatar } from "@heroui/react";
+import { Card, CardBody } from "@heroui/react";
+import { Button } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 
@@ -567,12 +567,12 @@ useEffect(() => {
         {/* Free-plan ribbon */}
         {isFreePlan && (
           <a
-            href="https://app.outlink.bio/signup"
+            href="https://app.halevora.link/signup"
             target="_blank"
             rel="noreferrer"
             className="absolute inset-x-0 top-0 z-20"
           >
-            <div className="w-full bg-gradient-to-r from-pink-500 to-orange-400 py-2 px-4 shadow-md flex items-center justify-center gap-2">
+            <div className="w-full bg-gradient-to-r from-[#C9A24B] to-[#4FB6C4] py-2 px-4 shadow-md flex items-center justify-center gap-2">
               <span className="text-[10px] font-semibold tracking-[0.15em] text-white uppercase">
                 Claim your domain
               </span>
@@ -714,18 +714,18 @@ useEffect(() => {
                           <Icon
                             icon="solar:verified-check-bold"
                             width={24}
-                            style={{ color: "#ec4899" }}
+                            style={{ color: "#C9A24B" }}
                           />
                         ) : (
                           <Chip
                             size="sm"
                             variant="flat"
-                            className="bg-[#ec4899]/10 text-[#ec4899]"
+                            className="bg-[#C9A24B]/10 text-[#C9A24B]"
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
-                                style={{ color: "#ec4899" }}
+                                style={{ color: "#C9A24B" }}
                               />
                             }
                           >
@@ -802,18 +802,18 @@ useEffect(() => {
                           <Icon
                             icon="solar:verified-check-bold"
                             width={24}
-                            style={{ color: "#ec4899" }}
+                            style={{ color: "#C9A24B" }}
                           />
                         ) : (
                           <Chip
                             size="sm"
                             variant="flat"
-                            className="bg-[#ec4899]/10 text-[#ec4899]"
+                            className="bg-[#C9A24B]/10 text-[#C9A24B]"
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
-                                style={{ color: "#ec4899" }}
+                                style={{ color: "#C9A24B" }}
                               />
                             }
                           >
@@ -871,7 +871,7 @@ useEffect(() => {
                                 icon={social.icon}
                                 width={20}
                                 color={
-                                  isLightMode ? "#ec4899" : "#e5e7eb"
+                                  isLightMode ? "#C9A24B" : "#e5e7eb"
                                 }
                               />
                             </Button>
@@ -1541,8 +1541,8 @@ useEffect(() => {
                                 onClick={() => setActiveGalleryIndex(dotIndex)}
                                 className={`h-1.5 rounded-full transition-all ${
                                   dotIndex === index
-                                    ? "w-4 bg-[#ec4899]"
-                                    : "w-1.5 bg-[#ec4899]/40"
+                                    ? "w-4 bg-[#C9A24B]"
+                                    : "w-1.5 bg-[#C9A24B]/40"
                                 }`}
                               />
                             ))}
@@ -1566,17 +1566,17 @@ useEffect(() => {
                   style={{ order: getSectionOrder("branding") }}
                 >
                   <a
-                    href="https://www.outlink.bio/"
+                    href="https://halevora.link/"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 text-xs text-default-500 hover:text-default-300 transition-colors"
                   >
                     <img
-                      src="/logo2.svg"
-                      alt="Outlink logo"
+                      src="/icon.svg"
+                      alt="Halevora logo"
                       className="h-4 w-4"
                     />
-                    <span>Powered by outlink</span>
+                    <span>Powered by Halevora</span>
                   </a>
                 </motion.div>
               )}

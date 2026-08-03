@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "@heroui/button";
-import { Progress } from "@heroui/progress";
+import { Button } from "@heroui/react";
+import { Progress } from "@heroui/react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 
@@ -59,19 +59,19 @@ export function ClickToReveal({
           </div>
           <Button
             size="md"
-            // Use brand pink for the primary CTA
+            // Use brand gold for the primary CTA
             onPress={handleClick}
-            className="font-bold shadow-lg bg-[#ec4899] hover:bg-[#db2777] text-white"
+            className="font-bold shadow-lg bg-[#C9A24B] hover:bg-[#B88F38] text-white"
           >
             Tap to Unlock ({clickCount}/{clicksRequired})
           </Button>
           <Progress
             value={progress}
             className="max-w-[200px]"
-            // Brand pink progress bar
+            // Brand gold progress bar
             color="primary"
             classNames={{
-              indicator: "bg-[#ec4899]",
+              indicator: "bg-[#C9A24B]",
             }}
             size="sm"
           />
