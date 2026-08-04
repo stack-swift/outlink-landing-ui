@@ -28,6 +28,7 @@ interface LandingPageViewerProps {
   onButtonClick?: () => void;
   isPreview?: boolean; 
   isFreePlan?: boolean; 
+  visitorLocationLabel?: string | null;
 }
 
 
@@ -72,6 +73,7 @@ export function LandingPageViewer({
   onButtonClick,
   isPreview = false,
   isFreePlan = false,
+  visitorLocationLabel = null,
 }: LandingPageViewerProps) {
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] =
     useState<string | null>(null);
@@ -363,6 +365,68 @@ const heroPoster =
   const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
   const isFullMode = mode === "full";
   const isVideoMode = mode === "video";
+  const hasProfileSignals =
+    !!settings.show_active_now ||
+    (!!settings.show_location && !!visitorLocationLabel) ||
+    (!!settings.show_response_time && !!settings.response_time_text?.trim());
+
+  const renderProfileSignals = () => {
+    if (!hasProfileSignals) return null;
+
+    const signalClass =
+      "inline-flex items-center gap-1 whitespace-nowrap text-[11px] font-semibold leading-none sm:text-xs";
+    const divider = (
+      <span
+        aria-hidden="true"
+        className="mx-0.5 text-[10px] font-bold opacity-70"
+        style={{ color: themeColors.textSecondary }}
+      >
+        •
+      </span>
+    );
+    const signals: React.ReactNode[] = [];
+
+    if (settings.show_active_now) {
+      signals.push(
+        <span key="active" className={signalClass}>
+          <span className="h-2.5 w-2.5 rounded-full bg-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.7)]" />
+          Active now
+        </span>,
+      );
+    }
+
+    if (settings.show_location && visitorLocationLabel) {
+      signals.push(
+        <span key="location" className={signalClass}>
+          <Icon icon="solar:map-point-bold" width={14} />
+          {visitorLocationLabel}
+        </span>,
+      );
+    }
+
+    if (settings.show_response_time && settings.response_time_text?.trim()) {
+      signals.push(
+        <span key="response" className={signalClass}>
+          <Icon icon="solar:clock-circle-bold" width={14} />
+          {settings.response_time_text.trim()}
+        </span>,
+      );
+    }
+
+    return (
+      <div
+        className="flex max-w-full flex-wrap items-center justify-center gap-y-1 px-2 text-center"
+        style={{ color: themeColors.textPrimary }}
+      >
+        {signals.map((signal, index) => (
+          <React.Fragment key={index}>
+            {index > 0 && divider}
+            {signal}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  };
 
   // Layout + spacing
   const DEFAULT_LAYOUT_SECTIONS: LayoutSectionKey[] = [
@@ -524,7 +588,23 @@ useEffect(() => {
       className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
       style={{ paddingTop: "env(safe-area-inset-top)" }}
     >
-      {/* Keep desktop clean: the hero media belongs inside the profile frame only. */}
+      {/* Desktop backdrop only: soft creator media behind the capped profile frame. */}
+      {(isFullMode || isVideoMode) && heroPoster ? (
+        <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <img
+            src={heroPoster}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover scale-110 blur-3xl opacity-65"
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "rgba(0,0,0,0.28)",
+            }}
+          />
+        </div>
+      ) : null}
 
       {/* Mobile-sized container */}
       <div
@@ -681,6 +761,7 @@ useEffect(() => {
                       </>
                     )}
                   </div>
+                  {renderProfileSignals()}
                   {settings.show_domain_handle && (
                     <p
                       className="text-sm"
@@ -769,6 +850,7 @@ useEffect(() => {
                       </>
                     )}
                   </div>
+                  {renderProfileSignals()}
                   {settings.show_domain_handle && (
                     <p
                       className="text-sm"

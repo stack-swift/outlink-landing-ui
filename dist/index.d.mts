@@ -81,6 +81,11 @@ interface LandingPageSettings {
     section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>>;
     verified_badge: boolean;
     verified_badge_style: "chip" | "solid";
+    show_active_now?: boolean;
+    show_location?: boolean;
+    location_text?: string | null;
+    show_response_time?: boolean;
+    response_time_text?: string | null;
     show_follower_count: boolean;
     follower_count: number;
     show_domain_handle: boolean;
@@ -106,8 +111,9 @@ interface LandingPageViewerProps {
     onButtonClick?: () => void;
     isPreview?: boolean;
     isFreePlan?: boolean;
+    visitorLocationLabel?: string | null;
 }
-declare function LandingPageViewer({ link, settings, onButtonClick, isPreview, isFreePlan, }: LandingPageViewerProps): react_jsx_runtime.JSX.Element;
+declare function LandingPageViewer({ link, settings, onButtonClick, isPreview, isFreePlan, visitorLocationLabel, }: LandingPageViewerProps): react_jsx_runtime.JSX.Element;
 
 interface ModernAudioPlayerProps {
     src: string;

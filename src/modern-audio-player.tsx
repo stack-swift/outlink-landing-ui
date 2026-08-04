@@ -20,6 +20,7 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
   const isDestroyedRef = useRef(false);
 
   const isLightMode = theme === 'light';
+  const brandAccent = "#5EC8D6";
 
   useEffect(() => {
     if (!waveformRef.current) return;
@@ -30,9 +31,9 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
     const wavesurfer = WaveSurfer.create({
       container: waveformRef.current,
       waveColor: isLightMode
-        ? "rgba(236, 72, 153, 0.15)"
-        : "rgba(236, 72, 153, 0.25)",
-      progressColor: "rgb(236, 72, 153)",
+        ? "rgba(94, 200, 214, 0.18)"
+        : "rgba(94, 200, 214, 0.28)",
+      progressColor: brandAccent,
       cursorColor: "transparent",
       barWidth: 2,
       barGap: 2,
@@ -119,8 +120,11 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
         whileTap={{ scale: 0.95 }}
         onClick={togglePlay}
         disabled={isLoading}
-        // Use fixed brand gold for the play button instead of theme primary
-        className="flex-shrink-0 w-10 h-10 rounded-full bg-[#C9A24B] flex items-center justify-center hover:bg-[#B88F38] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{
+          backgroundColor: brandAccent,
+          boxShadow: "0 10px 24px rgba(94, 200, 214, 0.22)",
+        }}
       >
         {isLoading ? (
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -153,4 +157,3 @@ export function ModernAudioPlayer({ src, theme = 'dark' }: ModernAudioPlayerProp
     </div>
   );
 }
-

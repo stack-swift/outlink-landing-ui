@@ -110,6 +110,11 @@ export interface LandingPageSettings {
   // Badges / meta
   verified_badge: boolean;
   verified_badge_style: "chip" | "solid";
+  show_active_now?: boolean;
+  show_location?: boolean;
+  location_text?: string | null;
+  show_response_time?: boolean;
+  response_time_text?: string | null;
   show_follower_count: boolean;
   follower_count: number;
   show_domain_handle: boolean;
