@@ -1169,7 +1169,7 @@ function LandingPageViewer({
         "div",
         {
           className: "relative z-10 w-full md:w-[36rem] md:max-w-[36rem] md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col",
-          style: { backgroundColor: themeColors.background },
+          style: { backgroundColor: themeColors.background, maxWidth: "36rem" },
           children: [
             isFullMode || isVideoMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
               import_framer_motion10.motion.div,

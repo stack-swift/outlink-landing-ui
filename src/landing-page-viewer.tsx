@@ -529,7 +529,7 @@ useEffect(() => {
       {/* Mobile-sized container */}
       <div
         className="relative z-10 w-full md:w-[36rem] md:max-w-[36rem] md:min-h-[812px] md:shadow-2xl md:rounded-2xl overflow-y-auto overflow-x-hidden flex flex-col"
-        style={{ backgroundColor: themeColors.background }}
+        style={{ backgroundColor: themeColors.background, maxWidth: "36rem" }}
       >
         {/* Hero area */}
         {isFullMode || isVideoMode ? (
