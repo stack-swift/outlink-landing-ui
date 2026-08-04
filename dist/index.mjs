@@ -856,7 +856,7 @@ function LandingPageViewer({
   const brandAccent = "#5EC8D6";
   const getSocialIconColor = (social) => {
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
-    if (value.includes("snapchat")) return "#111111";
+    if (value.includes("snapchat")) return "#FFFC00";
     if (value.includes("tiktok")) return "#FE2C55";
     if (value.includes("instagram")) return "#E4405F";
     if (value.includes("youtube")) return "#FF0000";
@@ -872,6 +872,10 @@ function LandingPageViewer({
   const isMonochromeSocialIcon = (social) => {
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
     return value.includes("twitter") || value.includes("x.com");
+  };
+  const isSnapchatSocialIcon = (social) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+    return value.includes("snapchat");
   };
   const getButtonVariant = () => {
     switch (settings.button_style) {
@@ -1511,6 +1515,7 @@ function LandingPageViewer({
                               children: settings.social_links.map((social, index) => {
                                 var _a2;
                                 const isMono = isMonochromeSocialIcon(social);
+                                const isSnapchat = isSnapchatSocialIcon(social);
                                 return /* @__PURE__ */ jsx10(
                                   Button3,
                                   {
@@ -1521,14 +1526,14 @@ function LandingPageViewer({
                                     isIconOnly: true,
                                     size: "sm",
                                     variant: "light",
-                                    className: `h-10 w-10 min-w-10 rounded-full bg-white p-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5 transition-transform hover:scale-110 ${isMono ? "text-[#111111] hover:bg-[#111111] hover:text-white" : "text-[#111111] hover:bg-white"}`,
+                                    className: `h-10 w-10 min-w-10 rounded-full bg-white p-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5 transition-transform hover:scale-110 ${isSnapchat ? "text-[#111111] hover:bg-[#111111] hover:text-[#FFFC00]" : isMono ? "text-[#111111] hover:bg-[#111111] hover:text-white" : "text-[#111111] hover:bg-white"}`,
                                     children: /* @__PURE__ */ jsx10(
                                       Icon8,
                                       {
                                         icon: social.icon,
                                         width: 20,
-                                        className: isMono ? "text-current" : void 0,
-                                        color: isMono ? void 0 : getSocialIconColor(social)
+                                        className: isMono || isSnapchat ? "text-current" : void 0,
+                                        color: isMono || isSnapchat ? void 0 : getSocialIconColor(social)
                                       }
                                     )
                                   },

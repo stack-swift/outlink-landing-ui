@@ -133,7 +133,7 @@ const heroPoster =
   const getSocialIconColor = (social: { icon?: string; platform?: string }) => {
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
 
-    if (value.includes("snapchat")) return "#111111";
+    if (value.includes("snapchat")) return "#FFFC00";
     if (value.includes("tiktok")) return "#FE2C55";
     if (value.includes("instagram")) return "#E4405F";
     if (value.includes("youtube")) return "#FF0000";
@@ -152,6 +152,12 @@ const heroPoster =
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
 
     return value.includes("twitter") || value.includes("x.com");
+  };
+
+  const isSnapchatSocialIcon = (social: { icon?: string; platform?: string }) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+
+    return value.includes("snapchat");
   };
 
   const getButtonVariant = () => {
@@ -916,6 +922,7 @@ useEffect(() => {
                         >
                           {settings.social_links.map((social, index) => {
                             const isMono = isMonochromeSocialIcon(social);
+                            const isSnapchat = isSnapchatSocialIcon(social);
 
                             return (
                               <Button
@@ -928,16 +935,18 @@ useEffect(() => {
                                 size="sm"
                                 variant="light"
                                 className={`h-10 w-10 min-w-10 rounded-full bg-white p-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5 transition-transform hover:scale-110 ${
-                                  isMono
-                                    ? "text-[#111111] hover:bg-[#111111] hover:text-white"
-                                    : "text-[#111111] hover:bg-white"
+                                  isSnapchat
+                                    ? "text-[#111111] hover:bg-[#111111] hover:text-[#FFFC00]"
+                                    : isMono
+                                      ? "text-[#111111] hover:bg-[#111111] hover:text-white"
+                                      : "text-[#111111] hover:bg-white"
                                 }`}
                               >
                                 <Icon
                                   icon={social.icon}
                                   width={20}
-                                  className={isMono ? "text-current" : undefined}
-                                  color={isMono ? undefined : getSocialIconColor(social)}
+                                  className={isMono || isSnapchat ? "text-current" : undefined}
+                                  color={isMono || isSnapchat ? undefined : getSocialIconColor(social)}
                                 />
                               </Button>
                             );
