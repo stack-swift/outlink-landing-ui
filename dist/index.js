@@ -243,7 +243,7 @@ function ClickToReveal({
             {
               size: "md",
               onPress: handleClick,
-              className: "font-bold shadow-lg bg-[#C9A24B] hover:bg-[#B88F38] text-white",
+              className: "font-bold shadow-lg bg-[#5EC8D6] hover:bg-[#4FB6C4] text-[#08080A]",
               children: [
                 "Tap to Unlock (",
                 clickCount,
@@ -260,7 +260,7 @@ function ClickToReveal({
               className: "max-w-[200px]",
               color: "primary",
               classNames: {
-                indicator: "bg-[#C9A24B]"
+                indicator: "bg-[#5EC8D6]"
               },
               size: "sm"
             }
@@ -363,10 +363,12 @@ function ScarcityBadge({
       children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
         import_react9.Chip,
         {
-          color: "danger",
-          variant: "solid",
           size: "sm",
-          className: "font-semibold",
+          variant: "flat",
+          classNames: {
+            base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+            content: "font-semibold"
+          },
           startContent: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_react10.Icon, { icon: "solar:fire-bold", width: 14 }),
           children: getDisplayMessage()
         }
@@ -381,10 +383,12 @@ function ScarcityBadge({
       children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
         import_react9.Chip,
         {
-          color: "default",
-          variant: "solid",
+          variant: "flat",
           size: "sm",
-          className: "font-semibold bg-[#C9A24B] text-white border-none",
+          classNames: {
+            base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+            content: "font-semibold"
+          },
           startContent: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "flex items-center", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
             import_framer_motion4.motion.span,
             {
@@ -463,7 +467,7 @@ function BlurOverlay({
                 {
                   size: "sm",
                   onPress: handleReveal,
-                  className: "font-bold shadow-lg bg-[#C9A24B] hover:bg-[#B88F38] text-white",
+                  className: "font-bold shadow-lg bg-[#5EC8D6] hover:bg-[#4FB6C4] text-[#08080A]",
                   startContent: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_react13.Icon, { icon: "solar:eye-linear", width: 16 }),
                   children: "Reveal Now"
                 }
@@ -532,7 +536,7 @@ function ProgressBarReveal({
             className: "w-[150px] mx-auto",
             color: "primary",
             classNames: {
-              indicator: "bg-[#C9A24B]"
+              indicator: "bg-[#5EC8D6]"
             },
             size: "sm"
           }
@@ -618,7 +622,7 @@ function CTACardWithMechanisms({
   if (((_a = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _a.pulse_animation) || ((_b = mechanisms == null ? void 0 : mechanisms.visual_effects) == null ? void 0 : _b.glow_effect)) {
     const className = `
       ${mechanisms.visual_effects.pulse_animation ? "animate-pulse" : ""}
-      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-[rgba(201,162,75,0.38)]" : ""}
+      ${mechanisms.visual_effects.glow_effect ? "shadow-lg shadow-[rgba(94,200,214,0.38)]" : ""}
     `.trim();
     content = /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       import_framer_motion8.motion.div,
@@ -704,10 +708,12 @@ function CTACardWithMechanisms({
         children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           import_react19.Chip,
           {
-            color: "secondary",
-            variant: "solid",
             size: "sm",
-            className: "font-semibold",
+            variant: "flat",
+            classNames: {
+              base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+              content: "font-semibold"
+            },
             startContent: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_react20.Icon, { icon: "solar:crown-bold", width: 14 }),
             children: mechanisms.exclusive_badge.text
           }
@@ -731,13 +737,13 @@ function AgeConfirmationModal({
   confirmTargetBlank = false,
   children
 }) {
-  const confirmButtonClass = "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-gradient-to-r from-[#D5AF53] via-[#C9C193] to-[#4FB6C4] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(201,162,75,0.28)] ring-1 ring-white/25 transition hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E9E2D0]/60";
+  const confirmButtonClass = "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
   const glassVars = {
-    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(201,162,75,0.78) 46%, rgba(79,182,196,0.62))",
-    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(216,197,130,0.88) 46%, rgba(135,221,229,0.72))",
+    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(94,200,214,0.9) 46%, rgba(79,182,196,0.72))",
+    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(94,200,214,0.98) 46%, rgba(135,221,229,0.78))",
     "--btn-primary-text": "#0A0A0C",
-    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(92,70,18,0.22), 0 10px 24px rgba(201,162,75,0.22)",
-    "--btn-primary-glow": "0 0 28px rgba(201,162,75,0.28)",
+    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(16,80,88,0.22), 0 10px 24px rgba(94,200,214,0.24)",
+    "--btn-primary-glow": "0 0 28px rgba(94,200,214,0.28)",
     "--btn-secondary-bg": "linear-gradient(135deg, rgba(233,226,208,0.14), rgba(233,226,208,0.06) 48%, rgba(16,16,20,0.54))",
     "--btn-secondary-hover-bg": "linear-gradient(135deg, rgba(233,226,208,0.2), rgba(233,226,208,0.1) 48%, rgba(16,16,20,0.6))",
     "--btn-secondary-text": "#E9E2D0",
@@ -885,6 +891,26 @@ function LandingPageViewer({
     textSecondary: isLightMode ? "#64748b" : "#94a3b8",
     cardBg: isLightMode ? "#f8fafc" : "#111111",
     border: isLightMode ? "#e2e8f0" : "#27272a"
+  };
+  const brandAccent = "#5EC8D6";
+  const getSocialIconColor = (social) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+    if (value.includes("snapchat")) return "#111111";
+    if (value.includes("tiktok")) return "#FE2C55";
+    if (value.includes("instagram")) return "#E4405F";
+    if (value.includes("youtube")) return "#FF0000";
+    if (value.includes("twitter") || value.includes("x.com")) return "#111111";
+    if (value.includes("facebook")) return "#1877F2";
+    if (value.includes("telegram")) return "#26A5E4";
+    if (value.includes("discord")) return "#5865F2";
+    if (value.includes("reddit")) return "#FF4500";
+    if (value.includes("whatsapp")) return "#25D366";
+    if (value.includes("of-local")) return "#00AFF0";
+    return "#111111";
+  };
+  const isMonochromeSocialIcon = (social) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+    return value.includes("twitter") || value.includes("x.com");
   };
   const getButtonVariant = () => {
     switch (settings.button_style) {
@@ -1368,20 +1394,23 @@ function LandingPageViewer({
                               {
                                 icon: "solar:verified-check-bold",
                                 width: 24,
-                                style: { color: "#C9A24B" }
+                                style: { color: brandAccent }
                               }
                             ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                               import_react25.Chip,
                               {
                                 size: "sm",
                                 variant: "flat",
-                                className: "bg-[#C9A24B]/10 text-[#C9A24B]",
+                                classNames: {
+                                  base: "bg-[#5EC8D6]/12 border border-[#5EC8D6]/25",
+                                  content: "text-[#5EC8D6] font-semibold"
+                                },
                                 startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                   import_react26.Icon,
                                   {
                                     icon: "solar:verified-check-bold",
                                     width: 16,
-                                    style: { color: "#C9A24B" }
+                                    style: { color: brandAccent }
                                   }
                                 ),
                                 children: "Verified"
@@ -1464,20 +1493,23 @@ function LandingPageViewer({
                               {
                                 icon: "solar:verified-check-bold",
                                 width: 24,
-                                style: { color: "#C9A24B" }
+                                style: { color: brandAccent }
                               }
                             ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                               import_react25.Chip,
                               {
                                 size: "sm",
                                 variant: "flat",
-                                className: "bg-[#C9A24B]/10 text-[#C9A24B]",
+                                classNames: {
+                                  base: "bg-[#5EC8D6]/12 border border-[#5EC8D6]/25",
+                                  content: "text-[#5EC8D6] font-semibold"
+                                },
                                 startContent: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                   import_react26.Icon,
                                   {
                                     icon: "solar:verified-check-bold",
                                     width: 16,
-                                    style: { color: "#C9A24B" }
+                                    style: { color: brandAccent }
                                   }
                                 ),
                                 children: "Verified"
@@ -1517,6 +1549,7 @@ function LandingPageViewer({
                               className: "flex flex-wrap items-center justify-center gap-3",
                               children: settings.social_links.map((social, index) => {
                                 var _a2;
+                                const isMono = isMonochromeSocialIcon(social);
                                 return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                   import_react24.Button,
                                   {
@@ -1527,13 +1560,14 @@ function LandingPageViewer({
                                     isIconOnly: true,
                                     size: "sm",
                                     variant: "light",
-                                    className: "hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0",
+                                    className: `h-10 w-10 min-w-10 rounded-full bg-white p-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5 transition-transform hover:scale-110 ${isMono ? "text-[#111111] hover:bg-[#111111] hover:text-white" : "text-[#111111] hover:bg-white"}`,
                                     children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                       import_react26.Icon,
                                       {
                                         icon: social.icon,
                                         width: 20,
-                                        color: isLightMode ? "#C9A24B" : "#e5e7eb"
+                                        className: isMono ? "text-current" : void 0,
+                                        color: isMono ? void 0 : getSocialIconColor(social)
                                       }
                                     )
                                   },
@@ -2065,7 +2099,7 @@ function LandingPageViewer({
                               {
                                 type: "button",
                                 onClick: () => setActiveGalleryIndex(dotIndex),
-                                className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#C9A24B]" : "w-1.5 bg-[#C9A24B]/40"}`
+                                className: `h-1.5 rounded-full transition-all ${dotIndex === index ? "w-4 bg-[#5EC8D6]" : "w-1.5 bg-[#5EC8D6]/40"}`
                               },
                               `${url}-${dotIndex}`
                             )) })

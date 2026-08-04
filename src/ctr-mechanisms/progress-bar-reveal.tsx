@@ -67,7 +67,7 @@ export function ProgressBarReveal({
               className="w-[150px] mx-auto"
               color="primary"
               classNames={{
-                indicator: "bg-[#C9A24B]",
+                indicator: "bg-[#5EC8D6]",
               }}
               size="sm"
             />
@@ -81,4 +81,3 @@ export function ProgressBarReveal({
     </div>
   );
 }
-

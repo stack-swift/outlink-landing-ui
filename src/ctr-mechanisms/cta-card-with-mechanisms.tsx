@@ -53,7 +53,7 @@ export function CTACardWithMechanisms({
       ${mechanisms.visual_effects.pulse_animation ? "animate-pulse" : ""}
       ${
         mechanisms.visual_effects.glow_effect
-          ? "shadow-lg shadow-[rgba(201,162,75,0.38)]"
+          ? "shadow-lg shadow-[rgba(94,200,214,0.38)]"
           : ""
       }
     `.trim();
@@ -165,10 +165,12 @@ export function CTACardWithMechanisms({
           }`}
         >
           <Chip
-            color="secondary"
-            variant="solid"
             size="sm"
-            className="font-semibold"
+            variant="flat"
+            classNames={{
+              base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+              content: "font-semibold",
+            }}
             startContent={<Icon icon="solar:crown-bold" width={14} />}
           >
             {mechanisms.exclusive_badge.text}

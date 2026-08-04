@@ -61,7 +61,7 @@ export function ClickToReveal({
             size="md"
             // Use brand gold for the primary CTA
             onPress={handleClick}
-            className="font-bold shadow-lg bg-[#C9A24B] hover:bg-[#B88F38] text-white"
+            className="font-bold shadow-lg bg-[#5EC8D6] hover:bg-[#4FB6C4] text-[#08080A]"
           >
             Tap to Unlock ({clickCount}/{clicksRequired})
           </Button>
@@ -71,7 +71,7 @@ export function ClickToReveal({
             // Brand gold progress bar
             color="primary"
             classNames={{
-              indicator: "bg-[#C9A24B]",
+              indicator: "bg-[#5EC8D6]",
             }}
             size="sm"
           />
@@ -81,4 +81,3 @@ export function ClickToReveal({
     </div>
   );
 }
-

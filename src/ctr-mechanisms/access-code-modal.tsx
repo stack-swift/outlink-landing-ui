@@ -53,7 +53,7 @@ export function AccessCodeModal({
               This content is protected. Enter the access code to continue.
             </p>
             {hint && (
-              <p className="text-sm" style={{ color: "#C9A24B" }}>
+              <p className="text-sm" style={{ color: "#5EC8D6" }}>
                 <Icon
                   icon="solar:info-circle-bold"
                   width={16}
@@ -86,7 +86,7 @@ export function AccessCodeModal({
             onPress={handleSubmit}
             isDisabled={!inputValue}
             fullWidth
-            className="bg-[#C9A24B] hover:bg-[#B88F38] text-white"
+            className="bg-[#5EC8D6] hover:bg-[#4FB6C4] text-[#08080A]"
           >
             Unlock
           </Button>
@@ -95,4 +95,3 @@ export function AccessCodeModal({
     </Modal>
   );
 }
-

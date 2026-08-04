@@ -128,6 +128,31 @@ const heroPoster =
     cardBg: isLightMode ? "#f8fafc" : "#111111",
     border: isLightMode ? "#e2e8f0" : "#27272a",
   };
+  const brandAccent = "#5EC8D6";
+
+  const getSocialIconColor = (social: { icon?: string; platform?: string }) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+
+    if (value.includes("snapchat")) return "#111111";
+    if (value.includes("tiktok")) return "#FE2C55";
+    if (value.includes("instagram")) return "#E4405F";
+    if (value.includes("youtube")) return "#FF0000";
+    if (value.includes("twitter") || value.includes("x.com")) return "#111111";
+    if (value.includes("facebook")) return "#1877F2";
+    if (value.includes("telegram")) return "#26A5E4";
+    if (value.includes("discord")) return "#5865F2";
+    if (value.includes("reddit")) return "#FF4500";
+    if (value.includes("whatsapp")) return "#25D366";
+    if (value.includes("of-local")) return "#00AFF0";
+
+    return "#111111";
+  };
+
+  const isMonochromeSocialIcon = (social: { icon?: string; platform?: string }) => {
+    const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
+
+    return value.includes("twitter") || value.includes("x.com");
+  };
 
   const getButtonVariant = () => {
     switch (settings.button_style) {
@@ -740,18 +765,21 @@ useEffect(() => {
                           <Icon
                             icon="solar:verified-check-bold"
                             width={24}
-                            style={{ color: "#C9A24B" }}
+                            style={{ color: brandAccent }}
                           />
                         ) : (
                           <Chip
                             size="sm"
                             variant="flat"
-                            className="bg-[#C9A24B]/10 text-[#C9A24B]"
+                            classNames={{
+                              base: "bg-[#5EC8D6]/12 border border-[#5EC8D6]/25",
+                              content: "text-[#5EC8D6] font-semibold",
+                            }}
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
-                                style={{ color: "#C9A24B" }}
+                                style={{ color: brandAccent }}
                               />
                             }
                           >
@@ -829,18 +857,21 @@ useEffect(() => {
                           <Icon
                             icon="solar:verified-check-bold"
                             width={24}
-                            style={{ color: "#C9A24B" }}
+                            style={{ color: brandAccent }}
                           />
                         ) : (
                           <Chip
                             size="sm"
                             variant="flat"
-                            className="bg-[#C9A24B]/10 text-[#C9A24B]"
+                            classNames={{
+                              base: "bg-[#5EC8D6]/12 border border-[#5EC8D6]/25",
+                              content: "text-[#5EC8D6] font-semibold",
+                            }}
                             startContent={
                               <Icon
                                 icon="solar:verified-check-bold"
                                 width={16}
-                                style={{ color: "#C9A24B" }}
+                                style={{ color: brandAccent }}
                               />
                             }
                           >
@@ -883,27 +914,34 @@ useEffect(() => {
                           transition={{ delay: 0.3, duration: 0.3 }}
                           className="flex flex-wrap items-center justify-center gap-3"
                         >
-                          {settings.social_links.map((social, index) => (
-                            <Button
-                              key={index}
-                              as="a"
-                              href={social.url ?? ""}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              isIconOnly
-                              size="sm"
-                              variant="light"
-                              className="hover:scale-110 transition-transform bg-transparent hover:bg-transparent shadow-none min-w-0 w-auto h-auto p-0"
-                            >
-                              <Icon
-                                icon={social.icon}
-                                width={20}
-                                color={
-                                  isLightMode ? "#C9A24B" : "#e5e7eb"
-                                }
-                              />
-                            </Button>
-                          ))}
+                          {settings.social_links.map((social, index) => {
+                            const isMono = isMonochromeSocialIcon(social);
+
+                            return (
+                              <Button
+                                key={index}
+                                as="a"
+                                href={social.url ?? ""}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                isIconOnly
+                                size="sm"
+                                variant="light"
+                                className={`h-10 w-10 min-w-10 rounded-full bg-white p-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)] ring-1 ring-black/5 transition-transform hover:scale-110 ${
+                                  isMono
+                                    ? "text-[#111111] hover:bg-[#111111] hover:text-white"
+                                    : "text-[#111111] hover:bg-white"
+                                }`}
+                              >
+                                <Icon
+                                  icon={social.icon}
+                                  width={20}
+                                  className={isMono ? "text-current" : undefined}
+                                  color={isMono ? undefined : getSocialIconColor(social)}
+                                />
+                              </Button>
+                            );
+                          })}
                         </motion.div>
                       )}
 
@@ -1566,8 +1604,8 @@ useEffect(() => {
                                 onClick={() => setActiveGalleryIndex(dotIndex)}
                                 className={`h-1.5 rounded-full transition-all ${
                                   dotIndex === index
-                                    ? "w-4 bg-[#C9A24B]"
-                                    : "w-1.5 bg-[#C9A24B]/40"
+                                    ? "w-4 bg-[#5EC8D6]"
+                                    : "w-1.5 bg-[#5EC8D6]/40"
                                 }`}
                               />
                             ))}

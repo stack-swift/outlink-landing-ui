@@ -39,10 +39,12 @@ export function ScarcityBadge({
           className="absolute top-2 left-2 z-[10]"
         >
           <Chip
-            color="danger"
-            variant="solid"
             size="sm"
-            className="font-semibold"
+            variant="flat"
+            classNames={{
+              base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+              content: "font-semibold",
+            }}
             startContent={<Icon icon="solar:fire-bold" width={14} />}
           >
             {getDisplayMessage()}
@@ -55,10 +57,12 @@ export function ScarcityBadge({
           className="absolute top-2 right-2 z-[10]"
         >
            <Chip
-  color="default"
-  variant="solid"
+  variant="flat"
   size="sm"
-  className="font-semibold bg-[#C9A24B] text-white border-none"
+  classNames={{
+    base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+    content: "font-semibold",
+  }}
   startContent={
     <span className="flex items-center">
       <motion.span
