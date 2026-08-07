@@ -818,7 +818,7 @@ useEffect(() => {
 
         {/* Content Section */}
         <div
-          className="flex-1 flex flex-col items-center px-4 sm:px-6 md:px-8 relative z-10"
+          className="flex-1 flex flex-col items-center px-4 pb-[calc(4rem+env(safe-area-inset-bottom))] sm:px-6 sm:pb-[calc(5rem+env(safe-area-inset-bottom))] md:px-8 md:pb-16 relative z-10"
           style={{ marginTop: isFullMode ? "0" : "0" }}
         >
           <div className="w-full max-w-md">
