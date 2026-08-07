@@ -44,6 +44,19 @@ function isTwitterFlow(): boolean {
   return params.has("x");
 }
 
+function isAbsoluteOrSchemeUrl(url: string): boolean {
+  return /^[a-z][a-z0-9+.-]*:/i.test(url);
+}
+
+function toAbsoluteUrl(url: string): string {
+  if (typeof window === "undefined" || isAbsoluteOrSchemeUrl(url)) return url;
+  return `${window.location.origin}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+
+function toSafariHandoffUrl(url: string): string {
+  const absoluteUrl = toAbsoluteUrl(url);
+  return absoluteUrl.startsWith("https://") ? `x-safari-${absoluteUrl}` : absoluteUrl;
+}
 
 function wrapUrlForNavigation(
   url: string | null | undefined,
@@ -54,7 +67,7 @@ function wrapUrlForNavigation(
     return `/reddit-escape?target=${encodeURIComponent(url)}`;
   }
   if (!isPreview && isTwitterFlow()) {
-    return `/twitter-escape?target=${encodeURIComponent(url)}`;
+    return toSafariHandoffUrl(url);
   }
   return url;
 }
@@ -382,10 +395,13 @@ const heroPoster =
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
-    const absoluteUrl = finalUrl.startsWith("http")
-      ? finalUrl
-      : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    const absoluteUrl = toAbsoluteUrl(finalUrl);
     const fromUserGesture = opts?.fromUserGesture === true;
+
+    if (isTwitterFlow() && finalUrl.startsWith("x-safari-")) {
+      window.location.href = finalUrl;
+      return;
+    }
 
     if (shouldEscapeInAppBrowser && fromUserGesture) {
       if (attemptAppBrowserHandoff(absoluteUrl)) {
@@ -398,10 +414,7 @@ const heroPoster =
 
   const getNavigationTargets = (url: string) => {
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
-    const absoluteUrl =
-      typeof window === "undefined" || finalUrl.startsWith("http")
-        ? finalUrl
-        : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    const absoluteUrl = toAbsoluteUrl(finalUrl);
 
     return { finalUrl, absoluteUrl };
   };
@@ -410,6 +423,11 @@ const heroPoster =
     const { finalUrl, absoluteUrl } = getNavigationTargets(url);
 
     const attemptExternalOpen = () => {
+      if (isTwitterFlow() && finalUrl.startsWith("x-safari-")) {
+        window.location.href = finalUrl;
+        return true;
+      }
+
       if (shouldEscapeInAppBrowser && absoluteUrl) {
         if (attemptAppBrowserHandoff(absoluteUrl)) {
           return true;

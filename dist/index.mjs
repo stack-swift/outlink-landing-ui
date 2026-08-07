@@ -790,13 +790,24 @@ function isTwitterFlow() {
   const params = new URLSearchParams(window.location.search);
   return params.has("x");
 }
+function isAbsoluteOrSchemeUrl(url) {
+  return /^[a-z][a-z0-9+.-]*:/i.test(url);
+}
+function toAbsoluteUrl(url) {
+  if (typeof window === "undefined" || isAbsoluteOrSchemeUrl(url)) return url;
+  return `${window.location.origin}${url.startsWith("/") ? "" : "/"}${url}`;
+}
+function toSafariHandoffUrl(url) {
+  const absoluteUrl = toAbsoluteUrl(url);
+  return absoluteUrl.startsWith("https://") ? `x-safari-${absoluteUrl}` : absoluteUrl;
+}
 function wrapUrlForNavigation(url, isPreview) {
   if (!url) return "";
   if (!isPreview && isRedditFlow()) {
     return `/reddit-escape?target=${encodeURIComponent(url)}`;
   }
   if (!isPreview && isTwitterFlow()) {
-    return `/twitter-escape?target=${encodeURIComponent(url)}`;
+    return toSafariHandoffUrl(url);
   }
   return url;
 }
@@ -1048,8 +1059,12 @@ function LandingPageViewer({
     if (!url) return;
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
     if (!finalUrl) return;
-    const absoluteUrl = finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    const absoluteUrl = toAbsoluteUrl(finalUrl);
     const fromUserGesture = (opts == null ? void 0 : opts.fromUserGesture) === true;
+    if (isTwitterFlow() && finalUrl.startsWith("x-safari-")) {
+      window.location.href = finalUrl;
+      return;
+    }
     if (shouldEscapeInAppBrowser && fromUserGesture) {
       if (attemptAppBrowserHandoff(absoluteUrl)) {
         return;
@@ -1059,12 +1074,16 @@ function LandingPageViewer({
   };
   const getNavigationTargets = (url) => {
     const finalUrl = wrapUrlForNavigation(url, isPreview) || url;
-    const absoluteUrl = typeof window === "undefined" || finalUrl.startsWith("http") ? finalUrl : `${window.location.origin}${finalUrl.startsWith("/") ? "" : "/"}${finalUrl}`;
+    const absoluteUrl = toAbsoluteUrl(finalUrl);
     return { finalUrl, absoluteUrl };
   };
   const getNativeLinkProps = (url) => {
     const { finalUrl, absoluteUrl } = getNavigationTargets(url);
     const attemptExternalOpen = () => {
+      if (isTwitterFlow() && finalUrl.startsWith("x-safari-")) {
+        window.location.href = finalUrl;
+        return true;
+      }
       if (shouldEscapeInAppBrowser && absoluteUrl) {
         if (attemptAppBrowserHandoff(absoluteUrl)) {
           return true;
