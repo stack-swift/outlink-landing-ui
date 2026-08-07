@@ -216,7 +216,13 @@ const heroPoster =
   const isInAppBrowser = (): boolean => {
     if (typeof window === "undefined") return false;
     const ua = navigator.userAgent || "";
-    return ua.includes("Instagram") || ua.includes("FBAN") || ua.includes("FBAV");
+    return (
+      ua.includes("Instagram") ||
+      ua.includes("FBAN") ||
+      ua.includes("FBAV") ||
+      ua.includes("Twitter") ||
+      ua.includes("TwitterAndroid")
+    );
   };
 
   const isInstagramInAppBrowser = (): boolean => {
