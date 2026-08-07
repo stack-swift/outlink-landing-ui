@@ -1,0 +1,29 @@
+{
+  "name": "halevora-render-kit-7f3c9b2a-private-runtime",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format cjs,esm --sourcemap"
+  },
+  "dependencies": {
+    "@heroui/react": "^2.8.5",
+    "@iconify/react": "^6.0.2",
+    "framer-motion": "^12.23.24",
+    "shadcn-glass-ui": "^2.11.2",
+    "wavesurfer.js": "^7.11.1"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
+  }
+}
