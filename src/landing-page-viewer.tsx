@@ -38,6 +38,12 @@ function isRedditFlow(): boolean {
   return params.has("r");
 }
 
+function isTwitterFlow(): boolean {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return params.has("x");
+}
+
 
 function wrapUrlForNavigation(
   url: string | null | undefined,
@@ -46,6 +52,9 @@ function wrapUrlForNavigation(
   if (!url) return "";
   if (!isPreview && isRedditFlow()) {
     return `/reddit-escape?target=${encodeURIComponent(url)}`;
+  }
+  if (!isPreview && isTwitterFlow()) {
+    return `/twitter-escape?target=${encodeURIComponent(url)}`;
   }
   return url;
 }
@@ -220,8 +229,7 @@ const heroPoster =
       ua.includes("Instagram") ||
       ua.includes("FBAN") ||
       ua.includes("FBAV") ||
-      ua.includes("Twitter") ||
-      ua.includes("TwitterAndroid")
+      /Twitter|TwitterAndroid|Twitter for iPhone|Twitter-iPhone/i.test(ua)
     );
   };
 
@@ -229,6 +237,12 @@ const heroPoster =
     if (typeof window === "undefined") return false;
     const ua = navigator.userAgent || "";
     return ua.includes("Instagram") || ua.includes("IABMV");
+  };
+
+  const isTwitterInAppBrowser = (): boolean => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return /Twitter|TwitterAndroid|Twitter for iPhone|Twitter-iPhone/i.test(ua);
   };
 
   const isMobileBrowser = (): boolean => {
@@ -316,6 +330,11 @@ const heroPoster =
     if (isIOS) {
       const safariScheme = buildDeepLinkUrl(absoluteUrl);
       if (!safariScheme) return false;
+
+      if (isTwitterInAppBrowser()) {
+        window.location.href = safariScheme;
+        return true;
+      }
 
       openInNewTabBestEffort(absoluteUrl);
       openInNewTabBestEffort(safariScheme);
