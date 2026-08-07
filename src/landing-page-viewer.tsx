@@ -50,6 +50,38 @@ function wrapUrlForNavigation(
   return url;
 }
 
+const VISITOR_ID_KEY = "halevora_visitor_id";
+const SESSION_ID_KEY = "halevora_session_id";
+
+function createAnalyticsId(prefix: string) {
+  const id =
+    typeof crypto !== "undefined" && "randomUUID" in crypto
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  return `${prefix}_${id}`;
+}
+
+function getAnalyticsIdentity() {
+  if (typeof window === "undefined") {
+    return { visitor_id: "", session_id: "" };
+  }
+
+  let visitorId = window.localStorage.getItem(VISITOR_ID_KEY);
+  if (!visitorId) {
+    visitorId = createAnalyticsId("vis");
+    window.localStorage.setItem(VISITOR_ID_KEY, visitorId);
+  }
+
+  let sessionId = window.sessionStorage.getItem(SESSION_ID_KEY);
+  if (!sessionId) {
+    sessionId = createAnalyticsId("ses");
+    window.sessionStorage.setItem(SESSION_ID_KEY, sessionId);
+  }
+
+  return { visitor_id: visitorId, session_id: sessionId };
+}
+
 // Helper: send click event to analytics
 function trackClick(linkId: string | undefined, isPreview: boolean | undefined) {
   if (!linkId || isPreview || typeof window === "undefined") return;
@@ -61,6 +93,7 @@ function trackClick(linkId: string | undefined, isPreview: boolean | undefined) 
     body: JSON.stringify({
       link_id: linkId,
       event_type: "click",
+      ...getAnalyticsIdentity(),
     }),
   }).catch(() => {
     // ignore analytics errors

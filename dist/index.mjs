@@ -792,6 +792,28 @@ function wrapUrlForNavigation(url, isPreview) {
   }
   return url;
 }
+var VISITOR_ID_KEY = "halevora_visitor_id";
+var SESSION_ID_KEY = "halevora_session_id";
+function createAnalyticsId(prefix) {
+  const id = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return `${prefix}_${id}`;
+}
+function getAnalyticsIdentity() {
+  if (typeof window === "undefined") {
+    return { visitor_id: "", session_id: "" };
+  }
+  let visitorId = window.localStorage.getItem(VISITOR_ID_KEY);
+  if (!visitorId) {
+    visitorId = createAnalyticsId("vis");
+    window.localStorage.setItem(VISITOR_ID_KEY, visitorId);
+  }
+  let sessionId = window.sessionStorage.getItem(SESSION_ID_KEY);
+  if (!sessionId) {
+    sessionId = createAnalyticsId("ses");
+    window.sessionStorage.setItem(SESSION_ID_KEY, sessionId);
+  }
+  return { visitor_id: visitorId, session_id: sessionId };
+}
 function trackClick(linkId, isPreview) {
   if (!linkId || isPreview || typeof window === "undefined") return;
   fetch("/api/analytics/track", {
@@ -800,7 +822,8 @@ function trackClick(linkId, isPreview) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       link_id: linkId,
-      event_type: "click"
+      event_type: "click",
+      ...getAnalyticsIdentity()
     })
   }).catch(() => {
   });
