@@ -1741,11 +1741,7 @@ function LandingPageViewer({
                                   background: card.style.background_gradient ? `linear-gradient(135deg, ${card.style.background_gradient.start}, ${card.style.background_gradient.end})` : "linear-gradient(135deg, #667eea, #764ba2)"
                                 };
                               case "image":
-                                return {
-                                  backgroundImage: card.style.background_image ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})` : "none",
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center"
-                                };
+                                return { background: "#000" };
                               case "video":
                                 return { background: "#000" };
                               default:
@@ -1775,8 +1771,21 @@ function LandingPageViewer({
                           const renderCardBodyContent = () => /* @__PURE__ */ jsxs8(
                             "div",
                             {
-                              className: `${sizeBodyClasses} flex items-center justify-center relative`,
+                              className: `${sizeBodyClasses} flex items-center justify-center relative overflow-hidden`,
                               children: [
+                                card.style.type === "image" && card.style.background_image && /* @__PURE__ */ jsxs8(Fragment7, { children: [
+                                  /* @__PURE__ */ jsx10(
+                                    "img",
+                                    {
+                                      src: card.style.background_image,
+                                      alt: "",
+                                      className: "absolute inset-0 h-full w-full object-cover object-center",
+                                      loading: "lazy",
+                                      decoding: "async"
+                                    }
+                                  ),
+                                  /* @__PURE__ */ jsx10("div", { className: "absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" })
+                                ] }),
                                 card.style.type === "video" && card.style.background_video && (() => {
                                   const fit = card.style.background_fit || "fill";
                                   const focus = card.style.background_focus || "top";
@@ -1908,7 +1917,7 @@ function LandingPageViewer({
                             {
                               isPressable: true,
                               onPress: handleCardClick,
-                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative",
+                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden",
                               style: getCardStyle(),
                               children: /* @__PURE__ */ jsx10(CardBody, { children: renderCardBodyContent() })
                             }
@@ -1920,7 +1929,7 @@ function LandingPageViewer({
                               target: cardLinkProps.target,
                               rel: cardLinkProps.rel,
                               onClick: cardLinkProps.onClick,
-                              className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]",
+                              className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden",
                               style: getCardStyle(),
                               children: renderCardBodyContent()
                             }
@@ -2111,7 +2120,7 @@ function LandingPageViewer({
                                             }
                                           )
                                         },
-                                        `${url}-${imgIndex}`
+                                        `gallery-card-${offset}-${imgIndex}`
                                       )
                                     );
                                   }

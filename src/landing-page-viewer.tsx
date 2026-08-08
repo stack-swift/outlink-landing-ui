@@ -1183,13 +1183,7 @@ useEffect(() => {
                                     : "linear-gradient(135deg, #667eea, #764ba2)",
                                 };
                               case "image":
-                                return {
-                                  backgroundImage: card.style.background_image
-                                    ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${card.style.background_image})`
-                                    : "none",
-                                  backgroundSize: "cover",
-                                  backgroundPosition: "center",
-                                };
+                                return { background: "#000" };
                               case "video":
                                 return { background: "#000" };
                               default:
@@ -1235,8 +1229,22 @@ useEffect(() => {
 
                           const renderCardBodyContent = () => (
                             <div
-                              className={`${sizeBodyClasses} flex items-center justify-center relative`}
+                              className={`${sizeBodyClasses} flex items-center justify-center relative overflow-hidden`}
                             >
+                                {card.style.type === "image" &&
+                                  card.style.background_image && (
+                                    <>
+                                      <img
+                                        src={card.style.background_image}
+                                        alt=""
+                                        className="absolute inset-0 h-full w-full object-cover object-center"
+                                        loading="lazy"
+                                        decoding="async"
+                                      />
+                                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+                                    </>
+                                  )}
+
                                 {/* Video Background */}
                                 {card.style.type === "video" &&
                                   card.style.background_video &&
@@ -1425,7 +1433,7 @@ useEffect(() => {
                             <Card
                               isPressable
                               onPress={handleCardClick}
-                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative"
+                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden"
                               style={getCardStyle()}
                             >
                               <CardBody>
@@ -1440,7 +1448,7 @@ useEffect(() => {
                               target={cardLinkProps.target}
                               rel={cardLinkProps.rel}
                               onClick={cardLinkProps.onClick}
-                              className="block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02]"
+                              className="block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden"
                               style={getCardStyle()}
                             >
                               {renderCardBodyContent()}
@@ -1648,7 +1656,7 @@ useEffect(() => {
 
                                 cards.push(
                                   <div
-                                    key={`${url}-${imgIndex}`}
+                                    key={`gallery-card-${offset}-${imgIndex}`}
                                     className="absolute rounded-3xl overflow-hidden shadow-2xl bg-default-100 cursor-pointer transition-all duration-300 ease-out"
                                     style={{
                                       width: "13rem",
