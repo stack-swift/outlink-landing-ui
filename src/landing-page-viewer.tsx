@@ -1154,6 +1154,10 @@ useEffect(() => {
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
+                          const imageBodyShapeClass =
+                            card.style.type === "image"
+                              ? "aspect-video !min-h-0"
+                              : "";
 
                           const isPremiumLogo =
                             card.style.logo_icon === "of-local" ||
@@ -1229,7 +1233,7 @@ useEffect(() => {
 
                           const renderCardBodyContent = () => (
                             <div
-                              className={`${sizeBodyClasses} flex items-center justify-center relative overflow-hidden`}
+                              className={`${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`}
                             >
                                 {card.style.type === "image" &&
                                   card.style.background_image && (

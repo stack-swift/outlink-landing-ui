@@ -1766,6 +1766,7 @@ function LandingPageViewer({
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
+                          const imageBodyShapeClass = card.style.type === "image" ? "aspect-video !min-h-0" : "";
                           const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
@@ -1810,7 +1811,7 @@ function LandingPageViewer({
                           const renderCardBodyContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                             "div",
                             {
-                              className: `${sizeBodyClasses} flex items-center justify-center relative overflow-hidden`,
+                              className: `${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`,
                               children: [
                                 card.style.type === "image" && card.style.background_image && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
                                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
