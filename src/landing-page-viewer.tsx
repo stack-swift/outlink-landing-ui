@@ -1158,6 +1158,13 @@ useEffect(() => {
                             card.style.type === "image"
                               ? "aspect-video !min-h-0"
                               : "";
+                          const imageBodyShapeStyle =
+                            card.style.type === "image"
+                              ? ({
+                                  aspectRatio: "16 / 9",
+                                  minHeight: 0,
+                                } as const)
+                              : undefined;
 
                           const isPremiumLogo =
                             card.style.logo_icon === "of-local" ||
@@ -1234,6 +1241,7 @@ useEffect(() => {
                           const renderCardBodyContent = () => (
                             <div
                               className={`${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`}
+                              style={imageBodyShapeStyle}
                             >
                                 {card.style.type === "image" &&
                                   card.style.background_image && (

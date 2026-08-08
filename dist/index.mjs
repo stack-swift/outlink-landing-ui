@@ -1728,6 +1728,10 @@ function LandingPageViewer({
                             sizeColSpanClass = "col-span-2";
                           }
                           const imageBodyShapeClass = card.style.type === "image" ? "aspect-video !min-h-0" : "";
+                          const imageBodyShapeStyle = card.style.type === "image" ? {
+                            aspectRatio: "16 / 9",
+                            minHeight: 0
+                          } : void 0;
                           const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
@@ -1773,6 +1777,7 @@ function LandingPageViewer({
                             "div",
                             {
                               className: `${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`,
+                              style: imageBodyShapeStyle,
                               children: [
                                 card.style.type === "image" && card.style.background_image && /* @__PURE__ */ jsxs8(Fragment7, { children: [
                                   /* @__PURE__ */ jsx10(
