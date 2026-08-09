@@ -35,6 +35,12 @@ interface CTACardStyle {
     prefix_text?: string | null;
     background_fit?: "fill" | "fit";
     background_focus?: "top" | "center" | "bottom";
+    countdown_badge?: {
+        enabled: boolean;
+        label: string;
+        message?: string | null;
+        duration_seconds: number;
+    } | null;
 }
 interface CTACardStyle {
     type: "solid" | "gradient" | "image" | "video";
@@ -46,12 +52,19 @@ interface CTACardStyle {
     } | null;
     background_image?: string | null;
     background_video?: string | null;
+    background_video_poster_url?: string | null;
     logo_icon?: string | null;
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
     background_fit?: "fill" | "fit";
     background_focus?: "top" | "center" | "bottom";
+    countdown_badge?: {
+        enabled: boolean;
+        label: string;
+        message?: string | null;
+        duration_seconds: number;
+    } | null;
 }
 type SectionSpacing = "tight" | "normal" | "relaxed";
 interface LandingPageSettings {

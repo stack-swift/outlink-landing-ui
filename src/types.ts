@@ -20,6 +20,12 @@ export interface CTACardStyle {
   // Video framing (for type === "video")
   background_fit?: "fill" | "fit"; // fill = cover, fit = contain
   background_focus?: "top" | "center" | "bottom";
+  countdown_badge?: {
+    enabled: boolean;
+    label: string;
+    message?: string | null;
+    duration_seconds: number;
+  } | null;
 }
 
 export interface CTACard {
@@ -54,6 +60,7 @@ export type LayoutSectionKey =
     background_gradient?: { start: string; end: string } | null;
     background_image?: string | null;
     background_video?: string | null;
+    background_video_poster_url?: string | null;
     // Brand/logo
     logo_icon?: string | null;
     logo_name?: string | null;
@@ -62,6 +69,12 @@ export type LayoutSectionKey =
     // Video framing (for type === "video")
     background_fit?: "fill" | "fit";
     background_focus?: "top" | "center" | "bottom";
+    countdown_badge?: {
+      enabled: boolean;
+      label: string;
+      message?: string | null;
+      duration_seconds: number;
+    } | null;
   }
 
 export type SectionSpacing = "tight" | "normal" | "relaxed";

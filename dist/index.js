@@ -682,7 +682,7 @@ function CTACardWithMechanisms({
     (_l = mechanisms == null ? void 0 : mechanisms.live_viewers) == null ? void 0 : _l.enabled,
     (_m = mechanisms == null ? void 0 : mechanisms.exclusive_badge) == null ? void 0 : _m.enabled
   ].filter(Boolean).length > 1;
-  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "relative overflow-hidden rounded-xl", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "relative overflow-hidden rounded-2xl", children: [
     showBadges && ((_n = mechanisms == null ? void 0 : mechanisms.limited_slots) == null ? void 0 : _n.enabled) && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
       ScarcityBadge,
       {
@@ -704,17 +704,25 @@ function CTACardWithMechanisms({
       {
         initial: { opacity: 0, scale: 0.8 },
         animate: { opacity: 1, scale: 1 },
-        className: `absolute z-[10] ${hasMultipleBadges ? "bottom-2 left-2" : "top-2 left-2"}`,
+        className: `absolute z-[10] ${hasMultipleBadges ? "bottom-3 left-3" : "top-3 left-3"}`,
         children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           import_react19.Chip,
           {
+            color: "default",
             size: "sm",
             variant: "flat",
             classNames: {
-              base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
-              content: "font-semibold"
+              base: "border border-white/10 bg-black/70 px-1.5 text-white shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+              content: "text-[12px] font-semibold text-white"
             },
-            startContent: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_react20.Icon, { icon: "solar:crown-bold", width: 14 }),
+            startContent: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+              import_react20.Icon,
+              {
+                icon: "solar:crown-bold",
+                width: 14,
+                className: "text-white"
+              }
+            ),
             children: mechanisms.exclusive_badge.text
           }
         )
@@ -819,6 +827,30 @@ function AgeConfirmationModal({
 
 // src/landing-page-viewer.tsx
 var import_jsx_runtime10 = require("react/jsx-runtime");
+function CTAUrgencyBadge({
+  label,
+  message,
+  durationSeconds
+}) {
+  const safeDuration = Math.max(1, Math.floor(durationSeconds || 0));
+  const [remaining, setRemaining] = (0, import_react21.useState)(safeDuration);
+  (0, import_react21.useEffect)(() => {
+    setRemaining(safeDuration);
+    const startedAt = Date.now();
+    const interval = window.setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startedAt) / 1e3);
+      setRemaining(Math.max(0, safeDuration - elapsed));
+    }, 1e3);
+    return () => window.clearInterval(interval);
+  }, [safeDuration]);
+  const hours = Math.floor(remaining / 3600);
+  const minutes = Math.floor(remaining % 3600 / 60);
+  const seconds = remaining % 60;
+  const time = `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${String(seconds).padStart(2, "0")}s`;
+  const fallbackText = `${label || "FREE"} ends in ${time}`;
+  const text = message && message.trim().length > 0 ? message.replace(/\{time\}/gi, time).replace(/\{label\}/gi, label || "FREE") : fallbackText;
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-1 inline-flex max-w-full items-center rounded-md bg-black px-3 py-1 text-xs font-bold leading-none shadow-[0_10px_24px_rgba(0,0,0,0.36)]", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "truncate text-[#5EC8D6]", children: text }) });
+}
 function isRedditFlow() {
   if (typeof window === "undefined") return false;
   const params = new URLSearchParams(window.location.search);
@@ -1815,7 +1847,7 @@ function LandingPageViewer({
                           const renderCardBodyContent = () => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                             "div",
                             {
-                              className: `${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`,
+                              className: `${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden rounded-2xl`,
                               style: imageBodyShapeStyle,
                               children: [
                                 card.style.type === "image" && card.style.background_image && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
@@ -1962,9 +1994,9 @@ function LandingPageViewer({
                             {
                               isPressable: true,
                               onPress: handleCardClick,
-                              className: "w-full hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden",
+                              className: "w-full rounded-2xl hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden",
                               style: getCardStyle(),
-                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { children: renderCardBodyContent() })
+                              children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { className: "overflow-hidden rounded-2xl p-0", children: renderCardBodyContent() })
                             }
                           );
                           const baseCardContent = cardLinkProps ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -1974,7 +2006,7 @@ function LandingPageViewer({
                               target: cardLinkProps.target,
                               rel: cardLinkProps.rel,
                               onClick: cardLinkProps.onClick,
-                              className: "block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden",
+                              className: "block w-full rounded-2xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden",
                               style: getCardStyle(),
                               children: renderCardBodyContent()
                             }
@@ -2013,7 +2045,8 @@ function LandingPageViewer({
                               children: cardWithMechanisms
                             }
                           ) : cardWithMechanisms;
-                          return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                          const urgencyBadge = card.style.countdown_badge;
+                          return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
                             import_framer_motion10.motion.div,
                             {
                               initial: { opacity: 0, y: 10 },
@@ -2023,7 +2056,17 @@ function LandingPageViewer({
                                 duration: 0.3
                               },
                               className: `relative ${sizeColSpanClass}`,
-                              children: finalContent
+                              children: [
+                                finalContent,
+                                (urgencyBadge == null ? void 0 : urgencyBadge.enabled) && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flex w-full justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  CTAUrgencyBadge,
+                                  {
+                                    label: urgencyBadge.label,
+                                    message: urgencyBadge.message,
+                                    durationSeconds: urgencyBadge.duration_seconds
+                                  }
+                                ) })
+                              ]
                             },
                             card.id
                           );

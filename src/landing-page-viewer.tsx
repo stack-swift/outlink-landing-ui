@@ -31,6 +31,48 @@ interface LandingPageViewerProps {
   visitorLocationLabel?: string | null;
 }
 
+function CTAUrgencyBadge({
+  label,
+  message,
+  durationSeconds,
+}: {
+  label: string;
+  message?: string | null;
+  durationSeconds: number;
+}) {
+  const safeDuration = Math.max(1, Math.floor(durationSeconds || 0));
+  const [remaining, setRemaining] = useState(safeDuration);
+
+  useEffect(() => {
+    setRemaining(safeDuration);
+    const startedAt = Date.now();
+    const interval = window.setInterval(() => {
+      const elapsed = Math.floor((Date.now() - startedAt) / 1000);
+      setRemaining(Math.max(0, safeDuration - elapsed));
+    }, 1000);
+
+    return () => window.clearInterval(interval);
+  }, [safeDuration]);
+
+  const hours = Math.floor(remaining / 3600);
+  const minutes = Math.floor((remaining % 3600) / 60);
+  const seconds = remaining % 60;
+  const time = `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${String(seconds).padStart(2, "0")}s`;
+  const fallbackText = `${label || "FREE"} ends in ${time}`;
+  const text =
+    message && message.trim().length > 0
+      ? message
+          .replace(/\{time\}/gi, time)
+          .replace(/\{label\}/gi, label || "FREE")
+      : fallbackText;
+
+  return (
+    <div className="mt-1 inline-flex max-w-full items-center rounded-md bg-black px-3 py-1 text-xs font-bold leading-none shadow-[0_10px_24px_rgba(0,0,0,0.36)]">
+      <span className="truncate text-[#5EC8D6]">{text}</span>
+    </div>
+  );
+}
+
 
 function isRedditFlow(): boolean {
   if (typeof window === "undefined") return false;
@@ -1240,7 +1282,7 @@ useEffect(() => {
 
                           const renderCardBodyContent = () => (
                             <div
-                              className={`${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden`}
+                              className={`${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden rounded-2xl`}
                               style={imageBodyShapeStyle}
                             >
                                 {card.style.type === "image" &&
@@ -1445,10 +1487,10 @@ useEffect(() => {
                             <Card
                               isPressable
                               onPress={handleCardClick}
-                              className="w-full hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden"
+                              className="w-full rounded-2xl hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden"
                               style={getCardStyle()}
                             >
-                              <CardBody>
+                              <CardBody className="overflow-hidden rounded-2xl p-0">
                                 {renderCardBodyContent()}
                               </CardBody>
                             </Card>
@@ -1460,7 +1502,7 @@ useEffect(() => {
                               target={cardLinkProps.target}
                               rel={cardLinkProps.rel}
                               onClick={cardLinkProps.onClick}
-                              className="block w-full rounded-xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden"
+                              className="block w-full rounded-2xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden"
                               style={getCardStyle()}
                             >
                               {renderCardBodyContent()}
@@ -1513,6 +1555,7 @@ useEffect(() => {
                             ) : (
                               cardWithMechanisms
                             );
+                          const urgencyBadge = card.style.countdown_badge;
 
                           return (
                             <motion.div
@@ -1526,6 +1569,17 @@ useEffect(() => {
                               className={`relative ${sizeColSpanClass}`}
                             >
                               {finalContent}
+                              {urgencyBadge?.enabled && (
+                                <div className="flex w-full justify-center">
+                                  <CTAUrgencyBadge
+                                    label={urgencyBadge.label}
+                                    message={urgencyBadge.message}
+                                    durationSeconds={
+                                      urgencyBadge.duration_seconds
+                                    }
+                                  />
+                                </div>
+                              )}
                             </motion.div>
                           );
                         })}

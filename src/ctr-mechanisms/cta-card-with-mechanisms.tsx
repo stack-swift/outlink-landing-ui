@@ -141,7 +141,7 @@ export function CTACardWithMechanisms({
 
   // Wrap everything in a relative container to contain overlays and badges
   return (
-    <div className="relative overflow-hidden rounded-xl">
+    <div className="relative overflow-hidden rounded-2xl">
       {showBadges && mechanisms?.limited_slots?.enabled && (
         <ScarcityBadge
           type="slots"
@@ -161,17 +161,24 @@ export function CTACardWithMechanisms({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           className={`absolute z-[10] ${
-            hasMultipleBadges ? "bottom-2 left-2" : "top-2 left-2"
+            hasMultipleBadges ? "bottom-3 left-3" : "top-3 left-3"
           }`}
         >
           <Chip
+            color="default"
             size="sm"
             variant="flat"
             classNames={{
-              base: "bg-black/70 text-white border border-white/15 shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
-              content: "font-semibold",
+              base: "border border-white/10 bg-black/70 px-1.5 text-white shadow-[0_8px_22px_rgba(0,0,0,0.35)] backdrop-blur-md",
+              content: "text-[12px] font-semibold text-white",
             }}
-            startContent={<Icon icon="solar:crown-bold" width={14} />}
+            startContent={
+              <Icon
+                icon="solar:crown-bold"
+                width={14}
+                className="text-white"
+              />
+            }
           >
             {mechanisms.exclusive_badge.text}
           </Chip>
