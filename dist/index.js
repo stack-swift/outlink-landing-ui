@@ -849,7 +849,16 @@ function CTAUrgencyBadge({
   const time = `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${String(seconds).padStart(2, "0")}s`;
   const fallbackText = `${label || "FREE"} ends in ${time}`;
   const text = message && message.trim().length > 0 ? message.replace(/\{time\}/gi, time).replace(/\{label\}/gi, label || "FREE") : fallbackText;
-  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-1 inline-flex max-w-full items-center rounded-md bg-black px-3 py-1 text-xs font-bold leading-none shadow-[0_10px_24px_rgba(0,0,0,0.36)]", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "truncate text-[#5EC8D6]", children: text }) });
+  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mt-2 inline-flex max-w-full items-center px-1 py-0.5 text-sm font-extrabold leading-none", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+    "span",
+    {
+      className: "truncate text-[#5EC8D6]",
+      style: {
+        textShadow: "0 1px 2px rgba(0,0,0,0.95), 0 0 10px rgba(94,200,214,0.55)"
+      },
+      children: text
+    }
+  ) });
 }
 function isRedditFlow() {
   if (typeof window === "undefined") return false;
@@ -1345,6 +1354,13 @@ function LandingPageViewer({
       className: "min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden",
       style: { paddingTop: "env(safe-area-inset-top)" },
       children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("style", { children: `
+          @keyframes halevoraCtaBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            38% { transform: translateY(-7px) scale(1.026); }
+            62% { transform: translateY(1px) scale(0.992); }
+          }
+        ` }),
         (isFullMode || isVideoMode) && heroPoster ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
             "img",
@@ -1827,6 +1843,14 @@ function LandingPageViewer({
                                 return {};
                             }
                           };
+                          const glowEffect = card.style.dashboard_glow_effect || "none";
+                          const glowShadow = glowEffect === "strong" ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)" : glowEffect === "soft" ? "0 0 0 1px rgba(255,255,255,0.72), 0 0 14px 5px rgba(255,255,255,0.68), 0 0 34px 12px rgba(255,255,255,0.34), 0 18px 40px rgba(0,0,0,0.56)" : void 0;
+                          const ctaEffectStyle = {
+                            ...glowShadow ? { boxShadow: glowShadow } : {},
+                            ...card.style.dashboard_bounce_effect ? {
+                              animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
+                            } : {}
+                          };
                           const handleCardClick = () => {
                             if (isPreview) return;
                             if (card.require_18plus) {
@@ -2017,7 +2041,7 @@ function LandingPageViewer({
                             {
                               isPressable: true,
                               onPress: handleCardClick,
-                              className: "w-full rounded-2xl hover:scale-[1.02] transition-transform shadow-lg relative overflow-hidden",
+                              className: "w-full rounded-2xl shadow-lg relative overflow-hidden",
                               style: getCardStyle(),
                               children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_react23.CardBody, { className: "overflow-hidden rounded-2xl p-0", children: renderCardBodyContent() })
                             }
@@ -2029,7 +2053,7 @@ function LandingPageViewer({
                               target: cardLinkProps.target,
                               rel: cardLinkProps.rel,
                               onClick: cardLinkProps.onClick,
-                              className: "block w-full rounded-2xl shadow-lg transition-transform hover:scale-[1.02] overflow-hidden",
+                              className: "block w-full rounded-2xl shadow-lg overflow-hidden",
                               style: getCardStyle(),
                               children: renderCardBodyContent()
                             }
@@ -2078,9 +2102,16 @@ function LandingPageViewer({
                                 delay: 0.6 + index * 0.1,
                                 duration: 0.3
                               },
-                              className: `relative ${sizeColSpanClass}`,
+                              className: `relative overflow-visible ${sizeColSpanClass}`,
                               children: [
-                                finalContent,
+                                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  "div",
+                                  {
+                                    className: "relative z-10 rounded-2xl transition-transform hover:scale-[1.02]",
+                                    style: ctaEffectStyle,
+                                    children: finalContent
+                                  }
+                                ),
                                 (urgencyBadge == null ? void 0 : urgencyBadge.enabled) && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flex w-full justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                   CTAUrgencyBadge,
                                   {
