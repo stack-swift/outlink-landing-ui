@@ -1250,6 +1250,12 @@ useEffect(() => {
                           const isOnlyFansTextIcon =
                             isOnlyFansLogo &&
                             card.style.brand_layout === "icon_text";
+                          const isOnlyFansVipIconText =
+                            isOnlyFansLogo &&
+                            card.style.brand_layout === "vip_icon_text";
+                          const isOnlyFansContentText =
+                            isOnlyFansLogo &&
+                            card.style.brand_layout === "content_text";
                           const isPremiumLogo =
                             isOnlyFansLogo ||
                             (card.style.logo_name || "")
@@ -1408,7 +1414,9 @@ useEffect(() => {
                                     
                                   })()}
 
-                                {isOnlyFansTextIcon && (
+                                {(isOnlyFansTextIcon ||
+                                  isOnlyFansVipIconText ||
+                                  isOnlyFansContentText) && (
                                   <img
                                     src="/of-logo.svg"
                                     alt="Creator icon"
@@ -1422,7 +1430,40 @@ useEffect(() => {
                                   {/* Premium logo layout stays stacked in center */}
                                   {isPremiumLogo && (
                                     <div className="mb-2">
-                                      {isOnlyFansTextIcon ? (
+                                      {isOnlyFansVipIconText ? (
+                                        <div className="flex items-center justify-center">
+                                          <img
+                                            src="/vipec.svg"
+                                            alt=""
+                                            className="h-auto max-h-8 w-auto max-w-[76%]"
+                                            loading="lazy"
+                                          />
+                                        </div>
+                                      ) : isOnlyFansContentText ? (
+                                        <div className="flex items-center justify-center gap-1.5">
+                                          {card.style.prefix_text && (
+                                            <span
+                                              className="font-bold leading-none"
+                                              style={{
+                                                color:
+                                                  card.style.logo_color ||
+                                                  "#00AFF0",
+                                                fontSize: `${card.style.brand_text_size || 18}px`,
+                                                fontFamily:
+                                                  '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif',
+                                              }}
+                                            >
+                                              {card.style.prefix_text}
+                                            </span>
+                                          )}
+                                          <img
+                                            src="/c.svg"
+                                            alt=""
+                                            className="h-auto max-h-7 w-auto max-w-[38%]"
+                                            loading="lazy"
+                                          />
+                                        </div>
+                                      ) : isOnlyFansTextIcon ? (
                                         <div className="flex items-center justify-center">
                                           <span
                                             className="font-bold leading-none"

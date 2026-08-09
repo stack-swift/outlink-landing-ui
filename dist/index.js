@@ -1840,6 +1840,8 @@ function LandingPageViewer({
                           } : void 0;
                           const isOnlyFansLogo = card.style.logo_icon === "of-local";
                           const isOnlyFansTextIcon = isOnlyFansLogo && card.style.brand_layout === "icon_text";
+                          const isOnlyFansVipIconText = isOnlyFansLogo && card.style.brand_layout === "vip_icon_text";
+                          const isOnlyFansContentText = isOnlyFansLogo && card.style.brand_layout === "content_text";
                           const isPremiumLogo = isOnlyFansLogo || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
@@ -1945,7 +1947,7 @@ function LandingPageViewer({
                                     }
                                   ) : null;
                                 })(),
-                                isOnlyFansTextIcon && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                (isOnlyFansTextIcon || isOnlyFansVipIconText || isOnlyFansContentText) && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                   "img",
                                   {
                                     src: "/of-logo.svg",
@@ -1955,7 +1957,37 @@ function LandingPageViewer({
                                   }
                                 ),
                                 /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "text-center w-full relative z-10", children: [
-                                  isPremiumLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: isOnlyFansTextIcon ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  isPremiumLogo && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "mb-2", children: isOnlyFansVipIconText ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                    "img",
+                                    {
+                                      src: "/vipec.svg",
+                                      alt: "",
+                                      className: "h-auto max-h-8 w-auto max-w-[76%]",
+                                      loading: "lazy"
+                                    }
+                                  ) }) : isOnlyFansContentText ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "flex items-center justify-center gap-1.5", children: [
+                                    card.style.prefix_text && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      "span",
+                                      {
+                                        className: "font-bold leading-none",
+                                        style: {
+                                          color: card.style.logo_color || "#00AFF0",
+                                          fontSize: `${card.style.brand_text_size || 18}px`,
+                                          fontFamily: '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif'
+                                        },
+                                        children: card.style.prefix_text
+                                      }
+                                    ),
+                                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                      "img",
+                                      {
+                                        src: "/c.svg",
+                                        alt: "",
+                                        className: "h-auto max-h-7 w-auto max-w-[38%]",
+                                        loading: "lazy"
+                                      }
+                                    )
+                                  ] }) : isOnlyFansTextIcon ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     "span",
                                     {
                                       className: "font-bold leading-none",
