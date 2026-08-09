@@ -740,6 +740,7 @@ useEffect(() => {
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
     if (isVideoMode) return "h-[546px] md:h-[546px]";
+    if (isFullMode && settings.header_image_height) return "";
     if (isFullMode) {
       switch (settings.header_image_size || "large") {
         case "small":
@@ -754,6 +755,10 @@ useEffect(() => {
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();
+  const heroHeightStyle =
+    isFullMode && settings.header_image_height
+      ? { height: `${settings.header_image_height}px` }
+      : undefined;
 
   return (
     <div
@@ -800,6 +805,7 @@ useEffect(() => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             className={`relative w-full ${heroHeightClass}`}
+            style={heroHeightStyle}
           >
             {isVideoMode
               ? (() => {
@@ -1235,15 +1241,23 @@ useEffect(() => {
                               : size === "standard"
                                 ? "2.35 / 1"
                                 : "16 / 9";
+                          const exactButtonHeight = card.style.button_height;
                           const imageBodyShapeClass =
                             card.style.type === "image" ? "!min-h-0" : "";
                           const imageBodyShapeStyle =
                             card.style.type === "image"
                               ? ({
-                                  aspectRatio: imageAspectRatio,
+                                  aspectRatio: exactButtonHeight
+                                    ? undefined
+                                    : imageAspectRatio,
+                                  height: exactButtonHeight
+                                    ? `${exactButtonHeight}px`
+                                    : undefined,
                                   minHeight: 0,
                                 } as const)
-                              : undefined;
+                              : exactButtonHeight
+                                ? ({ height: `${exactButtonHeight}px` } as const)
+                                : undefined;
 
                           const isOnlyFansLogo =
                             card.style.logo_icon === "of-local";
@@ -1252,10 +1266,12 @@ useEffect(() => {
                             card.style.brand_layout === "icon_text";
                           const isOnlyFansVipIconText =
                             isOnlyFansLogo &&
-                            card.style.brand_layout === "vip_icon_text";
+                            (card.style.brand_layout === "vip_icon_text" ||
+                              card.style.brand_layout === "asset_combo_a");
                           const isOnlyFansContentText =
                             isOnlyFansLogo &&
-                            card.style.brand_layout === "content_text";
+                            (card.style.brand_layout === "content_text" ||
+                              card.style.brand_layout === "asset_combo_b");
                           const isPremiumLogo =
                             isOnlyFansLogo ||
                             (card.style.logo_name || "")

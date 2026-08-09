@@ -1314,6 +1314,7 @@ function LandingPageViewer({
   );
   const heroHeightClass = (() => {
     if (isVideoMode) return "h-[546px] md:h-[546px]";
+    if (isFullMode && settings.header_image_height) return "";
     if (isFullMode) {
       switch (settings.header_image_size || "large") {
         case "small":
@@ -1327,6 +1328,7 @@ function LandingPageViewer({
     }
     return "h-[320px] md:h-[320px]";
   })();
+  const heroHeightStyle = isFullMode && settings.header_image_height ? { height: `${settings.header_image_height}px` } : void 0;
   return /* @__PURE__ */ jsxs8(
     "div",
     {
@@ -1373,6 +1375,7 @@ function LandingPageViewer({
                   animate: { opacity: 1 },
                   transition: { duration: 0.6 },
                   className: `relative w-full ${heroHeightClass}`,
+                  style: heroHeightStyle,
                   children: isVideoMode ? (() => {
                     if (settings.header_video_url) {
                       const focus = settings.header_video_focus || "center";
@@ -1794,15 +1797,17 @@ function LandingPageViewer({
                             sizeColSpanClass = "col-span-2";
                           }
                           const imageAspectRatio = size === "large" ? "16 / 9" : size === "standard" ? "2.35 / 1" : "16 / 9";
+                          const exactButtonHeight = card.style.button_height;
                           const imageBodyShapeClass = card.style.type === "image" ? "!min-h-0" : "";
                           const imageBodyShapeStyle = card.style.type === "image" ? {
-                            aspectRatio: imageAspectRatio,
+                            aspectRatio: exactButtonHeight ? void 0 : imageAspectRatio,
+                            height: exactButtonHeight ? `${exactButtonHeight}px` : void 0,
                             minHeight: 0
-                          } : void 0;
+                          } : exactButtonHeight ? { height: `${exactButtonHeight}px` } : void 0;
                           const isOnlyFansLogo = card.style.logo_icon === "of-local";
                           const isOnlyFansTextIcon = isOnlyFansLogo && card.style.brand_layout === "icon_text";
-                          const isOnlyFansVipIconText = isOnlyFansLogo && card.style.brand_layout === "vip_icon_text";
-                          const isOnlyFansContentText = isOnlyFansLogo && card.style.brand_layout === "content_text";
+                          const isOnlyFansVipIconText = isOnlyFansLogo && (card.style.brand_layout === "vip_icon_text" || card.style.brand_layout === "asset_combo_a");
+                          const isOnlyFansContentText = isOnlyFansLogo && (card.style.brand_layout === "content_text" || card.style.brand_layout === "asset_combo_b");
                           const isPremiumLogo = isOnlyFansLogo || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");

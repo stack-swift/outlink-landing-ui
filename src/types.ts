@@ -7,6 +7,8 @@ export interface SocialLink {
 
 export interface CTACardStyle {
   type: "solid" | "gradient" | "image" | "video";
+  size?: "small" | "standard" | "large" | null;
+  button_height?: number | null;
   background_color?: string | null;
   background_gradient?: { start: string; end: string } | null;
   background_image?: string | null;
@@ -17,7 +19,14 @@ export interface CTACardStyle {
   logo_name?: string | null;
   logo_color?: string | null;
   prefix_text?: string | null;
-  brand_layout?: "wordmark" | "icon_text" | "vip_icon_text" | "content_text" | null;
+  brand_layout?:
+    | "wordmark"
+    | "icon_text"
+    | "vip_icon_text"
+    | "content_text"
+    | "asset_combo_a"
+    | "asset_combo_b"
+    | null;
   brand_text_size?: number | null;
   dashboard_glow_effect?: "none" | "soft" | "strong" | null;
   dashboard_bounce_effect?: boolean | null;
@@ -60,6 +69,7 @@ export type LayoutSectionKey =
   
     // Button size / layout
     size?: "small" | "standard" | "large" | null;
+    button_height?: number | null;
   
     background_color?: string | null;
     background_gradient?: { start: string; end: string } | null;
@@ -71,7 +81,14 @@ export type LayoutSectionKey =
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
-    brand_layout?: "wordmark" | "icon_text" | "vip_icon_text" | "content_text" | null;
+    brand_layout?:
+      | "wordmark"
+      | "icon_text"
+      | "vip_icon_text"
+      | "content_text"
+      | "asset_combo_a"
+      | "asset_combo_b"
+      | null;
     brand_text_size?: number | null;
     dashboard_glow_effect?: "none" | "soft" | "strong" | null;
     dashboard_bounce_effect?: boolean | null;
@@ -96,6 +113,7 @@ export interface LandingPageSettings {
   // Header media
   avatar_url: string | null;
   header_image_size?: "small" | "medium" | "large";
+  header_image_height?: number | null;
    /** Optional short header video clip (MP4/WebM) that can play in the hero area. */
    header_video_url?: string | null;
 
