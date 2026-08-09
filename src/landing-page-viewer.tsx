@@ -1196,20 +1196,29 @@ useEffect(() => {
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
+                          const imageAspectRatio =
+                            size === "large"
+                              ? "16 / 9"
+                              : size === "standard"
+                                ? "2.35 / 1"
+                                : "16 / 9";
                           const imageBodyShapeClass =
-                            card.style.type === "image"
-                              ? "aspect-video !min-h-0"
-                              : "";
+                            card.style.type === "image" ? "!min-h-0" : "";
                           const imageBodyShapeStyle =
                             card.style.type === "image"
                               ? ({
-                                  aspectRatio: "16 / 9",
+                                  aspectRatio: imageAspectRatio,
                                   minHeight: 0,
                                 } as const)
                               : undefined;
 
+                          const isOnlyFansLogo =
+                            card.style.logo_icon === "of-local";
+                          const isOnlyFansTextIcon =
+                            isOnlyFansLogo &&
+                            card.style.brand_layout === "icon_text";
                           const isPremiumLogo =
-                            card.style.logo_icon === "of-local" ||
+                            isOnlyFansLogo ||
                             (card.style.logo_name || "")
                               .toLowerCase()
                               === "icon";
@@ -1349,39 +1358,67 @@ useEffect(() => {
                                     
                                   })()}
 
+                                {isOnlyFansTextIcon && (
+                                  <img
+                                    src="/of-logo.svg"
+                                    alt="Creator icon"
+                                    className="absolute right-3 top-3 z-20 h-6 w-auto"
+                                    loading="lazy"
+                                  />
+                                )}
+
                                 {/* Center content */}
                                 <div className="text-center w-full relative z-10">
                                   {/* Premium logo layout stays stacked in center */}
                                   {isPremiumLogo && (
                                     <div className="mb-2">
-                                      <div className="flex flex-col items-center gap-1">
-                                        {card.style.prefix_text && (
-                                          <p
-                                            className="text-base font-semibold"
+                                      {isOnlyFansTextIcon ? (
+                                        <div className="flex items-center justify-center">
+                                          <span
+                                            className="font-bold leading-none"
                                             style={{
                                               color:
                                                 card.style.logo_color ||
-                                                "#ffffff",
+                                                "#00AFF0",
+                                              fontSize: `${card.style.brand_text_size || 18}px`,
+                                              fontFamily:
+                                                '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif',
                                             }}
                                           >
-                                            {card.style.prefix_text}
-                                          </p>
-                                        )}
-                                        <div className="flex items-center justify-center gap-2">
-                                          <img
-                                            src="/of-logo.svg"
-                                            alt="Creator icon"
-                                            className="h-5 w-auto"
-                                            loading="lazy"
-                                          />
-                                          <img
-                                            src="/of.webp"
-                                            alt="Creator link"
-                                            className="h-5 w-auto"
-                                            loading="lazy"
-                                          />
+                                            {card.style.prefix_text ||
+                                              card.title}
+                                          </span>
                                         </div>
-                                      </div>
+                                      ) : (
+                                        <div className="flex flex-col items-center gap-1">
+                                          {card.style.prefix_text && (
+                                            <p
+                                              className="text-base font-semibold"
+                                              style={{
+                                                color:
+                                                  card.style.logo_color ||
+                                                  "#ffffff",
+                                              }}
+                                            >
+                                              {card.style.prefix_text}
+                                            </p>
+                                          )}
+                                          <div className="flex items-center justify-center gap-2">
+                                            <img
+                                              src="/of-logo.svg"
+                                              alt="Creator icon"
+                                              className="h-5 w-auto"
+                                              loading="lazy"
+                                            />
+                                            <img
+                                              src="/of.webp"
+                                              alt="Creator link"
+                                              className="h-5 w-auto"
+                                              loading="lazy"
+                                            />
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
                                   )}
 

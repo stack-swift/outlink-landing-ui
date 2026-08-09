@@ -1759,12 +1759,15 @@ function LandingPageViewer({
                             sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "col-span-2";
                           }
-                          const imageBodyShapeClass = card.style.type === "image" ? "aspect-video !min-h-0" : "";
+                          const imageAspectRatio = size === "large" ? "16 / 9" : size === "standard" ? "2.35 / 1" : "16 / 9";
+                          const imageBodyShapeClass = card.style.type === "image" ? "!min-h-0" : "";
                           const imageBodyShapeStyle = card.style.type === "image" ? {
-                            aspectRatio: "16 / 9",
+                            aspectRatio: imageAspectRatio,
                             minHeight: 0
                           } : void 0;
-                          const isPremiumLogo = card.style.logo_icon === "of-local" || (card.style.logo_name || "").toLowerCase() === "icon";
+                          const isOnlyFansLogo = card.style.logo_icon === "of-local";
+                          const isOnlyFansTextIcon = isOnlyFansLogo && card.style.brand_layout === "icon_text";
+                          const isPremiumLogo = isOnlyFansLogo || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
                           const getCardStyle = () => {
@@ -1861,8 +1864,28 @@ function LandingPageViewer({
                                     }
                                   ) : null;
                                 })(),
+                                isOnlyFansTextIcon && /* @__PURE__ */ jsx10(
+                                  "img",
+                                  {
+                                    src: "/of-logo.svg",
+                                    alt: "Creator icon",
+                                    className: "absolute right-3 top-3 z-20 h-6 w-auto",
+                                    loading: "lazy"
+                                  }
+                                ),
                                 /* @__PURE__ */ jsxs8("div", { className: "text-center w-full relative z-10", children: [
-                                  isPremiumLogo && /* @__PURE__ */ jsx10("div", { className: "mb-2", children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col items-center gap-1", children: [
+                                  isPremiumLogo && /* @__PURE__ */ jsx10("div", { className: "mb-2", children: isOnlyFansTextIcon ? /* @__PURE__ */ jsx10("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ jsx10(
+                                    "span",
+                                    {
+                                      className: "font-bold leading-none",
+                                      style: {
+                                        color: card.style.logo_color || "#00AFF0",
+                                        fontSize: `${card.style.brand_text_size || 18}px`,
+                                        fontFamily: '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif'
+                                      },
+                                      children: card.style.prefix_text || card.title
+                                    }
+                                  ) }) : /* @__PURE__ */ jsxs8("div", { className: "flex flex-col items-center gap-1", children: [
                                     card.style.prefix_text && /* @__PURE__ */ jsx10(
                                       "p",
                                       {

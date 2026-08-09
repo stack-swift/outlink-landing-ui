@@ -17,6 +17,8 @@ export interface CTACardStyle {
   logo_name?: string | null;
   logo_color?: string | null;
   prefix_text?: string | null;
+  brand_layout?: "wordmark" | "icon_text" | null;
+  brand_text_size?: number | null;
   // Video framing (for type === "video")
   background_fit?: "fill" | "fit"; // fill = cover, fit = contain
   background_focus?: "top" | "center" | "bottom";
@@ -66,6 +68,8 @@ export type LayoutSectionKey =
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
+    brand_layout?: "wordmark" | "icon_text" | null;
+    brand_text_size?: number | null;
     // Video framing (for type === "video")
     background_fit?: "fill" | "fit";
     background_focus?: "top" | "center" | "bottom";
