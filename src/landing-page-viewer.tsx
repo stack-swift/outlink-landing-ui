@@ -35,10 +35,12 @@ function CTAUrgencyBadge({
   label,
   message,
   durationSeconds,
+  className = "",
 }: {
   label: string;
   message?: string | null;
   durationSeconds: number;
+  className?: string;
 }) {
   const safeDuration = Math.max(1, Math.floor(durationSeconds || 0));
   const [remaining, setRemaining] = useState(safeDuration);
@@ -67,7 +69,9 @@ function CTAUrgencyBadge({
       : fallbackText;
 
   return (
-    <div className="mt-2 inline-flex max-w-full items-center px-1 py-0.5 text-sm font-extrabold leading-none">
+    <div
+      className={`mt-2 inline-flex max-w-full items-center px-1 py-0.5 text-sm font-extrabold leading-none ${className}`}
+    >
       <span
         className="truncate text-[#5EC8D6]"
         style={{
@@ -1628,6 +1632,22 @@ useEffect(() => {
                               cardWithMechanisms
                             );
                           const urgencyBadge = card.style.countdown_badge;
+                          const urgencyPosition =
+                            urgencyBadge?.position || "below";
+                          const urgencyBadgeElement = urgencyBadge?.enabled ? (
+                            <CTAUrgencyBadge
+                              label={urgencyBadge.label}
+                              message={urgencyBadge.message}
+                              durationSeconds={
+                                urgencyBadge.duration_seconds
+                              }
+                              className={
+                                urgencyPosition === "inside_bottom"
+                                  ? "!mt-0"
+                                  : ""
+                              }
+                            />
+                          ) : null;
 
                           return (
                             <motion.div
@@ -1640,23 +1660,30 @@ useEffect(() => {
                               }}
                               className={`relative overflow-visible ${sizeColSpanClass}`}
                             >
+                              {urgencyBadgeElement &&
+                                urgencyPosition === "above" && (
+                                  <div className="mb-2 flex w-full justify-center">
+                                    {urgencyBadgeElement}
+                                  </div>
+                                )}
                               <div
                                 className="relative z-10 rounded-2xl transition-transform hover:scale-[1.02]"
                                 style={ctaEffectStyle}
                               >
                                 {finalContent}
+                                {urgencyBadgeElement &&
+                                  urgencyPosition === "inside_bottom" && (
+                                    <div className="pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center px-3">
+                                      {urgencyBadgeElement}
+                                    </div>
+                                  )}
                               </div>
-                              {urgencyBadge?.enabled && (
-                                <div className="flex w-full justify-center">
-                                  <CTAUrgencyBadge
-                                    label={urgencyBadge.label}
-                                    message={urgencyBadge.message}
-                                    durationSeconds={
-                                      urgencyBadge.duration_seconds
-                                    }
-                                  />
-                                </div>
-                              )}
+                              {urgencyBadgeElement &&
+                                urgencyPosition === "below" && (
+                                  <div className="flex w-full justify-center pb-4">
+                                    {urgencyBadgeElement}
+                                  </div>
+                                )}
                             </motion.div>
                           );
                         })}

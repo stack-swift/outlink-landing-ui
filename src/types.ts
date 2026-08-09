@@ -29,6 +29,7 @@ export interface CTACardStyle {
     label: string;
     message?: string | null;
     duration_seconds: number;
+    position?: "above" | "inside_bottom" | "below" | null;
   } | null;
 }
 
@@ -82,6 +83,7 @@ export type LayoutSectionKey =
       label: string;
       message?: string | null;
       duration_seconds: number;
+      position?: "above" | "inside_bottom" | "below" | null;
     } | null;
   }
 

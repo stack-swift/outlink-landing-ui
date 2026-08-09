@@ -791,7 +791,8 @@ import { Fragment as Fragment7, jsx as jsx10, jsxs as jsxs8 } from "react/jsx-ru
 function CTAUrgencyBadge({
   label,
   message,
-  durationSeconds
+  durationSeconds,
+  className = ""
 }) {
   const safeDuration = Math.max(1, Math.floor(durationSeconds || 0));
   const [remaining, setRemaining] = useState8(safeDuration);
@@ -810,16 +811,22 @@ function CTAUrgencyBadge({
   const time = `${hours > 0 ? `${hours}h ` : ""}${minutes}m ${String(seconds).padStart(2, "0")}s`;
   const fallbackText = `${label || "FREE"} ends in ${time}`;
   const text = message && message.trim().length > 0 ? message.replace(/\{time\}/gi, time).replace(/\{label\}/gi, label || "FREE") : fallbackText;
-  return /* @__PURE__ */ jsx10("div", { className: "mt-2 inline-flex max-w-full items-center px-1 py-0.5 text-sm font-extrabold leading-none", children: /* @__PURE__ */ jsx10(
-    "span",
+  return /* @__PURE__ */ jsx10(
+    "div",
     {
-      className: "truncate text-[#5EC8D6]",
-      style: {
-        textShadow: "0 1px 2px rgba(0,0,0,0.95), 0 0 10px rgba(94,200,214,0.55)"
-      },
-      children: text
+      className: `mt-2 inline-flex max-w-full items-center px-1 py-0.5 text-sm font-extrabold leading-none ${className}`,
+      children: /* @__PURE__ */ jsx10(
+        "span",
+        {
+          className: "truncate text-[#5EC8D6]",
+          style: {
+            textShadow: "0 1px 2px rgba(0,0,0,0.95), 0 0 10px rgba(94,200,214,0.55)"
+          },
+          children: text
+        }
+      )
     }
-  ) });
+  );
 }
 function isRedditFlow() {
   if (typeof window === "undefined") return false;
@@ -2054,6 +2061,16 @@ function LandingPageViewer({
                             }
                           ) : cardWithMechanisms;
                           const urgencyBadge = card.style.countdown_badge;
+                          const urgencyPosition = (urgencyBadge == null ? void 0 : urgencyBadge.position) || "below";
+                          const urgencyBadgeElement = (urgencyBadge == null ? void 0 : urgencyBadge.enabled) ? /* @__PURE__ */ jsx10(
+                            CTAUrgencyBadge,
+                            {
+                              label: urgencyBadge.label,
+                              message: urgencyBadge.message,
+                              durationSeconds: urgencyBadge.duration_seconds,
+                              className: urgencyPosition === "inside_bottom" ? "!mt-0" : ""
+                            }
+                          ) : null;
                           return /* @__PURE__ */ jsxs8(
                             motion10.div,
                             {
@@ -2065,22 +2082,19 @@ function LandingPageViewer({
                               },
                               className: `relative overflow-visible ${sizeColSpanClass}`,
                               children: [
-                                /* @__PURE__ */ jsx10(
+                                urgencyBadgeElement && urgencyPosition === "above" && /* @__PURE__ */ jsx10("div", { className: "mb-2 flex w-full justify-center", children: urgencyBadgeElement }),
+                                /* @__PURE__ */ jsxs8(
                                   "div",
                                   {
                                     className: "relative z-10 rounded-2xl transition-transform hover:scale-[1.02]",
                                     style: ctaEffectStyle,
-                                    children: finalContent
+                                    children: [
+                                      finalContent,
+                                      urgencyBadgeElement && urgencyPosition === "inside_bottom" && /* @__PURE__ */ jsx10("div", { className: "pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center px-3", children: urgencyBadgeElement })
+                                    ]
                                   }
                                 ),
-                                (urgencyBadge == null ? void 0 : urgencyBadge.enabled) && /* @__PURE__ */ jsx10("div", { className: "flex w-full justify-center", children: /* @__PURE__ */ jsx10(
-                                  CTAUrgencyBadge,
-                                  {
-                                    label: urgencyBadge.label,
-                                    message: urgencyBadge.message,
-                                    durationSeconds: urgencyBadge.duration_seconds
-                                  }
-                                ) })
+                                urgencyBadgeElement && urgencyPosition === "below" && /* @__PURE__ */ jsx10("div", { className: "flex w-full justify-center pb-4", children: urgencyBadgeElement })
                               ]
                             },
                             card.id

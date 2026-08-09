@@ -44,6 +44,7 @@ interface CTACardStyle {
         label: string;
         message?: string | null;
         duration_seconds: number;
+        position?: "above" | "inside_bottom" | "below" | null;
     } | null;
 }
 interface CTACardStyle {
@@ -72,6 +73,7 @@ interface CTACardStyle {
         label: string;
         message?: string | null;
         duration_seconds: number;
+        position?: "above" | "inside_bottom" | "below" | null;
     } | null;
 }
 type SectionSpacing = "tight" | "normal" | "relaxed";
