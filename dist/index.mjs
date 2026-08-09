@@ -1313,7 +1313,18 @@ function LandingPageViewer({
     ]
   );
   const heroHeightClass = (() => {
-    if (isVideoMode || isFullMode) return "h-[546px] md:h-[546px]";
+    if (isVideoMode) return "h-[546px] md:h-[546px]";
+    if (isFullMode) {
+      switch (settings.header_image_size || "large") {
+        case "small":
+          return "h-[390px] md:h-[390px]";
+        case "medium":
+          return "h-[468px] md:h-[468px]";
+        case "large":
+        default:
+          return "h-[546px] md:h-[546px]";
+      }
+    }
     return "h-[320px] md:h-[320px]";
   })();
   return /* @__PURE__ */ jsxs8(
@@ -1421,7 +1432,7 @@ function LandingPageViewer({
                       {
                         src: settings.avatar_url,
                         alt: settings.display_name || link.title || "Profile",
-                        className: "w-full h-full object-cover object-center md:object-contain"
+                        className: "w-full h-full object-cover object-center"
                       }
                     ) }),
                     /* @__PURE__ */ jsx10(

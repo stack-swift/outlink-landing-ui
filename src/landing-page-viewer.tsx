@@ -739,7 +739,18 @@ useEffect(() => {
 
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
-    if (isVideoMode || isFullMode) return "h-[546px] md:h-[546px]";
+    if (isVideoMode) return "h-[546px] md:h-[546px]";
+    if (isFullMode) {
+      switch (settings.header_image_size || "large") {
+        case "small":
+          return "h-[390px] md:h-[390px]";
+        case "medium":
+          return "h-[468px] md:h-[468px]";
+        case "large":
+        default:
+          return "h-[546px] md:h-[546px]";
+      }
+    }
     // Avatar / fallback – more compact
     return "h-[320px] md:h-[320px]";
   })();
@@ -857,7 +868,7 @@ useEffect(() => {
                       <img
                         src={settings.avatar_url}
                         alt={settings.display_name || link.title || "Profile"}
-                        className="w-full h-full object-cover object-center md:object-contain"
+                        className="w-full h-full object-cover object-center"
                       />
                     </div>
                     <div

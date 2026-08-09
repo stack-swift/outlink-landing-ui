@@ -95,6 +95,7 @@ export interface LandingPageSettings {
 
   // Header media
   avatar_url: string | null;
+  header_image_size?: "small" | "medium" | "large";
    /** Optional short header video clip (MP4/WebM) that can play in the hero area. */
    header_video_url?: string | null;
 
