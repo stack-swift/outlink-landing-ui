@@ -915,6 +915,20 @@ function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState8(0);
   const [lightboxUrl, setLightboxUrl] = useState8(null);
   const galleryTouchStartX = useRef2(null);
+  const viewerRootRef = useRef2(null);
+  const protectPublicContent = !isPreview;
+  const contentProtectionStyle = protectPublicContent ? {
+    paddingTop: "env(safe-area-inset-top)",
+    userSelect: "none",
+    WebkitUserSelect: "none",
+    WebkitTouchCallout: "none",
+    WebkitUserDrag: "none"
+  } : { paddingTop: "env(safe-area-inset-top)" };
+  const preventContentSave = (event) => {
+    if (!protectPublicContent) return;
+    event.preventDefault();
+    event.stopPropagation();
+  };
   const [enableMotionVideo, setEnableMotionVideo] = useState8(!isPreview);
   const [heroVideoReady, setHeroVideoReady] = useState8(false);
   const heroVideoRef = useRef2(null);
@@ -951,6 +965,25 @@ function LandingPageViewer({
     border: isLightMode ? "#e2e8f0" : "#27272a"
   };
   const brandAccent = "#5EC8D6";
+  useEffect5(() => {
+    if (!protectPublicContent) return;
+    const root = viewerRootRef.current;
+    if (!root) return;
+    const prevent = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+    root.addEventListener("contextmenu", prevent, { capture: true });
+    root.addEventListener("dragstart", prevent, { capture: true });
+    root.addEventListener("drop", prevent, { capture: true });
+    root.addEventListener("selectstart", prevent, { capture: true });
+    return () => {
+      root.removeEventListener("contextmenu", prevent, { capture: true });
+      root.removeEventListener("dragstart", prevent, { capture: true });
+      root.removeEventListener("drop", prevent, { capture: true });
+      root.removeEventListener("selectstart", prevent, { capture: true });
+    };
+  }, [protectPublicContent]);
   const getSocialIconColor = (social) => {
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
     if (value.includes("snapchat")) return "#FFFC00";
@@ -1339,14 +1372,30 @@ function LandingPageViewer({
   return /* @__PURE__ */ jsxs8(
     "div",
     {
+      ref: viewerRootRef,
+      "data-halevora-protected": protectPublicContent ? "true" : void 0,
+      onContextMenuCapture: preventContentSave,
+      onDragStartCapture: preventContentSave,
+      onDropCapture: preventContentSave,
       className: "min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden",
-      style: { paddingTop: "env(safe-area-inset-top)" },
+      style: contentProtectionStyle,
       children: [
         /* @__PURE__ */ jsx10("style", { children: `
           @keyframes halevoraCtaBounce {
             0%, 100% { transform: translateY(0) scale(1); }
             38% { transform: translateY(-7px) scale(1.026); }
             62% { transform: translateY(1px) scale(0.992); }
+          }
+          [data-halevora-protected="true"],
+          [data-halevora-protected="true"] * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+          }
+          [data-halevora-protected="true"] img,
+          [data-halevora-protected="true"] video {
+            -webkit-user-drag: none;
+            user-drag: none;
           }
         ` }),
         (isFullMode || isVideoMode) && heroPoster ? /* @__PURE__ */ jsxs8("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [

@@ -191,6 +191,22 @@ export function LandingPageViewer({
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const galleryTouchStartX = useRef<number | null>(null);
+  const viewerRootRef = useRef<HTMLDivElement | null>(null);
+  const protectPublicContent = !isPreview;
+  const contentProtectionStyle = protectPublicContent
+    ? ({
+        paddingTop: "env(safe-area-inset-top)",
+        userSelect: "none",
+        WebkitUserSelect: "none",
+        WebkitTouchCallout: "none",
+        WebkitUserDrag: "none",
+      } as React.CSSProperties & Record<string, string>)
+    : { paddingTop: "env(safe-area-inset-top)" };
+  const preventContentSave = (event: React.SyntheticEvent) => {
+    if (!protectPublicContent) return;
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   // Motion video gate: don't load MP4 until the user interacts (instant LCP from poster)
   const [enableMotionVideo, setEnableMotionVideo] = useState(!isPreview);
@@ -238,6 +254,30 @@ const heroPoster =
     border: isLightMode ? "#e2e8f0" : "#27272a",
   };
   const brandAccent = "#5EC8D6";
+
+  useEffect(() => {
+    if (!protectPublicContent) return;
+
+    const root = viewerRootRef.current;
+    if (!root) return;
+
+    const prevent = (event: Event) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
+    root.addEventListener("contextmenu", prevent, { capture: true });
+    root.addEventListener("dragstart", prevent, { capture: true });
+    root.addEventListener("drop", prevent, { capture: true });
+    root.addEventListener("selectstart", prevent, { capture: true });
+
+    return () => {
+      root.removeEventListener("contextmenu", prevent, { capture: true });
+      root.removeEventListener("dragstart", prevent, { capture: true });
+      root.removeEventListener("drop", prevent, { capture: true });
+      root.removeEventListener("selectstart", prevent, { capture: true });
+    };
+  }, [protectPublicContent]);
 
   const getSocialIconColor = (social: { icon?: string; platform?: string }) => {
     const value = `${social.platform || ""} ${social.icon || ""}`.toLowerCase();
@@ -762,8 +802,13 @@ useEffect(() => {
 
   return (
     <div
+      ref={viewerRootRef}
+      data-halevora-protected={protectPublicContent ? "true" : undefined}
+      onContextMenuCapture={preventContentSave}
+      onDragStartCapture={preventContentSave}
+      onDropCapture={preventContentSave}
       className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
+      style={contentProtectionStyle}
     >
       <style>
         {`
@@ -771,6 +816,17 @@ useEffect(() => {
             0%, 100% { transform: translateY(0) scale(1); }
             38% { transform: translateY(-7px) scale(1.026); }
             62% { transform: translateY(1px) scale(0.992); }
+          }
+          [data-halevora-protected="true"],
+          [data-halevora-protected="true"] * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+          }
+          [data-halevora-protected="true"] img,
+          [data-halevora-protected="true"] video {
+            -webkit-user-drag: none;
+            user-drag: none;
           }
         `}
       </style>
