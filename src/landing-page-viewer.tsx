@@ -1309,8 +1309,6 @@ useEffect(() => {
                           };
                           const glowEffect =
                             card.style.dashboard_glow_effect || "none";
-                          const isAgeConfirmationActive =
-                            showingAgeConfirmationFor === card.id;
                           const glowShadow =
                             glowEffect === "strong"
                               ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)"
@@ -1319,8 +1317,7 @@ useEffect(() => {
                                 : undefined;
                           const ctaEffectStyle: React.CSSProperties = {
                             borderRadius: "1rem",
-                            ...(card.style.dashboard_bounce_effect &&
-                            !isAgeConfirmationActive
+                            ...(card.style.dashboard_bounce_effect
                               ? {
                                   animation:
                                     "halevoraCtaBounce 1.15s ease-in-out infinite",
@@ -1692,7 +1689,7 @@ useEffect(() => {
                           );
 
                           const finalContent =
-                            isAgeConfirmationActive ? (
+                            showingAgeConfirmationFor === card.id ? (
                               <AgeConfirmationModal
                                 isOpen={true}
                                 onConfirm={() => {
@@ -1724,8 +1721,7 @@ useEffect(() => {
                           const urgencyBadge = card.style.countdown_badge;
                           const urgencyPosition =
                             urgencyBadge?.position || "below";
-                          const urgencyBadgeElement =
-                            urgencyBadge?.enabled && !isAgeConfirmationActive ? (
+                          const urgencyBadgeElement = urgencyBadge?.enabled ? (
                             <CTAUrgencyBadge
                               label={urgencyBadge.label}
                               message={urgencyBadge.message}
@@ -1758,14 +1754,10 @@ useEffect(() => {
                                   </div>
                                 )}
                               <div
-                                className={`relative z-10 rounded-2xl transition-transform ${
-                                  isAgeConfirmationActive
-                                    ? ""
-                                    : "hover:scale-[1.02]"
-                                }`}
+                                className="relative z-10 rounded-2xl transition-transform hover:scale-[1.02]"
                                 style={ctaEffectStyle}
                               >
-                                {glowShadow && !isAgeConfirmationActive && (
+                                {glowShadow && (
                                   <div
                                     aria-hidden="true"
                                     className="pointer-events-none absolute inset-0 rounded-2xl"

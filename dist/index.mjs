@@ -710,8 +710,13 @@ function AgeConfirmationModal({
     borderRadius: "1rem",
     clipPath: "inset(0 round 1rem)"
   };
-  const confirmButtonClass = "inline-flex h-9 min-w-[96px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
+  const confirmButtonClass = "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
   const glassVars = {
+    "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(94,200,214,0.9) 46%, rgba(79,182,196,0.72))",
+    "--btn-primary-hover-bg": "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(94,200,214,0.98) 46%, rgba(135,221,229,0.78))",
+    "--btn-primary-text": "#0A0A0C",
+    "--btn-primary-shadow": "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(16,80,88,0.22), 0 10px 24px rgba(94,200,214,0.24)",
+    "--btn-primary-glow": "0 0 28px rgba(94,200,214,0.28)",
     "--btn-secondary-bg": "linear-gradient(135deg, rgba(233,226,208,0.14), rgba(233,226,208,0.06) 48%, rgba(16,16,20,0.54))",
     "--btn-secondary-hover-bg": "linear-gradient(135deg, rgba(233,226,208,0.2), rgba(233,226,208,0.1) 48%, rgba(16,16,20,0.6))",
     "--btn-secondary-text": "#E9E2D0",
@@ -732,49 +737,52 @@ function AgeConfirmationModal({
     return /* @__PURE__ */ jsx9(Fragment6, { children });
   }
   return /* @__PURE__ */ jsxs7("div", { className: "relative overflow-hidden rounded-2xl", style: roundedClipStyle, children: [
-    /* @__PURE__ */ jsx9("div", { className: "pointer-events-none opacity-0", children }),
+    /* @__PURE__ */ jsx9("div", { className: "pointer-events-none opacity-30", children }),
     /* @__PURE__ */ jsx9(
       "div",
       {
-        className: "absolute inset-0 bg-gradient-to-t from-black/98 via-black/90 to-black/82 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl backdrop-blur-[2px]",
+        className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl",
         style: roundedClipStyle,
-        children: /* @__PURE__ */ jsx9(
+        children: /* @__PURE__ */ jsxs7(
           motion9.div,
           {
             initial: { y: 10, opacity: 0 },
             animate: { y: 0, opacity: 1 },
             className: "flex flex-col items-center text-center",
-            children: /* @__PURE__ */ jsxs7("div", { className: "flex justify-center gap-2.5", style: glassVars, children: [
-              confirmHref ? /* @__PURE__ */ jsx9(
-                "a",
-                {
-                  href: confirmHref,
-                  target: confirmTargetBlank ? "_blank" : void 0,
-                  rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
-                  onClick: confirmTargetBlank ? onConfirm : handleConfirm,
-                  className: confirmButtonClass,
-                  children: "I'm 18+"
-                }
-              ) : /* @__PURE__ */ jsx9(
-                "button",
-                {
-                  type: "button",
-                  className: confirmButtonClass,
-                  onClick: handleConfirm,
-                  children: "I'm 18+"
-                }
-              ),
-              /* @__PURE__ */ jsx9(
-                ButtonGlass,
-                {
-                  className: "h-9 min-w-[72px] border-0 px-4 text-sm font-bold",
-                  onClick: handleCancel,
-                  size: "sm",
-                  variant: "secondary",
-                  children: "Exit"
-                }
-              )
-            ] })
+            children: [
+              /* @__PURE__ */ jsx9("div", { children: /* @__PURE__ */ jsx9("p", { className: "text-center text-sm font-semibold text-white drop-shadow-md", children: "Adult Content (18+)" }) }),
+              /* @__PURE__ */ jsxs7("div", { className: "mt-2 flex justify-center gap-2.5", style: glassVars, children: [
+                confirmHref ? /* @__PURE__ */ jsx9(
+                  "a",
+                  {
+                    href: confirmHref,
+                    target: confirmTargetBlank ? "_blank" : void 0,
+                    rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
+                    onClick: confirmTargetBlank ? onConfirm : handleConfirm,
+                    className: confirmButtonClass,
+                    children: "I'm 18+"
+                  }
+                ) : /* @__PURE__ */ jsx9(
+                  "button",
+                  {
+                    type: "button",
+                    className: confirmButtonClass,
+                    onClick: handleConfirm,
+                    children: "I'm 18+"
+                  }
+                ),
+                /* @__PURE__ */ jsx9(
+                  ButtonGlass,
+                  {
+                    className: "h-9 min-w-[72px] border-0 px-4 text-sm font-bold",
+                    onClick: handleCancel,
+                    size: "sm",
+                    variant: "secondary",
+                    children: "Exit"
+                  }
+                )
+              ] })
+            ]
           }
         )
       }
@@ -1826,11 +1834,10 @@ function LandingPageViewer({
                             }
                           };
                           const glowEffect = card.style.dashboard_glow_effect || "none";
-                          const isAgeConfirmationActive = showingAgeConfirmationFor === card.id;
                           const glowShadow = glowEffect === "strong" ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)" : glowEffect === "soft" ? "0 0 0 1px rgba(255,255,255,0.72), 0 0 14px 5px rgba(255,255,255,0.68), 0 0 34px 12px rgba(255,255,255,0.34), 0 18px 40px rgba(0,0,0,0.56)" : void 0;
                           const ctaEffectStyle = {
                             borderRadius: "1rem",
-                            ...card.style.dashboard_bounce_effect && !isAgeConfirmationActive ? {
+                            ...card.style.dashboard_bounce_effect ? {
                               animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
                             } : {}
                           };
@@ -2103,7 +2110,7 @@ function LandingPageViewer({
                               children: baseCardContent
                             }
                           ) : baseCardContent;
-                          const finalContent = isAgeConfirmationActive ? /* @__PURE__ */ jsx10(
+                          const finalContent = showingAgeConfirmationFor === card.id ? /* @__PURE__ */ jsx10(
                             AgeConfirmationModal,
                             {
                               isOpen: true,
@@ -2130,7 +2137,7 @@ function LandingPageViewer({
                           ) : cardWithMechanisms;
                           const urgencyBadge = card.style.countdown_badge;
                           const urgencyPosition = (urgencyBadge == null ? void 0 : urgencyBadge.position) || "below";
-                          const urgencyBadgeElement = (urgencyBadge == null ? void 0 : urgencyBadge.enabled) && !isAgeConfirmationActive ? /* @__PURE__ */ jsx10(
+                          const urgencyBadgeElement = (urgencyBadge == null ? void 0 : urgencyBadge.enabled) ? /* @__PURE__ */ jsx10(
                             CTAUrgencyBadge,
                             {
                               label: urgencyBadge.label,
@@ -2154,10 +2161,10 @@ function LandingPageViewer({
                                 /* @__PURE__ */ jsxs8(
                                   "div",
                                   {
-                                    className: `relative z-10 rounded-2xl transition-transform ${isAgeConfirmationActive ? "" : "hover:scale-[1.02]"}`,
+                                    className: "relative z-10 rounded-2xl transition-transform hover:scale-[1.02]",
                                     style: ctaEffectStyle,
                                     children: [
-                                      glowShadow && !isAgeConfirmationActive && /* @__PURE__ */ jsx10(
+                                      glowShadow && /* @__PURE__ */ jsx10(
                                         "div",
                                         {
                                           "aria-hidden": "true",
