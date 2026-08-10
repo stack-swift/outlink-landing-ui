@@ -1839,12 +1839,13 @@ function LandingPageViewer({
                             }
                           };
                           const glowEffect = card.style.dashboard_glow_effect || "none";
-                          const glowShadow = glowEffect === "strong" ? "drop-shadow(0 0 7px rgba(255,255,255,0.95)) drop-shadow(0 0 18px rgba(255,255,255,0.76)) drop-shadow(0 18px 28px rgba(0,0,0,0.62))" : glowEffect === "soft" ? "drop-shadow(0 0 6px rgba(255,255,255,0.68)) drop-shadow(0 0 14px rgba(255,255,255,0.38)) drop-shadow(0 14px 22px rgba(0,0,0,0.48))" : void 0;
+                          const glowShadow = glowEffect === "strong" ? "drop-shadow(0 0 8px rgba(255,255,255,0.98)) drop-shadow(0 0 22px rgba(255,255,255,0.86)) drop-shadow(0 0 42px rgba(255,255,255,0.52)) drop-shadow(0 18px 28px rgba(0,0,0,0.62))" : glowEffect === "soft" ? "drop-shadow(0 0 7px rgba(255,255,255,0.78)) drop-shadow(0 0 18px rgba(255,255,255,0.48)) drop-shadow(0 14px 22px rgba(0,0,0,0.48))" : void 0;
                           const ctaEffectStyle = {
                             borderRadius: "1rem",
                             filter: glowShadow,
                             WebkitFilter: glowShadow,
-                            border: glowShadow ? "1px solid rgba(255,255,255,0.82)" : void 0,
+                            padding: glowShadow ? "1px" : void 0,
+                            background: glowShadow ? "rgba(255,255,255,0.78)" : void 0,
                             ...card.style.dashboard_bounce_effect ? {
                               animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
                             } : {}
