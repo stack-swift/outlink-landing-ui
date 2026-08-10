@@ -116,14 +116,19 @@ function wrapUrlForNavigation(
   url: string | null | undefined,
   isPreview: boolean | undefined,
 ): string {
-  if (!url) return "";
+  const normalizedUrl = String(url || "").trim();
+  if (!normalizedUrl) return "";
+  const safeUrl = /^go\//i.test(normalizedUrl)
+    ? `/${normalizedUrl}`
+    : normalizedUrl;
+
   if (!isPreview && isRedditFlow()) {
-    return `/reddit-escape?target=${encodeURIComponent(url)}`;
+    return `/reddit-escape?target=${encodeURIComponent(safeUrl)}`;
   }
   if (!isPreview && isTwitterFlow()) {
-    return toSafariHandoffUrl(url);
+    return toSafariHandoffUrl(safeUrl);
   }
-  return url;
+  return safeUrl;
 }
 
 const VISITOR_ID_KEY = "halevora_visitor_id";

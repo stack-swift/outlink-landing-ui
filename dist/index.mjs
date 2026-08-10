@@ -857,14 +857,16 @@ function toSafariHandoffUrl(url) {
   return absoluteUrl.startsWith("https://") ? `x-safari-${absoluteUrl}` : absoluteUrl;
 }
 function wrapUrlForNavigation(url, isPreview) {
-  if (!url) return "";
+  const normalizedUrl = String(url || "").trim();
+  if (!normalizedUrl) return "";
+  const safeUrl = /^go\//i.test(normalizedUrl) ? `/${normalizedUrl}` : normalizedUrl;
   if (!isPreview && isRedditFlow()) {
-    return `/reddit-escape?target=${encodeURIComponent(url)}`;
+    return `/reddit-escape?target=${encodeURIComponent(safeUrl)}`;
   }
   if (!isPreview && isTwitterFlow()) {
-    return toSafariHandoffUrl(url);
+    return toSafariHandoffUrl(safeUrl);
   }
-  return url;
+  return safeUrl;
 }
 var VISITOR_ID_KEY = "halevora_visitor_id";
 var SESSION_ID_KEY = "halevora_session_id";
