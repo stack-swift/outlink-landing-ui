@@ -776,11 +776,11 @@ function AgeConfirmationModal({
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children });
   }
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "relative overflow-hidden rounded-2xl", style: roundedClipStyle, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "pointer-events-none opacity-30", children }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "pointer-events-none opacity-20", children }),
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       "div",
       {
-        className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl",
+        className: "absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/75 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl",
         style: roundedClipStyle,
         children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
           import_framer_motion9.motion.div,
@@ -1878,6 +1878,9 @@ function LandingPageViewer({
                           const glowShadow = glowEffect === "strong" ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)" : glowEffect === "soft" ? "0 0 0 1px rgba(255,255,255,0.72), 0 0 14px 5px rgba(255,255,255,0.68), 0 0 34px 12px rgba(255,255,255,0.34), 0 18px 40px rgba(0,0,0,0.56)" : void 0;
                           const ctaEffectStyle = {
                             borderRadius: "1rem",
+                            boxShadow: glowShadow,
+                            padding: glowShadow ? "0.5px" : void 0,
+                            background: glowShadow ? "rgba(255,255,255,0.62)" : void 0,
                             ...card.style.dashboard_bounce_effect ? {
                               animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
                             } : {}
@@ -2205,18 +2208,7 @@ function LandingPageViewer({
                                     className: "relative z-10 rounded-2xl transition-transform hover:scale-[1.02]",
                                     style: ctaEffectStyle,
                                     children: [
-                                      glowShadow && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                        "div",
-                                        {
-                                          "aria-hidden": "true",
-                                          className: "pointer-events-none absolute inset-0 rounded-2xl",
-                                          style: {
-                                            borderRadius: "1rem",
-                                            boxShadow: glowShadow
-                                          }
-                                        }
-                                      ),
-                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative z-10 rounded-2xl", children: finalContent }),
+                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative z-10 rounded-2xl overflow-hidden", children: finalContent }),
                                       urgencyBadgeElement && urgencyPosition === "inside_bottom" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center px-3", children: urgencyBadgeElement })
                                     ]
                                   }

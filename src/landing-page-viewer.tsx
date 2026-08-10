@@ -1321,6 +1321,11 @@ useEffect(() => {
                                 : undefined;
                           const ctaEffectStyle: React.CSSProperties = {
                             borderRadius: "1rem",
+                            boxShadow: glowShadow,
+                            padding: glowShadow ? "0.5px" : undefined,
+                            background: glowShadow
+                              ? "rgba(255,255,255,0.62)"
+                              : undefined,
                             ...(card.style.dashboard_bounce_effect
                               ? {
                                   animation:
@@ -1761,17 +1766,7 @@ useEffect(() => {
                                 className="relative z-10 rounded-2xl transition-transform hover:scale-[1.02]"
                                 style={ctaEffectStyle}
                               >
-                                {glowShadow && (
-                                  <div
-                                    aria-hidden="true"
-                                    className="pointer-events-none absolute inset-0 rounded-2xl"
-                                    style={{
-                                      borderRadius: "1rem",
-                                      boxShadow: glowShadow,
-                                    }}
-                                  />
-                                )}
-                                <div className="relative z-10 rounded-2xl">
+                                <div className="relative z-10 rounded-2xl overflow-hidden">
                                   {finalContent}
                                 </div>
                                 {urgencyBadgeElement &&

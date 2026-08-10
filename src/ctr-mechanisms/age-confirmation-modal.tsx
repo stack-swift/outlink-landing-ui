@@ -67,13 +67,13 @@ export function AgeConfirmationModal({
   return (
     <div className="relative overflow-hidden rounded-2xl" style={roundedClipStyle}>
       {/* Blurred background */}
-      <div className="pointer-events-none opacity-30">
+      <div className="pointer-events-none opacity-20">
         {children}
       </div>
       
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl"
+        className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-black/75 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl"
         style={roundedClipStyle}
       >
         <motion.div
