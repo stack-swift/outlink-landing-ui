@@ -776,11 +776,11 @@ function AgeConfirmationModal({
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children });
   }
   return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "relative overflow-hidden rounded-2xl", style: roundedClipStyle, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "pointer-events-none opacity-15", children }),
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "pointer-events-none opacity-20 blur-[1px]", children }),
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
       "div",
       {
-        className: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/86 to-black/76 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl",
+        className: "absolute inset-0 bg-gradient-to-t from-black/98 via-black/90 to-black/82 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl backdrop-blur-[2px]",
         style: roundedClipStyle,
         children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
           import_framer_motion9.motion.div,
@@ -1880,13 +1880,16 @@ function LandingPageViewer({
                             }
                           };
                           const glowEffect = card.style.dashboard_glow_effect || "none";
-                          const glowFilter = glowEffect === "strong" ? "drop-shadow(0 0 2px rgba(255,255,255,0.95)) drop-shadow(0 0 12px rgba(255,255,255,0.92)) drop-shadow(0 0 28px rgba(255,255,255,0.58)) drop-shadow(0 18px 28px rgba(0,0,0,0.62))" : glowEffect === "soft" ? "drop-shadow(0 0 2px rgba(255,255,255,0.72)) drop-shadow(0 0 10px rgba(255,255,255,0.62)) drop-shadow(0 0 20px rgba(255,255,255,0.32)) drop-shadow(0 14px 22px rgba(0,0,0,0.5))" : void 0;
+                          const glowShadow = glowEffect === "strong" ? "0 0 0 1.5px rgba(255,255,255,0.92), 0 0 16px 6px rgba(255,255,255,0.82), 0 0 42px 14px rgba(255,255,255,0.48), 0 18px 28px rgba(0,0,0,0.62)" : glowEffect === "soft" ? "0 0 0 1px rgba(255,255,255,0.68), 0 0 12px 4px rgba(255,255,255,0.56), 0 0 28px 10px rgba(255,255,255,0.26), 0 14px 22px rgba(0,0,0,0.5)" : void 0;
                           const ctaEffectStyle = {
                             borderRadius: "1rem",
-                            ...glowFilter ? { filter: glowFilter } : {},
                             ...card.style.dashboard_bounce_effect ? {
                               animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
                             } : {}
+                          };
+                          const ctaGlowLayerStyle = {
+                            borderRadius: "1rem",
+                            ...glowShadow ? { boxShadow: glowShadow } : {}
                           };
                           const ctaRoundedClipStyle = {
                             borderRadius: "1rem",
@@ -2210,7 +2213,15 @@ function LandingPageViewer({
                                     className: "relative z-10 rounded-2xl transition-transform hover:scale-[1.02]",
                                     style: ctaEffectStyle,
                                     children: [
-                                      finalContent,
+                                      glowShadow && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                        "div",
+                                        {
+                                          "aria-hidden": "true",
+                                          className: "pointer-events-none absolute inset-0 rounded-2xl",
+                                          style: ctaGlowLayerStyle
+                                        }
+                                      ),
+                                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "relative z-10 rounded-2xl", children: finalContent }),
                                       urgencyBadgeElement && urgencyPosition === "inside_bottom" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center px-3", children: urgencyBadgeElement })
                                     ]
                                   }
