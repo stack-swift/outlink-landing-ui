@@ -1316,6 +1316,7 @@ useEffect(() => {
                                 ? "0 0 0 1px rgba(255,255,255,0.72), 0 0 14px 5px rgba(255,255,255,0.68), 0 0 34px 12px rgba(255,255,255,0.34), 0 18px 40px rgba(0,0,0,0.56)"
                                 : undefined;
                           const ctaEffectStyle: React.CSSProperties = {
+                            borderRadius: "1rem",
                             ...(glowShadow ? { boxShadow: glowShadow } : {}),
                             ...(card.style.dashboard_bounce_effect
                               ? {
