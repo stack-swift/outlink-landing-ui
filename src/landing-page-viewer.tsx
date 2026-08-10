@@ -1208,7 +1208,7 @@ useEffect(() => {
                   style={{ order: getSectionOrder("cta_block") }}
                 >
                   {settings.cta_cards && settings.cta_cards.length > 0 ? (
-                    <div className="w-full grid grid-cols-2 gap-3">
+                    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {settings.cta_cards
                         .sort((a, b) => a.order - b.order)
                         .map((card, index) => {
@@ -1220,20 +1220,20 @@ useEffect(() => {
                           let sizeColSpanClass = "";
 
                           if (size === "small") {
-                            sizeBodyClasses = "p-4 min-h-[110px]";
-                            sizeTitleClass = "text-base";
-                            sizeDescriptionClass = "text-xs";
+                            sizeBodyClasses = "p-5 min-h-[120px]";
+                            sizeTitleClass = "text-lg";
+                            sizeDescriptionClass = "text-sm";
                             sizeColSpanClass = "";
                           } else if (size === "standard") {
-                            sizeBodyClasses = "p-5 min-h-[150px]";
+                            sizeBodyClasses = "p-6 min-h-[120px]";
                             sizeTitleClass = "text-lg";
                             sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "col-span-2";
+                            sizeColSpanClass = "sm:col-span-2";
                           } else if (size === "large") {
-                            sizeBodyClasses = "p-6 min-h-[260px]";
+                            sizeBodyClasses = "p-6 min-h-[200px]";
                             sizeTitleClass = "text-lg";
                             sizeDescriptionClass = "text-sm";
-                            sizeColSpanClass = "col-span-2";
+                            sizeColSpanClass = "sm:col-span-2";
                           }
                           const imageAspectRatio =
                             size === "large"
@@ -1337,6 +1337,9 @@ useEffect(() => {
                             borderRadius: "1rem",
                             clipPath: "inset(0 round 1rem)",
                           };
+                          const ctaRoundedLayerStyle: React.CSSProperties = {
+                            borderRadius: "1rem",
+                          };
 
                           const handleCardClick = () => {
                             if (card.require_18plus) {
@@ -1390,13 +1393,13 @@ useEffect(() => {
                                         src={card.style.background_image}
                                         alt=""
                                         className="absolute inset-0 h-full w-full object-cover object-center"
-                                        style={ctaRoundedClipStyle}
+                                        style={ctaRoundedLayerStyle}
                                         loading="lazy"
                                         decoding="async"
                                       />
                                       <div
                                         className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60"
-                                        style={ctaRoundedClipStyle}
+                                        style={ctaRoundedLayerStyle}
                                       />
                                     </>
                                   )}
@@ -1437,14 +1440,14 @@ useEffect(() => {
                                       muted
                                       playsInline
                                       className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                      style={ctaRoundedClipStyle}
+                                      style={ctaRoundedLayerStyle}
                                     />
                                   ) : card.style.background_video_poster_url ? (
                                     <img
                                       src={card.style.background_video_poster_url}
                                       alt=""
                                       className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                      style={ctaRoundedClipStyle}
+                                      style={ctaRoundedLayerStyle}
                                       loading="lazy"
                                       decoding="async"
                                     />
