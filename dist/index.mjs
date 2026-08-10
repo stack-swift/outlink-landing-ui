@@ -706,6 +706,10 @@ function AgeConfirmationModal({
   confirmTargetBlank = false,
   children
 }) {
+  const roundedClipStyle = {
+    borderRadius: "1rem",
+    clipPath: "inset(0 round 1rem)"
+  };
   const confirmButtonClass = "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
   const glassVars = {
     "--btn-primary-bg": "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(94,200,214,0.9) 46%, rgba(79,182,196,0.72))",
@@ -732,57 +736,64 @@ function AgeConfirmationModal({
   if (!isOpen) {
     return /* @__PURE__ */ jsx9(Fragment6, { children });
   }
-  return /* @__PURE__ */ jsxs7("div", { className: "relative overflow-hidden rounded-2xl", children: [
-    /* @__PURE__ */ jsx9("div", { className: "pointer-events-none opacity-30", children }),
-    /* @__PURE__ */ jsx9("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl", children: /* @__PURE__ */ jsxs7(
-      motion9.div,
+  return /* @__PURE__ */ jsxs7("div", { className: "relative overflow-hidden rounded-2xl", style: roundedClipStyle, children: [
+    /* @__PURE__ */ jsx9("div", { className: "pointer-events-none opacity-15", children }),
+    /* @__PURE__ */ jsx9(
+      "div",
       {
-        initial: { y: 10, opacity: 0 },
-        animate: { y: 0, opacity: 1 },
-        className: "flex flex-col items-center text-center",
-        children: [
-          /* @__PURE__ */ jsx9("div", { children: /* @__PURE__ */ jsx9("p", { className: "text-center text-sm font-semibold text-white drop-shadow-md", children: "Adult Content (18+)" }) }),
-          /* @__PURE__ */ jsxs7(
-            "div",
-            {
-              className: "mt-2 flex justify-center gap-2.5",
-              style: glassVars,
-              children: [
-                confirmHref ? /* @__PURE__ */ jsx9(
-                  "a",
-                  {
-                    href: confirmHref,
-                    target: confirmTargetBlank ? "_blank" : void 0,
-                    rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
-                    onClick: confirmTargetBlank ? onConfirm : handleConfirm,
-                    className: confirmButtonClass,
-                    children: "I'm 18+"
-                  }
-                ) : /* @__PURE__ */ jsx9(
-                  "button",
-                  {
-                    type: "button",
-                    className: confirmButtonClass,
-                    onClick: handleConfirm,
-                    children: "I'm 18+"
-                  }
-                ),
-                /* @__PURE__ */ jsx9(
-                  ButtonGlass,
-                  {
-                    className: "h-9 min-w-[72px] border-0 px-4 text-sm font-bold",
-                    onClick: handleCancel,
-                    size: "sm",
-                    variant: "secondary",
-                    children: "Exit"
-                  }
-                )
-              ]
-            }
-          )
-        ]
+        className: "absolute inset-0 bg-gradient-to-t from-black/95 via-black/86 to-black/76 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl",
+        style: roundedClipStyle,
+        children: /* @__PURE__ */ jsxs7(
+          motion9.div,
+          {
+            initial: { y: 10, opacity: 0 },
+            animate: { y: 0, opacity: 1 },
+            className: "flex flex-col items-center text-center",
+            children: [
+              /* @__PURE__ */ jsx9("div", { children: /* @__PURE__ */ jsx9("p", { className: "text-center text-sm font-semibold text-white drop-shadow-md", children: "Adult Content (18+)" }) }),
+              /* @__PURE__ */ jsxs7(
+                "div",
+                {
+                  className: "mt-2 flex justify-center gap-2.5",
+                  style: glassVars,
+                  children: [
+                    confirmHref ? /* @__PURE__ */ jsx9(
+                      "a",
+                      {
+                        href: confirmHref,
+                        target: confirmTargetBlank ? "_blank" : void 0,
+                        rel: confirmTargetBlank ? "noopener noreferrer" : void 0,
+                        onClick: confirmTargetBlank ? onConfirm : handleConfirm,
+                        className: confirmButtonClass,
+                        children: "I'm 18+"
+                      }
+                    ) : /* @__PURE__ */ jsx9(
+                      "button",
+                      {
+                        type: "button",
+                        className: confirmButtonClass,
+                        onClick: handleConfirm,
+                        children: "I'm 18+"
+                      }
+                    ),
+                    /* @__PURE__ */ jsx9(
+                      ButtonGlass,
+                      {
+                        className: "h-9 min-w-[72px] border-0 px-4 text-sm font-bold",
+                        onClick: handleCancel,
+                        size: "sm",
+                        variant: "secondary",
+                        children: "Exit"
+                      }
+                    )
+                  ]
+                }
+              )
+            ]
+          }
+        )
       }
-    ) })
+    )
   ] });
 }
 
@@ -1838,6 +1849,10 @@ function LandingPageViewer({
                               animation: "halevoraCtaBounce 1.15s ease-in-out infinite"
                             } : {}
                           };
+                          const ctaRoundedClipStyle = {
+                            borderRadius: "1rem",
+                            clipPath: "inset(0 round 1rem)"
+                          };
                           const handleCardClick = () => {
                             if (isPreview) return;
                             if (card.require_18plus) {
@@ -1862,7 +1877,10 @@ function LandingPageViewer({
                             "div",
                             {
                               className: `${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden rounded-2xl`,
-                              style: imageBodyShapeStyle,
+                              style: {
+                                ...imageBodyShapeStyle,
+                                ...ctaRoundedClipStyle
+                              },
                               children: [
                                 card.style.type === "image" && card.style.background_image && /* @__PURE__ */ jsxs8(Fragment7, { children: [
                                   /* @__PURE__ */ jsx10(
@@ -1871,11 +1889,18 @@ function LandingPageViewer({
                                       src: card.style.background_image,
                                       alt: "",
                                       className: "absolute inset-0 h-full w-full object-cover object-center",
+                                      style: ctaRoundedClipStyle,
                                       loading: "lazy",
                                       decoding: "async"
                                     }
                                   ),
-                                  /* @__PURE__ */ jsx10("div", { className: "absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" })
+                                  /* @__PURE__ */ jsx10(
+                                    "div",
+                                    {
+                                      className: "absolute inset-0 bg-gradient-to-b from-black/30 to-black/60",
+                                      style: ctaRoundedClipStyle
+                                    }
+                                  )
                                 ] }),
                                 card.style.type === "video" && card.style.background_video && (() => {
                                   const fit = card.style.background_fit || "fill";
@@ -1901,7 +1926,8 @@ function LandingPageViewer({
                                       loop: true,
                                       muted: true,
                                       playsInline: true,
-                                      className: `${baseClasses} ${fitClass} ${focusClass}`
+                                      className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                      style: ctaRoundedClipStyle
                                     }
                                   ) : card.style.background_video_poster_url ? /* @__PURE__ */ jsx10(
                                     "img",
@@ -1909,6 +1935,7 @@ function LandingPageViewer({
                                       src: card.style.background_video_poster_url,
                                       alt: "",
                                       className: `${baseClasses} ${fitClass} ${focusClass}`,
+                                      style: ctaRoundedClipStyle,
                                       loading: "lazy",
                                       decoding: "async"
                                     }
@@ -2059,7 +2086,10 @@ function LandingPageViewer({
                               isPressable: true,
                               onPress: handleCardClick,
                               className: "w-full rounded-2xl shadow-lg relative overflow-hidden",
-                              style: getCardStyle(),
+                              style: {
+                                ...getCardStyle(),
+                                ...ctaRoundedClipStyle
+                              },
                               children: /* @__PURE__ */ jsx10(CardBody, { className: "overflow-hidden rounded-2xl p-0", children: renderCardBodyContent() })
                             }
                           );
@@ -2071,7 +2101,10 @@ function LandingPageViewer({
                               rel: cardLinkProps.rel,
                               onClick: cardLinkProps.onClick,
                               className: "block w-full rounded-2xl shadow-lg overflow-hidden",
-                              style: getCardStyle(),
+                              style: {
+                                ...getCardStyle(),
+                                ...ctaRoundedClipStyle
+                              },
                               children: renderCardBodyContent()
                             }
                           ) : renderCardContent();

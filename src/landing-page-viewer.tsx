@@ -1325,6 +1325,10 @@ useEffect(() => {
                                 }
                               : {}),
                           };
+                          const ctaRoundedClipStyle: React.CSSProperties = {
+                            borderRadius: "1rem",
+                            clipPath: "inset(0 round 1rem)",
+                          };
 
                           const handleCardClick = () => {
                             if (isPreview) return;
@@ -1365,7 +1369,10 @@ useEffect(() => {
                           const renderCardBodyContent = () => (
                             <div
                               className={`${sizeBodyClasses} ${imageBodyShapeClass} flex items-center justify-center relative overflow-hidden rounded-2xl`}
-                              style={imageBodyShapeStyle}
+                              style={{
+                                ...imageBodyShapeStyle,
+                                ...ctaRoundedClipStyle,
+                              }}
                             >
                                 {card.style.type === "image" &&
                                   card.style.background_image && (
@@ -1374,10 +1381,14 @@ useEffect(() => {
                                         src={card.style.background_image}
                                         alt=""
                                         className="absolute inset-0 h-full w-full object-cover object-center"
+                                        style={ctaRoundedClipStyle}
                                         loading="lazy"
                                         decoding="async"
                                       />
-                                      <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+                                      <div
+                                        className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60"
+                                        style={ctaRoundedClipStyle}
+                                      />
                                     </>
                                   )}
 
@@ -1417,12 +1428,14 @@ useEffect(() => {
                                       muted
                                       playsInline
                                       className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                      style={ctaRoundedClipStyle}
                                     />
                                   ) : card.style.background_video_poster_url ? (
                                     <img
                                       src={card.style.background_video_poster_url}
                                       alt=""
                                       className={`${baseClasses} ${fitClass} ${focusClass}`}
+                                      style={ctaRoundedClipStyle}
                                       loading="lazy"
                                       decoding="async"
                                     />
@@ -1633,7 +1646,10 @@ useEffect(() => {
                               isPressable
                               onPress={handleCardClick}
                               className="w-full rounded-2xl shadow-lg relative overflow-hidden"
-                              style={getCardStyle()}
+                              style={{
+                                ...getCardStyle(),
+                                ...ctaRoundedClipStyle,
+                              }}
                             >
                               <CardBody className="overflow-hidden rounded-2xl p-0">
                                 {renderCardBodyContent()}
@@ -1648,7 +1664,10 @@ useEffect(() => {
                               rel={cardLinkProps.rel}
                               onClick={cardLinkProps.onClick}
                               className="block w-full rounded-2xl shadow-lg overflow-hidden"
-                              style={getCardStyle()}
+                              style={{
+                                ...getCardStyle(),
+                                ...ctaRoundedClipStyle,
+                              }}
                             >
                               {renderCardBodyContent()}
                             </a>

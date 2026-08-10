@@ -22,6 +22,10 @@ export function AgeConfirmationModal({
   confirmTargetBlank = false,
   children,
 }: AgeConfirmationModalProps) {
+  const roundedClipStyle: React.CSSProperties = {
+    borderRadius: "1rem",
+    clipPath: "inset(0 round 1rem)",
+  };
   const confirmButtonClass =
     "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
 
@@ -61,14 +65,17 @@ export function AgeConfirmationModal({
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl">
+    <div className="relative overflow-hidden rounded-2xl" style={roundedClipStyle}>
       {/* Blurred background */}
-      <div className="pointer-events-none opacity-30">
+      <div className="pointer-events-none opacity-15">
         {children}
       </div>
       
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl">
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/86 to-black/76 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl"
+        style={roundedClipStyle}
+      >
         <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
