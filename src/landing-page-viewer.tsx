@@ -1491,9 +1491,7 @@ useEffect(() => {
                                             <span
                                               className="font-bold leading-none"
                                               style={{
-                                                color:
-                                                  card.style.logo_color ||
-                                                  "#00AFF0",
+                                                color: "#ffffff",
                                                 fontSize: `${card.style.brand_text_size || 18}px`,
                                                 fontFamily:
                                                   '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif',
@@ -1514,9 +1512,7 @@ useEffect(() => {
                                           <span
                                             className="font-bold leading-none"
                                             style={{
-                                              color:
-                                                card.style.logo_color ||
-                                                "#00AFF0",
+                                              color: "#ffffff",
                                               fontSize: `${card.style.brand_text_size || 18}px`,
                                               fontFamily:
                                                 '"Gardenia ExtraBold", ui-sans-serif, system-ui, sans-serif',
