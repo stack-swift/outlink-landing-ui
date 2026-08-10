@@ -1310,8 +1310,7 @@ useEffect(() => {
                           const glowEffect =
                             card.style.dashboard_glow_effect || "none";
                           const isAgeConfirmationActive =
-                            showingAgeConfirmationFor === card.id &&
-                            !isPreview;
+                            showingAgeConfirmationFor === card.id;
                           const glowShadow =
                             glowEffect === "strong"
                               ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)"
@@ -1334,12 +1333,12 @@ useEffect(() => {
                           };
 
                           const handleCardClick = () => {
-                            if (isPreview) return;
-
                             if (card.require_18plus) {
                               setShowingAgeConfirmationFor(card.id);
                               return;
                             }
+
+                            if (isPreview) return;
 
                             trackClick(link.id, isPreview);
                             navigateToUrl(card.url, { fromUserGesture: true });
@@ -1347,6 +1346,7 @@ useEffect(() => {
 
                           const handleAgeConfirm = () => {
                             setShowingAgeConfirmationFor(null);
+                            if (isPreview) return;
                             trackClick(link.id, isPreview);
                             navigateToUrl(card.url, { fromUserGesture: true });
                           };
