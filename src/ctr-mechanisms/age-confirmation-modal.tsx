@@ -27,17 +27,9 @@ export function AgeConfirmationModal({
     clipPath: "inset(0 round 1rem)",
   };
   const confirmButtonClass =
-    "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
+    "inline-flex h-9 min-w-[96px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
 
   const glassVars = {
-    "--btn-primary-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(94,200,214,0.9) 46%, rgba(79,182,196,0.72))",
-    "--btn-primary-hover-bg":
-      "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(94,200,214,0.98) 46%, rgba(135,221,229,0.78))",
-    "--btn-primary-text": "#0A0A0C",
-    "--btn-primary-shadow":
-      "inset 0 1px 0 rgba(255,255,255,0.46), inset 0 -1px 0 rgba(16,80,88,0.22), 0 10px 24px rgba(94,200,214,0.24)",
-    "--btn-primary-glow": "0 0 28px rgba(94,200,214,0.28)",
     "--btn-secondary-bg":
       "linear-gradient(135deg, rgba(233,226,208,0.14), rgba(233,226,208,0.06) 48%, rgba(16,16,20,0.54))",
     "--btn-secondary-hover-bg":
@@ -67,7 +59,7 @@ export function AgeConfirmationModal({
   return (
     <div className="relative overflow-hidden rounded-2xl" style={roundedClipStyle}>
       {/* Blurred background */}
-      <div className="pointer-events-none opacity-20 blur-[1px]">
+      <div className="pointer-events-none opacity-0">
         {children}
       </div>
       
@@ -81,15 +73,7 @@ export function AgeConfirmationModal({
           animate={{ y: 0, opacity: 1 }}
           className="flex flex-col items-center text-center"
         >
-          <div>
-            <p className="text-center text-sm font-semibold text-white drop-shadow-md">
-              Adult Content (18+)
-            </p>
-          </div>
-          <div
-            className="mt-2 flex justify-center gap-2.5"
-            style={glassVars}
-          >
+          <div className="flex justify-center gap-2.5" style={glassVars}>
             {confirmHref ? (
               <a
                 href={confirmHref}

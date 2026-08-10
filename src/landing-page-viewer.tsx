@@ -1309,16 +1309,19 @@ useEffect(() => {
                           };
                           const glowEffect =
                             card.style.dashboard_glow_effect || "none";
-                          const hasGlow = glowEffect !== "none";
-                          const glowOpacity =
-                            glowEffect === "strong" ? 0.92 : 0.62;
-                          const glowBlur =
-                            glowEffect === "strong" ? 14 : 9;
-                          const glowSpread =
-                            glowEffect === "strong" ? -6 : -4;
+                          const isAgeConfirmationActive =
+                            showingAgeConfirmationFor === card.id &&
+                            !isPreview;
+                          const glowShadow =
+                            glowEffect === "strong"
+                              ? "0 0 0 2px rgba(255,255,255,0.95), 0 0 18px 7px rgba(255,255,255,0.95), 0 0 52px 20px rgba(255,255,255,0.62), 0 22px 54px rgba(0,0,0,0.72)"
+                              : glowEffect === "soft"
+                                ? "0 0 0 1px rgba(255,255,255,0.72), 0 0 14px 5px rgba(255,255,255,0.68), 0 0 34px 12px rgba(255,255,255,0.34), 0 18px 40px rgba(0,0,0,0.56)"
+                                : undefined;
                           const ctaEffectStyle: React.CSSProperties = {
                             borderRadius: "1rem",
-                            ...(card.style.dashboard_bounce_effect
+                            ...(card.style.dashboard_bounce_effect &&
+                            !isAgeConfirmationActive
                               ? {
                                   animation:
                                     "halevoraCtaBounce 1.15s ease-in-out infinite",
@@ -1689,8 +1692,7 @@ useEffect(() => {
                           );
 
                           const finalContent =
-                            showingAgeConfirmationFor === card.id &&
-                            !isPreview ? (
+                            isAgeConfirmationActive ? (
                               <AgeConfirmationModal
                                 isOpen={true}
                                 onConfirm={() => {
@@ -1722,7 +1724,8 @@ useEffect(() => {
                           const urgencyBadge = card.style.countdown_badge;
                           const urgencyPosition =
                             urgencyBadge?.position || "below";
-                          const urgencyBadgeElement = urgencyBadge?.enabled ? (
+                          const urgencyBadgeElement =
+                            urgencyBadge?.enabled && !isAgeConfirmationActive ? (
                             <CTAUrgencyBadge
                               label={urgencyBadge.label}
                               message={urgencyBadge.message}
@@ -1755,72 +1758,22 @@ useEffect(() => {
                                   </div>
                                 )}
                               <div
-                                className="relative z-10 rounded-2xl transition-transform hover:scale-[1.02]"
+                                className={`relative z-10 rounded-2xl transition-transform ${
+                                  isAgeConfirmationActive
+                                    ? ""
+                                    : "hover:scale-[1.02]"
+                                }`}
                                 style={ctaEffectStyle}
                               >
-                                {hasGlow && (
-                                  <svg
+                                {glowShadow && !isAgeConfirmationActive && (
+                                  <div
                                     aria-hidden="true"
-                                    className="pointer-events-none absolute -inset-8 h-[calc(100%+4rem)] w-[calc(100%+4rem)] overflow-visible"
-                                    preserveAspectRatio="none"
-                                  >
-                                    <defs>
-                                      <filter
-                                        id={`halevora-cta-glow-${card.id}`}
-                                        x="-35%"
-                                        y="-80%"
-                                        width="170%"
-                                        height="260%"
-                                        colorInterpolationFilters="sRGB"
-                                      >
-                                        <feGaussianBlur
-                                          stdDeviation={glowBlur}
-                                          result="glow"
-                                        />
-                                        <feMerge>
-                                          <feMergeNode in="glow" />
-                                          <feMergeNode in="SourceGraphic" />
-                                        </feMerge>
-                                      </filter>
-                                    </defs>
-                                    <rect
-                                      x="32"
-                                      y="32"
-                                      width="calc(100% - 64px)"
-                                      height="calc(100% - 64px)"
-                                      rx="16"
-                                      ry="16"
-                                      fill="none"
-                                      stroke={`rgba(255,255,255,${glowOpacity})`}
-                                      strokeWidth="1.4"
-                                      filter={`url(#halevora-cta-glow-${card.id})`}
-                                    />
-                                    <rect
-                                      x="32"
-                                      y="32"
-                                      width="calc(100% - 64px)"
-                                      height="calc(100% - 64px)"
-                                      rx="16"
-                                      ry="16"
-                                      fill="none"
-                                      stroke="rgba(255,255,255,0.88)"
-                                      strokeWidth="0.38"
-                                      vectorEffect="non-scaling-stroke"
-                                    />
-                                    <rect
-                                      x="32"
-                                      y="32"
-                                      width="calc(100% - 64px)"
-                                      height="calc(100% - 64px)"
-                                      rx="16"
-                                      ry="16"
-                                      fill="none"
-                                      stroke="rgba(0,0,0,0.52)"
-                                      strokeWidth="1"
-                                      transform={`translate(0 ${Math.abs(glowSpread)})`}
-                                      filter={`url(#halevora-cta-glow-${card.id})`}
-                                    />
-                                  </svg>
+                                    className="pointer-events-none absolute inset-0 rounded-2xl"
+                                    style={{
+                                      borderRadius: "1rem",
+                                      boxShadow: glowShadow,
+                                    }}
+                                  />
                                 )}
                                 <div className="relative z-10 rounded-2xl">
                                   {finalContent}
