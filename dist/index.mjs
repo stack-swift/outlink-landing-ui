@@ -732,9 +732,9 @@ function AgeConfirmationModal({
   if (!isOpen) {
     return /* @__PURE__ */ jsx9(Fragment6, { children });
   }
-  return /* @__PURE__ */ jsxs7("div", { className: "relative overflow-hidden rounded-xl", children: [
+  return /* @__PURE__ */ jsxs7("div", { className: "relative overflow-hidden rounded-2xl", children: [
     /* @__PURE__ */ jsx9("div", { className: "pointer-events-none opacity-30", children }),
-    /* @__PURE__ */ jsx9("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ jsxs7(
+    /* @__PURE__ */ jsx9("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl", children: /* @__PURE__ */ jsxs7(
       motion9.div,
       {
         initial: { y: 10, opacity: 0 },

@@ -771,9 +771,9 @@ function AgeConfirmationModal({
   if (!isOpen) {
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_jsx_runtime9.Fragment, { children });
   }
-  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "relative overflow-hidden rounded-xl", children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "relative overflow-hidden rounded-2xl", children: [
     /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "pointer-events-none opacity-30", children }),
-    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-xl", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
+    /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40 z-[5] flex flex-col items-center justify-center px-4 py-3 rounded-2xl", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
       import_framer_motion9.motion.div,
       {
         initial: { y: 10, opacity: 0 },
