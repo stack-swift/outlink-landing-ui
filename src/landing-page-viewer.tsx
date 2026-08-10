@@ -1272,6 +1272,10 @@ useEffect(() => {
                             isOnlyFansLogo &&
                             (card.style.brand_layout === "content_text" ||
                               card.style.brand_layout === "asset_combo_b");
+                          const onlyFansVipAsset =
+                            card.style.brand_asset || "/vipec.svg";
+                          const onlyFansContentAsset =
+                            card.style.brand_asset || "/c.svg";
                           const isPremiumLogo =
                             isOnlyFansLogo ||
                             (card.style.logo_name || "")
@@ -1463,7 +1467,7 @@ useEffect(() => {
                                       {isOnlyFansVipIconText ? (
                                         <div className="flex items-center justify-center">
                                           <img
-                                            src="/vipec.svg"
+                                            src={onlyFansVipAsset}
                                             alt=""
                                             className="h-auto max-h-8 w-auto max-w-[76%]"
                                             loading="lazy"
@@ -1487,7 +1491,7 @@ useEffect(() => {
                                             </span>
                                           )}
                                           <img
-                                            src="/c.svg"
+                                            src={onlyFansContentAsset}
                                             alt=""
                                             className="h-auto max-h-7 w-auto max-w-[38%]"
                                             loading="lazy"

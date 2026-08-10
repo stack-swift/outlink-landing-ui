@@ -1812,6 +1812,8 @@ function LandingPageViewer({
                           const isOnlyFansTextIcon = isOnlyFansLogo && card.style.brand_layout === "icon_text";
                           const isOnlyFansVipIconText = isOnlyFansLogo && (card.style.brand_layout === "vip_icon_text" || card.style.brand_layout === "asset_combo_a");
                           const isOnlyFansContentText = isOnlyFansLogo && (card.style.brand_layout === "content_text" || card.style.brand_layout === "asset_combo_b");
+                          const onlyFansVipAsset = card.style.brand_asset || "/vipec.svg";
+                          const onlyFansContentAsset = card.style.brand_asset || "/c.svg";
                           const isPremiumLogo = isOnlyFansLogo || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
@@ -1947,7 +1949,7 @@ function LandingPageViewer({
                                   isPremiumLogo && /* @__PURE__ */ jsx10("div", { className: "mb-2", children: isOnlyFansVipIconText ? /* @__PURE__ */ jsx10("div", { className: "flex items-center justify-center", children: /* @__PURE__ */ jsx10(
                                     "img",
                                     {
-                                      src: "/vipec.svg",
+                                      src: onlyFansVipAsset,
                                       alt: "",
                                       className: "h-auto max-h-8 w-auto max-w-[76%]",
                                       loading: "lazy"
@@ -1968,7 +1970,7 @@ function LandingPageViewer({
                                     /* @__PURE__ */ jsx10(
                                       "img",
                                       {
-                                        src: "/c.svg",
+                                        src: onlyFansContentAsset,
                                         alt: "",
                                         className: "h-auto max-h-7 w-auto max-w-[38%]",
                                         loading: "lazy"

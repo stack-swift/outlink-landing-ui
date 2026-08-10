@@ -19,6 +19,7 @@ export interface CTACardStyle {
   logo_name?: string | null;
   logo_color?: string | null;
   prefix_text?: string | null;
+  brand_asset?: string | null;
   brand_layout?:
     | "wordmark"
     | "icon_text"
@@ -81,6 +82,7 @@ export type LayoutSectionKey =
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
+    brand_asset?: string | null;
     brand_layout?:
       | "wordmark"
       | "icon_text"

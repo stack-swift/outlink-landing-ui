@@ -35,6 +35,7 @@ interface CTACardStyle {
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
+    brand_asset?: string | null;
     brand_layout?: "wordmark" | "icon_text" | "vip_icon_text" | "content_text" | "asset_combo_a" | "asset_combo_b" | null;
     brand_text_size?: number | null;
     dashboard_glow_effect?: "none" | "soft" | "strong" | null;
@@ -65,6 +66,7 @@ interface CTACardStyle {
     logo_name?: string | null;
     logo_color?: string | null;
     prefix_text?: string | null;
+    brand_asset?: string | null;
     brand_layout?: "wordmark" | "icon_text" | "vip_icon_text" | "content_text" | "asset_combo_a" | "asset_combo_b" | null;
     brand_text_size?: number | null;
     dashboard_glow_effect?: "none" | "soft" | "strong" | null;
