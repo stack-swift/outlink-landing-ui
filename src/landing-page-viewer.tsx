@@ -1309,12 +1309,13 @@ useEffect(() => {
                           };
                           const glowEffect =
                             card.style.dashboard_glow_effect || "none";
-                          const glowShadow =
-                            glowEffect === "strong"
-                              ? "0 0 0 1.5px rgba(255,255,255,0.92), 0 0 16px 6px rgba(255,255,255,0.82), 0 0 42px 14px rgba(255,255,255,0.48), 0 18px 28px rgba(0,0,0,0.62)"
-                              : glowEffect === "soft"
-                                ? "0 0 0 1px rgba(255,255,255,0.68), 0 0 12px 4px rgba(255,255,255,0.56), 0 0 28px 10px rgba(255,255,255,0.26), 0 14px 22px rgba(0,0,0,0.5)"
-                                : undefined;
+                          const hasGlow = glowEffect !== "none";
+                          const glowOpacity =
+                            glowEffect === "strong" ? 0.92 : 0.62;
+                          const glowBlur =
+                            glowEffect === "strong" ? 14 : 9;
+                          const glowSpread =
+                            glowEffect === "strong" ? -6 : -4;
                           const ctaEffectStyle: React.CSSProperties = {
                             borderRadius: "1rem",
                             ...(card.style.dashboard_bounce_effect
@@ -1323,10 +1324,6 @@ useEffect(() => {
                                     "halevoraCtaBounce 1.15s ease-in-out infinite",
                                 }
                               : {}),
-                          };
-                          const ctaGlowLayerStyle: React.CSSProperties = {
-                            borderRadius: "1rem",
-                            ...(glowShadow ? { boxShadow: glowShadow } : {}),
                           };
                           const ctaRoundedClipStyle: React.CSSProperties = {
                             borderRadius: "1rem",
@@ -1761,12 +1758,69 @@ useEffect(() => {
                                 className="relative z-10 rounded-2xl transition-transform hover:scale-[1.02]"
                                 style={ctaEffectStyle}
                               >
-                                {glowShadow && (
-                                  <div
+                                {hasGlow && (
+                                  <svg
                                     aria-hidden="true"
-                                    className="pointer-events-none absolute inset-0 rounded-2xl"
-                                    style={ctaGlowLayerStyle}
-                                  />
+                                    className="pointer-events-none absolute -inset-8 h-[calc(100%+4rem)] w-[calc(100%+4rem)] overflow-visible"
+                                    preserveAspectRatio="none"
+                                  >
+                                    <defs>
+                                      <filter
+                                        id={`halevora-cta-glow-${card.id}`}
+                                        x="-35%"
+                                        y="-80%"
+                                        width="170%"
+                                        height="260%"
+                                        colorInterpolationFilters="sRGB"
+                                      >
+                                        <feGaussianBlur
+                                          stdDeviation={glowBlur}
+                                          result="glow"
+                                        />
+                                        <feMerge>
+                                          <feMergeNode in="glow" />
+                                          <feMergeNode in="SourceGraphic" />
+                                        </feMerge>
+                                      </filter>
+                                    </defs>
+                                    <rect
+                                      x="32"
+                                      y="32"
+                                      width="calc(100% - 64px)"
+                                      height="calc(100% - 64px)"
+                                      rx="16"
+                                      ry="16"
+                                      fill="none"
+                                      stroke={`rgba(255,255,255,${glowOpacity})`}
+                                      strokeWidth="1.4"
+                                      filter={`url(#halevora-cta-glow-${card.id})`}
+                                    />
+                                    <rect
+                                      x="32"
+                                      y="32"
+                                      width="calc(100% - 64px)"
+                                      height="calc(100% - 64px)"
+                                      rx="16"
+                                      ry="16"
+                                      fill="none"
+                                      stroke="rgba(255,255,255,0.88)"
+                                      strokeWidth="0.38"
+                                      vectorEffect="non-scaling-stroke"
+                                    />
+                                    <rect
+                                      x="32"
+                                      y="32"
+                                      width="calc(100% - 64px)"
+                                      height="calc(100% - 64px)"
+                                      rx="16"
+                                      ry="16"
+                                      fill="none"
+                                      stroke="rgba(0,0,0,0.52)"
+                                      strokeWidth="1"
+                                      transform={`translate(0 ${Math.abs(glowSpread)})`}
+                                      filter={`url(#halevora-cta-glow-${card.id})`}
+                                    />
+                                  </svg>
                                 )}
                                 <div className="relative z-10 rounded-2xl">
                                   {finalContent}
