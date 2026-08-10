@@ -1335,7 +1335,10 @@ useEffect(() => {
                           };
                           const ctaRoundedClipStyle: React.CSSProperties = {
                             borderRadius: "1rem",
-                            clipPath: "inset(0 round 1rem)",
+                            overflow: "hidden",
+                            isolation: "isolate",
+                            transform: "translateZ(0)",
+                            WebkitTransform: "translateZ(0)",
                           };
                           const ctaRoundedLayerStyle: React.CSSProperties = {
                             borderRadius: "1rem",

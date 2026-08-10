@@ -24,7 +24,10 @@ export function AgeConfirmationModal({
 }: AgeConfirmationModalProps) {
   const roundedClipStyle: React.CSSProperties = {
     borderRadius: "1rem",
-    clipPath: "inset(0 round 1rem)",
+    overflow: "hidden",
+    isolation: "isolate",
+    transform: "translateZ(0)",
+    WebkitTransform: "translateZ(0)",
   };
   const confirmButtonClass =
     "inline-flex h-9 min-w-[88px] items-center justify-center rounded-xl bg-[#5EC8D6] px-4 text-sm font-extrabold text-[#08080A] shadow-[0_10px_24px_rgba(94,200,214,0.28)] ring-1 ring-white/25 transition hover:bg-[#4FB6C4] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5EC8D6]/60";
