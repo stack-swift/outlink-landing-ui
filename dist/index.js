@@ -970,17 +970,9 @@ function LandingPageViewer({
     event.preventDefault();
     event.stopPropagation();
   };
-  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react21.useState)(!isPreview);
+  const [enableMotionVideo, setEnableMotionVideo] = (0, import_react21.useState)(false);
   const [heroVideoReady, setHeroVideoReady] = (0, import_react21.useState)(false);
   const heroVideoRef = (0, import_react21.useRef)(null);
-  const ctaVideoMapRef = (0, import_react21.useRef)(/* @__PURE__ */ new Map());
-  const setCtaVideoRef = (id) => (el) => {
-    if (!el) {
-      ctaVideoMapRef.current.delete(id);
-      return;
-    }
-    ctaVideoMapRef.current.set(id, el);
-  };
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
   (0, import_react21.useEffect)(() => {
     if (!heroPoster) return;
@@ -997,6 +989,38 @@ function LandingPageViewer({
       }
     };
   }, [heroPoster]);
+  (0, import_react21.useEffect)(() => {
+    if (isPreview) {
+      setEnableMotionVideo(false);
+      return;
+    }
+    if (settings.profile_display_mode !== "video" || !settings.header_video_url) {
+      setEnableMotionVideo(false);
+      return;
+    }
+    if (enableMotionVideo) return;
+    const connection = navigator.connection;
+    if (connection == null ? void 0 : connection.saveData) return;
+    const isMobile = /Mobi|iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
+    const delayMs = isMobile ? 800 : 300;
+    const enable = () => setEnableMotionVideo(true);
+    const timeoutId = window.setTimeout(() => {
+      const requestIdle = window.requestIdleCallback;
+      if (requestIdle) {
+        requestIdle(enable, { timeout: 900 });
+      } else {
+        enable();
+      }
+    }, delayMs);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [
+    enableMotionVideo,
+    isPreview,
+    settings.header_video_url,
+    settings.profile_display_mode
+  ]);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#000000",
@@ -1351,16 +1375,8 @@ function LandingPageViewer({
       hero.preload = "metadata";
       hero.load();
     }
-    for (const v of ctaVideoMapRef.current.values()) {
-      v.preload = "metadata";
-      v.load();
-    }
     hero == null ? void 0 : hero.play().catch(() => {
     });
-    for (const v of ctaVideoMapRef.current.values()) {
-      v.play().catch(() => {
-      });
-    }
   }, [enableMotionVideo]);
   (0, import_react21.useEffect)(
     () => {
@@ -1513,7 +1529,7 @@ function LandingPageViewer({
                               ref: heroVideoRef,
                               src: settings.header_video_url,
                               poster: heroPoster,
-                              preload: "none",
+                              preload: "metadata",
                               autoPlay: true,
                               loop: true,
                               muted: true,
@@ -2028,21 +2044,7 @@ function LandingPageViewer({
                                       focusClass = "object-bottom";
                                     else focusClass = "object-center";
                                   }
-                                  return enableMotionVideo ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                                    "video",
-                                    {
-                                      ref: setCtaVideoRef(card.id),
-                                      src: card.style.background_video,
-                                      poster: card.style.background_video_poster_url || void 0,
-                                      preload: "none",
-                                      autoPlay: true,
-                                      loop: true,
-                                      muted: true,
-                                      playsInline: true,
-                                      className: `${baseClasses} ${fitClass} ${focusClass}`,
-                                      style: ctaRoundedLayerStyle
-                                    }
-                                  ) : card.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                                  return card.style.background_video_poster_url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                                     "img",
                                     {
                                       src: card.style.background_video_poster_url,

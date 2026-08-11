@@ -213,20 +213,10 @@ export function LandingPageViewer({
     event.stopPropagation();
   };
 
-  // Motion video gate: don't load MP4 until the user interacts (instant LCP from poster)
-  const [enableMotionVideo, setEnableMotionVideo] = useState(!isPreview);
+  // Motion video gate: paint the poster first, then load MP4 after the page settles.
+  const [enableMotionVideo, setEnableMotionVideo] = useState(false);
 const [heroVideoReady, setHeroVideoReady] = useState(false);
 const heroVideoRef = useRef<HTMLVideoElement | null>(null);
-
-const ctaVideoMapRef = useRef(new Map<string, HTMLVideoElement>());
-
-const setCtaVideoRef = (id: string) => (el: HTMLVideoElement | null) => {
-  if (!el) {
-    ctaVideoMapRef.current.delete(id);
-    return;
-  }
-  ctaVideoMapRef.current.set(id, el);
-};
 
 const heroPoster =
   settings.header_video_poster_url || settings.avatar_url || undefined;
@@ -247,6 +237,46 @@ const heroPoster =
       } catch {}
     };
   }, [heroPoster]);
+
+  useEffect(() => {
+    if (isPreview) {
+      setEnableMotionVideo(false);
+      return;
+    }
+
+    if (settings.profile_display_mode !== "video" || !settings.header_video_url) {
+      setEnableMotionVideo(false);
+      return;
+    }
+
+    if (enableMotionVideo) return;
+
+    const connection = (navigator as any).connection;
+    if (connection?.saveData) return;
+
+    const isMobile = /Mobi|iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
+    const delayMs = isMobile ? 800 : 300;
+    const enable = () => setEnableMotionVideo(true);
+    const timeoutId = window.setTimeout(() => {
+      const requestIdle = (window as any).requestIdleCallback as
+        | ((callback: () => void, options?: { timeout?: number }) => number)
+        | undefined;
+      if (requestIdle) {
+        requestIdle(enable, { timeout: 900 });
+      } else {
+        enable();
+      }
+    }, delayMs);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [
+    enableMotionVideo,
+    isPreview,
+    settings.header_video_url,
+    settings.profile_display_mode,
+  ]);
 
   const isLightMode = settings.theme_mode === "light";
 
@@ -696,28 +726,6 @@ const heroPoster =
     return () => window.removeEventListener("keydown", handler);
   }, [lightboxUrl]);
 
-  // Enable MP4 only after first user interaction (scroll/tap/click/keypress)
-// useEffect(() => {
-//   if (isPreview) return;
-//   if (enableMotionVideo) return;
-
-//   const activate = () => setEnableMotionVideo(true);
-
-//   window.addEventListener("pointerdown", activate, { once: true, passive: true });
-//   window.addEventListener("touchstart", activate, { once: true, passive: true });
-//   window.addEventListener("wheel", activate, { once: true, passive: true });
-//   window.addEventListener("scroll", activate, { once: true, passive: true });
-//   window.addEventListener("keydown", activate, { once: true });
-
-//   return () => {
-//     window.removeEventListener("pointerdown", activate);
-//     window.removeEventListener("touchstart", activate);
-//     window.removeEventListener("wheel", activate);
-//     window.removeEventListener("scroll", activate);
-//     window.removeEventListener("keydown", activate);
-//   };
-// }, [isPreview, enableMotionVideo]);
-
 useEffect(() => {
   if (!enableMotionVideo) return;
   setHeroVideoReady(false);
@@ -733,16 +741,8 @@ useEffect(() => {
     hero.load();
   }
 
-  for (const v of ctaVideoMapRef.current.values()) {
-    v.preload = "metadata";
-    v.load();
-  }
-
   // Then try to play
   hero?.play().catch(() => {});
-  for (const v of ctaVideoMapRef.current.values()) {
-    v.play().catch(() => {});
-  }
 }, [enableMotionVideo]);
 
   // Auto‑redirect to a CTA button after N seconds (optional)
@@ -914,7 +914,7 @@ useEffect(() => {
       ref={heroVideoRef}
       src={settings.header_video_url}
       poster={heroPoster}
-      preload="none"
+      preload="metadata"
       autoPlay
       loop
       muted
@@ -1486,7 +1486,7 @@ useEffect(() => {
                                     </>
                                   )}
 
-                                {/* Video Background */}
+                                {/* Deprecated CTA video: render poster only, never load MP4. */}
                                 {card.style.type === "video" &&
                                   card.style.background_video &&
                                   (() => {
@@ -1511,20 +1511,7 @@ useEffect(() => {
                                       else focusClass = "object-center";
                                     }
 
-                                    return enableMotionVideo ? (
-                                      <video
-                                      ref={setCtaVideoRef(card.id)}
-                                      src={card.style.background_video}
-                                      poster={card.style.background_video_poster_url || undefined}
-                                      preload="none"
-                                      autoPlay
-                                      loop
-                                      muted
-                                      playsInline
-                                      className={`${baseClasses} ${fitClass} ${focusClass}`}
-                                      style={ctaRoundedLayerStyle}
-                                    />
-                                  ) : card.style.background_video_poster_url ? (
+                                    return card.style.background_video_poster_url ? (
                                     <img
                                       src={card.style.background_video_poster_url}
                                       alt=""
