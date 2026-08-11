@@ -595,7 +595,7 @@ const heroPoster =
     if (settings.show_active_now) {
       signals.push(
         <span key="active" className={signalClass}>
-          <span className="h-2.5 w-2.5 rounded-full bg-[#22C55E] shadow-[0_0_12px_rgba(34,197,94,0.7)]" />
+          <span className="halevora-active-dot h-2.5 w-2.5 rounded-full bg-[#22C55E]" />
           Active now
         </span>,
       );
@@ -621,12 +621,11 @@ const heroPoster =
 
     return (
       <div
-        className="flex max-w-full flex-wrap items-center justify-center gap-y-1 px-2 text-center"
+        className="flex max-w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 px-2 text-center"
         style={{ color: themeColors.textPrimary }}
       >
         {signals.map((signal, index) => (
           <React.Fragment key={index}>
-            {index > 0 && divider}
             {signal}
           </React.Fragment>
         ))}
@@ -821,6 +820,23 @@ useEffect(() => {
             0%, 100% { transform: translateY(0) scale(1); }
             38% { transform: translateY(-7px) scale(1.026); }
             62% { transform: translateY(1px) scale(0.992); }
+          }
+          @keyframes halevoraActiveDotGlow {
+            0%, 100% {
+              box-shadow: 0 0 6px rgba(34, 197, 94, 0.45), 0 0 12px rgba(34, 197, 94, 0.35);
+              opacity: 0.82;
+              transform: scale(0.92);
+            }
+            50% {
+              box-shadow: 0 0 10px rgba(34, 197, 94, 0.95), 0 0 22px rgba(34, 197, 94, 0.75);
+              opacity: 1;
+              transform: scale(1.08);
+            }
+          }
+          .halevora-active-dot {
+            animation: halevoraActiveDotGlow 1.45s ease-in-out infinite;
+            transform-origin: center;
+            will-change: box-shadow, opacity, transform;
           }
           [data-halevora-protected="true"],
           [data-halevora-protected="true"] * {
