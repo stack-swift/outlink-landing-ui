@@ -1047,7 +1047,8 @@ function LandingPageViewer({
     const ua = navigator.userAgent || "";
     return /Mobi|iPhone|iPad|iPod|Android/i.test(ua);
   };
-  const isWhitehatLink = (link.link_type || "").toLowerCase() === "whitehat";
+  const normalizedLinkType = (link.link_type || "").toLowerCase();
+  const isWhitehatLink = normalizedLinkType === "whitehat" || normalizedLinkType === "whitehat_v2";
   const shouldEscapeInAppBrowser = !isPreview && (isWhitehatLink || isInAppBrowser()) && (isWhitehatLink || link.enable_deeplink !== false) && (!isWhitehatLink || isMobileBrowser());
   const buildDeepLinkUrl = (absoluteUrl) => {
     if (typeof window === "undefined") return null;
@@ -1229,7 +1230,7 @@ function LandingPageViewer({
       signals.push(
         /* @__PURE__ */ jsxs8("span", { className: signalClass, children: [
           /* @__PURE__ */ jsx10("span", { className: "halevora-active-dot h-2.5 w-2.5 rounded-full bg-[#22C55E]" }),
-          "Active now"
+          "Online"
         ] }, "active")
       );
     }
@@ -1326,7 +1327,7 @@ function LandingPageViewer({
     () => {
       var _a2;
       if (isPreview) return;
-      if (link.link_type !== "whitehat") return;
+      if (link.link_type !== "whitehat" && link.link_type !== "whitehat_v2") return;
       if (!settings.auto_redirect_enabled) return;
       const cards = settings.cta_cards || [];
       if (!cards.length) return;

@@ -183,5 +183,5 @@ export interface Link {
   domain?: string | null;
   path?: string | null;
   // Used by LandingPageViewer to customize behavior (e.g. Reddit handling)
-  link_type?: "whitehat" | "greyhat" | "blackhat" | null;
+  link_type?: "whitehat" | "greyhat" | "blackhat" | "whitehat_v2" | "greyhat_v2" | null;
 }

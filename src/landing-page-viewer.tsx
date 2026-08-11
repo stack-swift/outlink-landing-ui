@@ -363,9 +363,10 @@ const heroPoster =
     return /Mobi|iPhone|iPad|iPod|Android/i.test(ua);
   };
 
+  const normalizedLinkType =
+    ((link as { link_type?: string }).link_type || "").toLowerCase();
   const isWhitehatLink =
-    ((link as { link_type?: string }).link_type || "").toLowerCase() ===
-    "whitehat";
+    normalizedLinkType === "whitehat" || normalizedLinkType === "whitehat_v2";
   const shouldEscapeInAppBrowser =
     !isPreview &&
     (isWhitehatLink || isInAppBrowser()) &&
@@ -596,7 +597,7 @@ const heroPoster =
       signals.push(
         <span key="active" className={signalClass}>
           <span className="halevora-active-dot h-2.5 w-2.5 rounded-full bg-[#22C55E]" />
-          Active now
+          Online
         </span>,
       );
     }
@@ -748,7 +749,7 @@ useEffect(() => {
   useEffect(
     () => {
       if (isPreview) return;
-      if (link.link_type !== "whitehat") return;
+      if (link.link_type !== "whitehat" && link.link_type !== "whitehat_v2") return;
       if (!settings.auto_redirect_enabled) return;
 
       const cards = settings.cta_cards || [];

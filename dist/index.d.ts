@@ -132,7 +132,7 @@ interface Link {
     destination_url: string | null;
     domain?: string | null;
     path?: string | null;
-    link_type?: "whitehat" | "greyhat" | "blackhat" | null;
+    link_type?: "whitehat" | "greyhat" | "blackhat" | "whitehat_v2" | "greyhat_v2" | null;
 }
 
 interface LandingPageViewerProps {
