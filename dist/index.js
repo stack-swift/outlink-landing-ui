@@ -1001,20 +1001,7 @@ function LandingPageViewer({
     if (enableMotionVideo) return;
     const connection = navigator.connection;
     if (connection == null ? void 0 : connection.saveData) return;
-    const isMobile = /Mobi|iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
-    const delayMs = isMobile ? 800 : 300;
-    const enable = () => setEnableMotionVideo(true);
-    const timeoutId = window.setTimeout(() => {
-      const requestIdle = window.requestIdleCallback;
-      if (requestIdle) {
-        requestIdle(enable, { timeout: 900 });
-      } else {
-        enable();
-      }
-    }, delayMs);
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
+    setEnableMotionVideo(true);
   }, [
     enableMotionVideo,
     isPreview,
@@ -1531,7 +1518,7 @@ function LandingPageViewer({
                               poster: heroPoster,
                               preload: "metadata",
                               autoPlay: true,
-                              loop: true,
+                              loop: !isPreview,
                               muted: true,
                               playsInline: true,
                               onPlaying: () => setHeroVideoReady(true),

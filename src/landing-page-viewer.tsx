@@ -213,7 +213,7 @@ export function LandingPageViewer({
     event.stopPropagation();
   };
 
-  // Motion video gate: paint the poster first, then load MP4 after the page settles.
+  // Motion video gate: paint the poster first, then attach MP4 as soon as the page hydrates.
   const [enableMotionVideo, setEnableMotionVideo] = useState(false);
 const [heroVideoReady, setHeroVideoReady] = useState(false);
 const heroVideoRef = useRef<HTMLVideoElement | null>(null);
@@ -254,23 +254,7 @@ const heroPoster =
     const connection = (navigator as any).connection;
     if (connection?.saveData) return;
 
-    const isMobile = /Mobi|iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
-    const delayMs = isMobile ? 800 : 300;
-    const enable = () => setEnableMotionVideo(true);
-    const timeoutId = window.setTimeout(() => {
-      const requestIdle = (window as any).requestIdleCallback as
-        | ((callback: () => void, options?: { timeout?: number }) => number)
-        | undefined;
-      if (requestIdle) {
-        requestIdle(enable, { timeout: 900 });
-      } else {
-        enable();
-      }
-    }, delayMs);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
+    setEnableMotionVideo(true);
   }, [
     enableMotionVideo,
     isPreview,
@@ -916,7 +900,7 @@ useEffect(() => {
       poster={heroPoster}
       preload="metadata"
       autoPlay
-      loop
+      loop={!isPreview}
       muted
       playsInline
       onPlaying={() => setHeroVideoReady(true)}
