@@ -688,9 +688,11 @@ const heroPoster =
     : DEFAULT_LAYOUT_SECTIONS;
 
   layoutSections = layoutSections.filter((k) => k !== "branding");
-  const contentVerticalOffset = getContentVerticalOffset(
-    settings.section_spacing as Record<string, unknown> | undefined,
-  );
+  const contentVerticalOffset = isVideoBackgroundMode
+    ? getContentVerticalOffset(
+        settings.section_spacing as Record<string, unknown> | undefined,
+      )
+    : 0;
 
   const isSectionEnabled = (key: LayoutSectionKey) =>
     layoutSections.includes(key);
@@ -823,7 +825,9 @@ useEffect(() => {
       onContextMenuCapture={preventContentSave}
       onDragStartCapture={preventContentSave}
       onDropCapture={preventContentSave}
-      className="min-h-[100dvh] flex items-start md:items-center justify-center relative overflow-hidden"
+      className={`min-h-[100dvh] flex items-start ${
+        isVideoBackgroundMode ? "md:items-start" : "md:items-center"
+      } justify-center relative overflow-hidden`}
       style={contentProtectionStyle}
     >
       <style>
@@ -910,7 +914,7 @@ useEffect(() => {
       <div
         className={
           isVideoBackgroundMode
-            ? "halevora-landing-scroll relative z-10 min-h-[812px] w-full overflow-x-hidden flex flex-col"
+            ? "halevora-landing-scroll relative z-10 min-h-[100dvh] w-full overflow-x-hidden flex flex-col"
             : "halevora-landing-scroll relative z-10 w-full max-w-[430px] md:min-h-[812px] md:shadow-2xl md:rounded-[2rem] overflow-x-hidden flex flex-col"
         }
         style={{
