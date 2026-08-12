@@ -796,8 +796,8 @@ function AgeConfirmationModal({
 // src/landing-page-viewer.tsx
 import { Fragment as Fragment7, jsx as jsx10, jsxs as jsxs8 } from "react/jsx-runtime";
 var CONTENT_VERTICAL_OFFSET_KEY = "__content_vertical_offset";
-var MIN_CONTENT_VERTICAL_OFFSET = -160;
-var MAX_CONTENT_VERTICAL_OFFSET = 240;
+var MIN_CONTENT_VERTICAL_OFFSET = 0;
+var MAX_CONTENT_VERTICAL_OFFSET = 320;
 function getContentVerticalOffset(sectionSpacing) {
   const raw = sectionSpacing == null ? void 0 : sectionSpacing[CONTENT_VERTICAL_OFFSET_KEY];
   const value = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : 0;
@@ -1946,7 +1946,7 @@ function LandingPageViewer({
                           "bio"
                         )}`,
                         style: {
-                          color: themeColors.textSecondary,
+                          color: themeColors.textPrimary,
                           order: getSectionOrder("bio")
                         },
                         children: settings.bio

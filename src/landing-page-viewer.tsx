@@ -21,8 +21,8 @@ import type {
 } from "./types";
 
 const CONTENT_VERTICAL_OFFSET_KEY = "__content_vertical_offset";
-const MIN_CONTENT_VERTICAL_OFFSET = -160;
-const MAX_CONTENT_VERTICAL_OFFSET = 240;
+const MIN_CONTENT_VERTICAL_OFFSET = 0;
+const MAX_CONTENT_VERTICAL_OFFSET = 320;
 
 function getContentVerticalOffset(sectionSpacing?: Record<string, unknown>) {
   const raw = sectionSpacing?.[CONTENT_VERTICAL_OFFSET_KEY];
@@ -1391,7 +1391,7 @@ useEffect(() => {
                     "bio",
                   )}`}
                   style={{
-                    color: themeColors.textSecondary,
+                    color: themeColors.textPrimary,
                     order: getSectionOrder("bio"),
                   }}
                 >
