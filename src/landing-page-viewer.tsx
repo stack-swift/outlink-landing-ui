@@ -20,7 +20,20 @@ import type {
   SectionSpacing,
 } from "./types";
 
+const CONTENT_VERTICAL_OFFSET_KEY = "__content_vertical_offset";
+const MIN_CONTENT_VERTICAL_OFFSET = -160;
+const MAX_CONTENT_VERTICAL_OFFSET = 240;
 
+function getContentVerticalOffset(sectionSpacing?: Record<string, unknown>) {
+  const raw = sectionSpacing?.[CONTENT_VERTICAL_OFFSET_KEY];
+  const value =
+    typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : 0;
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(
+    MAX_CONTENT_VERTICAL_OFFSET,
+    Math.max(MIN_CONTENT_VERTICAL_OFFSET, Math.round(value)),
+  );
+}
 
 interface LandingPageViewerProps {
   link: Link;
@@ -220,6 +233,21 @@ const heroVideoRef = useRef<HTMLVideoElement | null>(null);
 
 const heroPoster =
   settings.header_video_poster_url || settings.avatar_url || undefined;
+  const mode =
+    settings.profile_display_mode === "avatar" &&
+    (settings.section_spacing as any)?.__profile_video_background
+      ? "video_background"
+      : settings.profile_display_mode || "full";
+  const isFullMode = mode === "full";
+  const isVideoMode = mode === "video";
+  const isVideoBackgroundMode = mode === "video_background";
+  const usesMotionVideo = isVideoMode || isVideoBackgroundMode;
+  const hideVideoBackgroundAvatar =
+    isVideoBackgroundMode &&
+    !!(settings.section_spacing as any)?.__profile_video_background_hide_avatar;
+  const showAvatarMedia =
+    mode === "avatar" || (isVideoBackgroundMode && !hideVideoBackgroundAvatar);
+  const usesAvatarProfile = mode === "avatar" || isVideoBackgroundMode;
 
   useEffect(() => {
     if (!heroPoster) return;
@@ -244,7 +272,7 @@ const heroPoster =
       return;
     }
 
-    if (settings.profile_display_mode !== "video" || !settings.header_video_url) {
+    if (!usesMotionVideo || !settings.header_video_url) {
       setEnableMotionVideo(false);
       return;
     }
@@ -259,7 +287,7 @@ const heroPoster =
     enableMotionVideo,
     isPreview,
     settings.header_video_url,
-    settings.profile_display_mode,
+    usesMotionVideo,
   ]);
 
   const isLightMode = settings.theme_mode === "light";
@@ -583,9 +611,6 @@ const heroPoster =
     navigateToUrl(link.destination_url, { fromUserGesture: true });
   };
 
-  const mode = settings.profile_display_mode || "full"; // 'full' | 'avatar' | 'video'
-  const isFullMode = mode === "full";
-  const isVideoMode = mode === "video";
   const hasProfileSignals =
     !!settings.show_active_now ||
     (!!settings.show_location && !!visitorLocationLabel) ||
@@ -658,12 +683,14 @@ const heroPoster =
     "gallery",
   ];
 
-  let layoutSections: LayoutSectionKey[] =
-    settings.layout_sections && settings.layout_sections.length
-      ? (settings.layout_sections as LayoutSectionKey[])
-      : DEFAULT_LAYOUT_SECTIONS;
+  let layoutSections: LayoutSectionKey[] = Array.isArray(settings.layout_sections)
+    ? (settings.layout_sections as LayoutSectionKey[])
+    : DEFAULT_LAYOUT_SECTIONS;
 
   layoutSections = layoutSections.filter((k) => k !== "branding");
+  const contentVerticalOffset = getContentVerticalOffset(
+    settings.section_spacing as Record<string, unknown> | undefined,
+  );
 
   const isSectionEnabled = (key: LayoutSectionKey) =>
     layoutSections.includes(key);
@@ -834,14 +861,21 @@ useEffect(() => {
             -webkit-user-drag: none;
             user-drag: none;
           }
+          .halevora-landing-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .halevora-landing-scroll::-webkit-scrollbar {
+            display: none;
+          }
         `}
       </style>
 
       {/* Desktop backdrop only: soft creator media behind the capped profile frame. */}
-      {(isFullMode || isVideoMode) &&
-      (heroPoster || (isVideoMode && settings.header_video_url)) ? (
+      {(isFullMode || isVideoMode || isVideoBackgroundMode) &&
+      (heroPoster || (usesMotionVideo && settings.header_video_url)) ? (
         <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {isVideoMode && settings.header_video_url && enableMotionVideo ? (
+          {usesMotionVideo && settings.header_video_url && enableMotionVideo ? (
             <video
               src={settings.header_video_url}
               poster={heroPoster}
@@ -859,7 +893,7 @@ useEffect(() => {
               alt=""
               aria-hidden="true"
               className={`absolute inset-0 h-full w-full object-cover scale-110 opacity-65 ${
-                isVideoMode ? "" : "blur-3xl"
+                usesMotionVideo ? "" : "blur-3xl"
               }`}
             />
           ) : null}
@@ -874,9 +908,55 @@ useEffect(() => {
 
       {/* Mobile-sized container */}
       <div
-        className="relative z-10 w-full max-w-[430px] md:min-h-[812px] md:shadow-2xl md:rounded-[2rem] overflow-y-auto overflow-x-hidden flex flex-col"
-        style={{ backgroundColor: themeColors.background, maxWidth: "430px" }}
+        className={
+          isVideoBackgroundMode
+            ? "halevora-landing-scroll relative z-10 min-h-[812px] w-full overflow-x-hidden flex flex-col"
+            : "halevora-landing-scroll relative z-10 w-full max-w-[430px] md:min-h-[812px] md:shadow-2xl md:rounded-[2rem] overflow-x-hidden flex flex-col"
+        }
+        style={{
+          backgroundColor: themeColors.background,
+          maxWidth: isVideoBackgroundMode ? undefined : "430px",
+        }}
       >
+        {isVideoBackgroundMode && settings.header_video_url ? (
+          <div className="absolute inset-0 z-0 overflow-hidden">
+            {heroPoster ? (
+              <img
+                src={heroPoster}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+            ) : null}
+            {enableMotionVideo ? (
+              <video
+                ref={heroVideoRef}
+                src={settings.header_video_url}
+                poster={heroPoster}
+                preload="metadata"
+                autoPlay
+                loop={!isPreview}
+                muted
+                playsInline
+                onPlaying={() => setHeroVideoReady(true)}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${
+                  heroVideoReady ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ) : null}
+            <div className="absolute inset-0 bg-black/55" />
+            <div
+              className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
+              style={{
+                background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`,
+              }}
+            />
+          </div>
+        ) : null}
+
         {/* Hero area */}
         {isFullMode || isVideoMode ? (
           <motion.div
@@ -979,7 +1059,12 @@ useEffect(() => {
         {/* Content Section */}
         <div
           className="flex-1 flex flex-col items-center px-4 pb-[calc(4rem+env(safe-area-inset-bottom))] sm:px-6 sm:pb-[calc(5rem+env(safe-area-inset-bottom))] md:px-8 md:pb-16 relative z-10"
-          style={{ marginTop: isFullMode ? "0" : "0" }}
+          style={{
+            marginTop: isFullMode ? "0" : "0",
+            transform: contentVerticalOffset
+              ? `translateY(${contentVerticalOffset}px)`
+              : undefined,
+          }}
         >
           <div className="w-full max-w-md">
             <div className="flex flex-col items-center gap-4">
@@ -1044,39 +1129,69 @@ useEffect(() => {
               )}
 
               {/* Avatar mode display */}
-              {mode === "avatar" && (
+              {showAvatarMedia && (
                 <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.1, duration: 0.3 }}
                   className="relative"
                 >
-                  <div
-                    className="rounded-full p-1"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)",
-                    }}
-                  >
-                    <Avatar
-                      src={settings.avatar_url || undefined}
-                      alt={settings.display_name || link.title || "Profile"}
-                      className="w-32 h-32 text-large border-4"
-                      style={{ borderColor: themeColors.background }}
-                      showFallback
-                      fallback={
-                        <Icon
-                          icon="solar:user-bold-duotone"
-                          className="w-20 h-20 text-default-500"
-                        />
-                      }
-                    />
+                  <div className="rounded-full">
+                    {isVideoBackgroundMode && settings.header_video_url ? (
+                      <div className="relative h-32 w-32 overflow-hidden rounded-full bg-default-100">
+                        {heroPoster ? (
+                          <img
+                            src={heroPoster}
+                            alt={settings.display_name || link.title || "Profile"}
+                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${
+                              heroVideoReady ? "opacity-0" : "opacity-100"
+                            }`}
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
+                          />
+                        ) : null}
+                        {enableMotionVideo ? (
+                          <video
+                            src={settings.header_video_url}
+                            poster={heroPoster}
+                            preload="metadata"
+                            autoPlay
+                            loop={!isPreview}
+                            muted
+                            playsInline
+                            className="absolute inset-0 h-full w-full object-cover"
+                          />
+                        ) : null}
+                        {!heroPoster && !enableMotionVideo ? (
+                          <div className="flex h-full w-full items-center justify-center">
+                            <Icon
+                              icon="solar:clapperboard-play-bold-duotone"
+                              className="h-16 w-16 text-default-500"
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <Avatar
+                        src={settings.avatar_url || undefined}
+                        alt={settings.display_name || link.title || "Profile"}
+                        className="w-32 h-32 text-large"
+                        showFallback
+                        fallback={
+                          <Icon
+                            icon="solar:user-bold-duotone"
+                            className="w-20 h-20 text-default-500"
+                          />
+                        }
+                      />
+                    )}
                   </div>
                 </motion.div>
               )}
 
               {/* Avatar mode name */}
-              {mode === "avatar" && isSectionEnabled("header") && (
+              {usesAvatarProfile && isSectionEnabled("header") && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}

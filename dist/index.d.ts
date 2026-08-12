@@ -108,7 +108,7 @@ interface LandingPageSettings {
     cta_cards: CTACard[];
     gallery_images?: string[];
     layout_sections?: LayoutSectionKey[];
-    section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>>;
+    section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>> & Record<string, SectionSpacing | number | undefined>;
     verified_badge: boolean;
     verified_badge_style: "chip" | "solid";
     show_active_now?: boolean;
@@ -119,7 +119,7 @@ interface LandingPageSettings {
     show_follower_count: boolean;
     follower_count: number;
     show_domain_handle: boolean;
-    profile_display_mode: "full" | "avatar" | "video";
+    profile_display_mode: "full" | "avatar" | "video" | "video_background";
     voice_note_url: string | null;
     auto_redirect_enabled?: boolean;
     auto_redirect_delay_seconds?: number;

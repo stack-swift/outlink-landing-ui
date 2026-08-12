@@ -149,7 +149,8 @@ export interface LandingPageSettings {
 
   // Layout + spacing (optional)
   layout_sections?: LayoutSectionKey[];
-  section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>>;
+  section_spacing?: Partial<Record<LayoutSectionKey, SectionSpacing>> &
+    Record<string, SectionSpacing | number | undefined>;
 
   // Badges / meta
   verified_badge: boolean;
@@ -164,7 +165,7 @@ export interface LandingPageSettings {
   show_domain_handle: boolean;
 
   // Layout mode: image hero, avatar only, or video header
-  profile_display_mode: "full" | "avatar" | "video";
+  profile_display_mode: "full" | "avatar" | "video" | "video_background";
 
   // Optional voice note
   voice_note_url: string | null;

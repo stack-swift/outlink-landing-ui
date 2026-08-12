@@ -795,6 +795,18 @@ function AgeConfirmationModal({
 
 // src/landing-page-viewer.tsx
 import { Fragment as Fragment7, jsx as jsx10, jsxs as jsxs8 } from "react/jsx-runtime";
+var CONTENT_VERTICAL_OFFSET_KEY = "__content_vertical_offset";
+var MIN_CONTENT_VERTICAL_OFFSET = -160;
+var MAX_CONTENT_VERTICAL_OFFSET = 240;
+function getContentVerticalOffset(sectionSpacing) {
+  const raw = sectionSpacing == null ? void 0 : sectionSpacing[CONTENT_VERTICAL_OFFSET_KEY];
+  const value = typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : 0;
+  if (!Number.isFinite(value)) return 0;
+  return Math.min(
+    MAX_CONTENT_VERTICAL_OFFSET,
+    Math.max(MIN_CONTENT_VERTICAL_OFFSET, Math.round(value))
+  );
+}
 function CTAUrgencyBadge({
   label,
   message,
@@ -912,7 +924,7 @@ function LandingPageViewer({
   isFreePlan = false,
   visitorLocationLabel = null
 }) {
-  var _a;
+  var _a, _b, _c;
   const [showingAgeConfirmationFor, setShowingAgeConfirmationFor] = useState8(null);
   const [activeGalleryIndex, setActiveGalleryIndex] = useState8(0);
   const [lightboxUrl, setLightboxUrl] = useState8(null);
@@ -935,6 +947,14 @@ function LandingPageViewer({
   const [heroVideoReady, setHeroVideoReady] = useState8(false);
   const heroVideoRef = useRef2(null);
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
+  const mode = settings.profile_display_mode === "avatar" && ((_a = settings.section_spacing) == null ? void 0 : _a.__profile_video_background) ? "video_background" : settings.profile_display_mode || "full";
+  const isFullMode = mode === "full";
+  const isVideoMode = mode === "video";
+  const isVideoBackgroundMode = mode === "video_background";
+  const usesMotionVideo = isVideoMode || isVideoBackgroundMode;
+  const hideVideoBackgroundAvatar = isVideoBackgroundMode && !!((_b = settings.section_spacing) == null ? void 0 : _b.__profile_video_background_hide_avatar);
+  const showAvatarMedia = mode === "avatar" || isVideoBackgroundMode && !hideVideoBackgroundAvatar;
+  const usesAvatarProfile = mode === "avatar" || isVideoBackgroundMode;
   useEffect5(() => {
     if (!heroPoster) return;
     const l = document.createElement("link");
@@ -955,7 +975,7 @@ function LandingPageViewer({
       setEnableMotionVideo(false);
       return;
     }
-    if (settings.profile_display_mode !== "video" || !settings.header_video_url) {
+    if (!usesMotionVideo || !settings.header_video_url) {
       setEnableMotionVideo(false);
       return;
     }
@@ -967,7 +987,7 @@ function LandingPageViewer({
     enableMotionVideo,
     isPreview,
     settings.header_video_url,
-    settings.profile_display_mode
+    usesMotionVideo
   ]);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
@@ -1219,10 +1239,7 @@ function LandingPageViewer({
     trackClick(link.id, isPreview);
     navigateToUrl(link.destination_url, { fromUserGesture: true });
   };
-  const mode = settings.profile_display_mode || "full";
-  const isFullMode = mode === "full";
-  const isVideoMode = mode === "video";
-  const hasProfileSignals = !!settings.show_active_now || !!settings.show_location && !!visitorLocationLabel || !!settings.show_response_time && !!((_a = settings.response_time_text) == null ? void 0 : _a.trim());
+  const hasProfileSignals = !!settings.show_active_now || !!settings.show_location && !!visitorLocationLabel || !!settings.show_response_time && !!((_c = settings.response_time_text) == null ? void 0 : _c.trim());
   const renderProfileSignals = () => {
     var _a2;
     if (!hasProfileSignals) return null;
@@ -1278,8 +1295,11 @@ function LandingPageViewer({
     "cta_block",
     "gallery"
   ];
-  let layoutSections = settings.layout_sections && settings.layout_sections.length ? settings.layout_sections : DEFAULT_LAYOUT_SECTIONS;
+  let layoutSections = Array.isArray(settings.layout_sections) ? settings.layout_sections : DEFAULT_LAYOUT_SECTIONS;
   layoutSections = layoutSections.filter((k) => k !== "branding");
+  const contentVerticalOffset = getContentVerticalOffset(
+    settings.section_spacing
+  );
   const isSectionEnabled = (key) => layoutSections.includes(key);
   const getSectionOrder = (key) => {
     const index = layoutSections.indexOf(key);
@@ -1417,9 +1437,16 @@ function LandingPageViewer({
             -webkit-user-drag: none;
             user-drag: none;
           }
+          .halevora-landing-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          .halevora-landing-scroll::-webkit-scrollbar {
+            display: none;
+          }
         ` }),
-        (isFullMode || isVideoMode) && (heroPoster || isVideoMode && settings.header_video_url) ? /* @__PURE__ */ jsxs8("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [
-          isVideoMode && settings.header_video_url && enableMotionVideo ? /* @__PURE__ */ jsx10(
+        (isFullMode || isVideoMode || isVideoBackgroundMode) && (heroPoster || usesMotionVideo && settings.header_video_url) ? /* @__PURE__ */ jsxs8("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [
+          usesMotionVideo && settings.header_video_url && enableMotionVideo ? /* @__PURE__ */ jsx10(
             "video",
             {
               src: settings.header_video_url,
@@ -1438,7 +1465,7 @@ function LandingPageViewer({
               src: heroPoster,
               alt: "",
               "aria-hidden": "true",
-              className: `absolute inset-0 h-full w-full object-cover scale-110 opacity-65 ${isVideoMode ? "" : "blur-3xl"}`
+              className: `absolute inset-0 h-full w-full object-cover scale-110 opacity-65 ${usesMotionVideo ? "" : "blur-3xl"}`
             }
           ) : null,
           /* @__PURE__ */ jsx10(
@@ -1454,9 +1481,51 @@ function LandingPageViewer({
         /* @__PURE__ */ jsxs8(
           "div",
           {
-            className: "relative z-10 w-full max-w-[430px] md:min-h-[812px] md:shadow-2xl md:rounded-[2rem] overflow-y-auto overflow-x-hidden flex flex-col",
-            style: { backgroundColor: themeColors.background, maxWidth: "430px" },
+            className: isVideoBackgroundMode ? "halevora-landing-scroll relative z-10 min-h-[812px] w-full overflow-x-hidden flex flex-col" : "halevora-landing-scroll relative z-10 w-full max-w-[430px] md:min-h-[812px] md:shadow-2xl md:rounded-[2rem] overflow-x-hidden flex flex-col",
+            style: {
+              backgroundColor: themeColors.background,
+              maxWidth: isVideoBackgroundMode ? void 0 : "430px"
+            },
             children: [
+              isVideoBackgroundMode && settings.header_video_url ? /* @__PURE__ */ jsxs8("div", { className: "absolute inset-0 z-0 overflow-hidden", children: [
+                heroPoster ? /* @__PURE__ */ jsx10(
+                  "img",
+                  {
+                    src: heroPoster,
+                    alt: "",
+                    "aria-hidden": "true",
+                    className: "absolute inset-0 h-full w-full object-cover",
+                    loading: "eager",
+                    decoding: "async",
+                    fetchPriority: "high"
+                  }
+                ) : null,
+                enableMotionVideo ? /* @__PURE__ */ jsx10(
+                  "video",
+                  {
+                    ref: heroVideoRef,
+                    src: settings.header_video_url,
+                    poster: heroPoster,
+                    preload: "metadata",
+                    autoPlay: true,
+                    loop: !isPreview,
+                    muted: true,
+                    playsInline: true,
+                    onPlaying: () => setHeroVideoReady(true),
+                    className: `absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${heroVideoReady ? "opacity-100" : "opacity-0"}`
+                  }
+                ) : null,
+                /* @__PURE__ */ jsx10("div", { className: "absolute inset-0 bg-black/55" }),
+                /* @__PURE__ */ jsx10(
+                  "div",
+                  {
+                    className: "absolute inset-x-0 bottom-0 h-56 pointer-events-none",
+                    style: {
+                      background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, ${themeColors.background} 100%)`
+                    }
+                  }
+                )
+              ] }) : null,
               isFullMode || isVideoMode ? /* @__PURE__ */ jsx10(
                 motion10.div,
                 {
@@ -1549,7 +1618,10 @@ function LandingPageViewer({
                 "div",
                 {
                   className: "flex-1 flex flex-col items-center px-4 pb-[calc(4rem+env(safe-area-inset-bottom))] sm:px-6 sm:pb-[calc(5rem+env(safe-area-inset-bottom))] md:px-8 md:pb-16 relative z-10",
-                  style: { marginTop: isFullMode ? "0" : "0" },
+                  style: {
+                    marginTop: isFullMode ? "0" : "0",
+                    transform: contentVerticalOffset ? `translateY(${contentVerticalOffset}px)` : void 0
+                  },
                   children: /* @__PURE__ */ jsx10("div", { className: "w-full max-w-md", children: /* @__PURE__ */ jsxs8("div", { className: "flex flex-col items-center gap-4", children: [
                     (isFullMode || isVideoMode) && isSectionEnabled("header") && /* @__PURE__ */ jsxs8(
                       motion10.div,
@@ -1615,42 +1687,64 @@ function LandingPageViewer({
                         ]
                       }
                     ),
-                    mode === "avatar" && /* @__PURE__ */ jsx10(
+                    showAvatarMedia && /* @__PURE__ */ jsx10(
                       motion10.div,
                       {
                         initial: { scale: 0.8 },
                         animate: { scale: 1 },
                         transition: { delay: 0.1, duration: 0.3 },
                         className: "relative",
-                        children: /* @__PURE__ */ jsx10(
-                          "div",
+                        children: /* @__PURE__ */ jsx10("div", { className: "rounded-full", children: isVideoBackgroundMode && settings.header_video_url ? /* @__PURE__ */ jsxs8("div", { className: "relative h-32 w-32 overflow-hidden rounded-full bg-default-100", children: [
+                          heroPoster ? /* @__PURE__ */ jsx10(
+                            "img",
+                            {
+                              src: heroPoster,
+                              alt: settings.display_name || link.title || "Profile",
+                              className: `absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
+                              loading: "eager",
+                              decoding: "async",
+                              fetchPriority: "high"
+                            }
+                          ) : null,
+                          enableMotionVideo ? /* @__PURE__ */ jsx10(
+                            "video",
+                            {
+                              src: settings.header_video_url,
+                              poster: heroPoster,
+                              preload: "metadata",
+                              autoPlay: true,
+                              loop: !isPreview,
+                              muted: true,
+                              playsInline: true,
+                              className: "absolute inset-0 h-full w-full object-cover"
+                            }
+                          ) : null,
+                          !heroPoster && !enableMotionVideo ? /* @__PURE__ */ jsx10("div", { className: "flex h-full w-full items-center justify-center", children: /* @__PURE__ */ jsx10(
+                            Icon8,
+                            {
+                              icon: "solar:clapperboard-play-bold-duotone",
+                              className: "h-16 w-16 text-default-500"
+                            }
+                          ) }) : null
+                        ] }) : /* @__PURE__ */ jsx10(
+                          Avatar,
                           {
-                            className: "rounded-full p-1",
-                            style: {
-                              background: "linear-gradient(135deg, #0EA5E9, #3B82F6, #6366F1)"
-                            },
-                            children: /* @__PURE__ */ jsx10(
-                              Avatar,
+                            src: settings.avatar_url || void 0,
+                            alt: settings.display_name || link.title || "Profile",
+                            className: "w-32 h-32 text-large",
+                            showFallback: true,
+                            fallback: /* @__PURE__ */ jsx10(
+                              Icon8,
                               {
-                                src: settings.avatar_url || void 0,
-                                alt: settings.display_name || link.title || "Profile",
-                                className: "w-32 h-32 text-large border-4",
-                                style: { borderColor: themeColors.background },
-                                showFallback: true,
-                                fallback: /* @__PURE__ */ jsx10(
-                                  Icon8,
-                                  {
-                                    icon: "solar:user-bold-duotone",
-                                    className: "w-20 h-20 text-default-500"
-                                  }
-                                )
+                                icon: "solar:user-bold-duotone",
+                                className: "w-20 h-20 text-default-500"
                               }
                             )
                           }
-                        )
+                        ) })
                       }
                     ),
-                    mode === "avatar" && isSectionEnabled("header") && /* @__PURE__ */ jsxs8(
+                    usesAvatarProfile && isSectionEnabled("header") && /* @__PURE__ */ jsxs8(
                       motion10.div,
                       {
                         initial: { opacity: 0, y: 10 },
