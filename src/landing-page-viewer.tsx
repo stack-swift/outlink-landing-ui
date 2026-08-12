@@ -838,18 +838,35 @@ useEffect(() => {
       </style>
 
       {/* Desktop backdrop only: soft creator media behind the capped profile frame. */}
-      {(isFullMode || isVideoMode) && heroPoster ? (
+      {(isFullMode || isVideoMode) &&
+      (heroPoster || (isVideoMode && settings.header_video_url)) ? (
         <div className="hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <img
-            src={heroPoster}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover scale-110 blur-3xl opacity-65"
-          />
+          {isVideoMode && settings.header_video_url && enableMotionVideo ? (
+            <video
+              src={settings.header_video_url}
+              poster={heroPoster}
+              preload="none"
+              autoPlay
+              loop
+              muted
+              playsInline
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover scale-110 opacity-55"
+            />
+          ) : heroPoster ? (
+            <img
+              src={heroPoster}
+              alt=""
+              aria-hidden="true"
+              className={`absolute inset-0 h-full w-full object-cover scale-110 opacity-65 ${
+                isVideoMode ? "" : "blur-3xl"
+              }`}
+            />
+          ) : null}
           <div
             className="absolute inset-0"
             style={{
-              background: "rgba(0,0,0,0.28)",
+              background: "rgba(0,0,0,0.36)",
             }}
           />
         </div>
@@ -1678,25 +1695,6 @@ useEffect(() => {
                                       </div>
                                     )}
 
-                                    {card.style.logo_name && (
-                                      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-20">
-                                        <p
-                                          className="text-xs font-semibold"
-                                          style={{
-                                            color:
-                                              card.style.logo_color ||
-                                              "#ffffff",
-                                            textShadow:
-                                              card.style.type === "image" ||
-                                              card.style.type === "video"
-                                                ? "0 1px 3px rgba(0,0,0,0.7)"
-                                                : "none",
-                                          }}
-                                        >
-                                          {card.style.logo_name}
-                                        </p>
-                                      </div>
-                                    )}
                                   </>
                                 )}
                             </div>

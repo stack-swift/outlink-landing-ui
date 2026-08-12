@@ -1418,22 +1418,35 @@ function LandingPageViewer({
             user-drag: none;
           }
         ` }),
-        (isFullMode || isVideoMode) && heroPoster ? /* @__PURE__ */ jsxs8("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [
-          /* @__PURE__ */ jsx10(
+        (isFullMode || isVideoMode) && (heroPoster || isVideoMode && settings.header_video_url) ? /* @__PURE__ */ jsxs8("div", { className: "hidden md:block absolute inset-0 z-0 pointer-events-none overflow-hidden", children: [
+          isVideoMode && settings.header_video_url && enableMotionVideo ? /* @__PURE__ */ jsx10(
+            "video",
+            {
+              src: settings.header_video_url,
+              poster: heroPoster,
+              preload: "none",
+              autoPlay: true,
+              loop: true,
+              muted: true,
+              playsInline: true,
+              "aria-hidden": "true",
+              className: "absolute inset-0 h-full w-full object-cover scale-110 opacity-55"
+            }
+          ) : heroPoster ? /* @__PURE__ */ jsx10(
             "img",
             {
               src: heroPoster,
               alt: "",
               "aria-hidden": "true",
-              className: "absolute inset-0 h-full w-full object-cover scale-110 blur-3xl opacity-65"
+              className: `absolute inset-0 h-full w-full object-cover scale-110 opacity-65 ${isVideoMode ? "" : "blur-3xl"}`
             }
-          ),
+          ) : null,
           /* @__PURE__ */ jsx10(
             "div",
             {
               className: "absolute inset-0",
               style: {
-                background: "rgba(0,0,0,0.28)"
+                background: "rgba(0,0,0,0.36)"
               }
             }
           )
@@ -2108,38 +2121,25 @@ function LandingPageViewer({
                                     }
                                   )
                                 ] }),
-                                isBrandedNonPremium && /* @__PURE__ */ jsxs8(Fragment7, { children: [
-                                  card.style.logo_icon && /* @__PURE__ */ jsx10("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ jsx10(
-                                    "div",
-                                    {
-                                      className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
-                                      style: {
-                                        backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
-                                      },
-                                      children: /* @__PURE__ */ jsx10(
-                                        Icon8,
-                                        {
-                                          icon: card.style.logo_icon,
-                                          width: 18,
-                                          style: {
-                                            color: card.style.logo_color || "#ffffff"
-                                          }
+                                isBrandedNonPremium && /* @__PURE__ */ jsx10(Fragment7, { children: card.style.logo_icon && /* @__PURE__ */ jsx10("div", { className: "absolute top-2 right-2 z-20", children: /* @__PURE__ */ jsx10(
+                                  "div",
+                                  {
+                                    className: "rounded-full px-2 py-2 flex items-center justify-center shadow-md",
+                                    style: {
+                                      backgroundColor: isSnapchatLogo ? "#000000" : "#ffffff"
+                                    },
+                                    children: /* @__PURE__ */ jsx10(
+                                      Icon8,
+                                      {
+                                        icon: card.style.logo_icon,
+                                        width: 18,
+                                        style: {
+                                          color: card.style.logo_color || "#ffffff"
                                         }
-                                      )
-                                    }
-                                  ) }),
-                                  card.style.logo_name && /* @__PURE__ */ jsx10("div", { className: "absolute bottom-1 left-1/2 -translate-x-1/2 z-20", children: /* @__PURE__ */ jsx10(
-                                    "p",
-                                    {
-                                      className: "text-xs font-semibold",
-                                      style: {
-                                        color: card.style.logo_color || "#ffffff",
-                                        textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 3px rgba(0,0,0,0.7)" : "none"
-                                      },
-                                      children: card.style.logo_name
-                                    }
-                                  ) })
-                                ] })
+                                      }
+                                    )
+                                  }
+                                ) }) })
                               ]
                             }
                           );
