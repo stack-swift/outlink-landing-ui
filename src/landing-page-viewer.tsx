@@ -228,11 +228,13 @@ export function LandingPageViewer({
 
   // Motion video gate: paint the poster first, then attach MP4 as soon as the page hydrates.
   const [enableMotionVideo, setEnableMotionVideo] = useState(false);
-const [heroVideoReady, setHeroVideoReady] = useState(false);
-const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
+  const [avatarVideoReady, setAvatarVideoReady] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null);
+  const avatarVideoRef = useRef<HTMLVideoElement | null>(null);
 
-const heroPoster =
-  settings.header_video_poster_url || settings.avatar_url || undefined;
+  const heroPoster =
+    settings.header_video_poster_url || settings.avatar_url || undefined;
   const mode =
     settings.profile_display_mode === "avatar" &&
     (settings.section_spacing as any)?.__profile_video_background
@@ -289,6 +291,32 @@ const heroPoster =
     settings.header_video_url,
     usesMotionVideo,
   ]);
+
+  useEffect(() => {
+    if (!enableMotionVideo) return;
+    setHeroVideoReady(false);
+    setAvatarVideoReady(false);
+  }, [enableMotionVideo]);
+
+  useEffect(() => {
+    if (!enableMotionVideo) return;
+
+    const tryPlay = async () => {
+      try {
+        await heroVideoRef.current?.play();
+      } catch {
+        // ignore
+      }
+
+      try {
+        await avatarVideoRef.current?.play();
+      } catch {
+        // ignore
+      }
+    };
+
+    tryPlay();
+  }, [enableMotionVideo]);
 
   const isLightMode = settings.theme_mode === "light";
 
@@ -1148,7 +1176,7 @@ useEffect(() => {
                             src={heroPoster}
                             alt={settings.display_name || link.title || "Profile"}
                             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${
-                              heroVideoReady ? "opacity-0" : "opacity-100"
+                              avatarVideoReady ? "opacity-0" : "opacity-100"
                             }`}
                             loading="eager"
                             decoding="async"
@@ -1157,6 +1185,7 @@ useEffect(() => {
                         ) : null}
                         {enableMotionVideo ? (
                           <video
+                            ref={avatarVideoRef}
                             src={settings.header_video_url}
                             poster={heroPoster}
                             preload="metadata"
@@ -1164,6 +1193,7 @@ useEffect(() => {
                             loop={!isPreview}
                             muted
                             playsInline
+                            onPlaying={() => setAvatarVideoReady(true)}
                             className="absolute inset-0 h-full w-full object-cover"
                           />
                         ) : null}

@@ -945,7 +945,9 @@ function LandingPageViewer({
   };
   const [enableMotionVideo, setEnableMotionVideo] = useState8(false);
   const [heroVideoReady, setHeroVideoReady] = useState8(false);
+  const [avatarVideoReady, setAvatarVideoReady] = useState8(false);
   const heroVideoRef = useRef2(null);
+  const avatarVideoRef = useRef2(null);
   const heroPoster = settings.header_video_poster_url || settings.avatar_url || void 0;
   const mode = settings.profile_display_mode === "avatar" && ((_a = settings.section_spacing) == null ? void 0 : _a.__profile_video_background) ? "video_background" : settings.profile_display_mode || "full";
   const isFullMode = mode === "full";
@@ -989,6 +991,26 @@ function LandingPageViewer({
     settings.header_video_url,
     usesMotionVideo
   ]);
+  useEffect5(() => {
+    if (!enableMotionVideo) return;
+    setHeroVideoReady(false);
+    setAvatarVideoReady(false);
+  }, [enableMotionVideo]);
+  useEffect5(() => {
+    if (!enableMotionVideo) return;
+    const tryPlay = async () => {
+      var _a2, _b2;
+      try {
+        await ((_a2 = heroVideoRef.current) == null ? void 0 : _a2.play());
+      } catch {
+      }
+      try {
+        await ((_b2 = avatarVideoRef.current) == null ? void 0 : _b2.play());
+      } catch {
+      }
+    };
+    tryPlay();
+  }, [enableMotionVideo]);
   const isLightMode = settings.theme_mode === "light";
   const themeColors = {
     background: isLightMode ? "#FFFFFF" : "#000000",
@@ -1700,7 +1722,7 @@ function LandingPageViewer({
                             {
                               src: heroPoster,
                               alt: settings.display_name || link.title || "Profile",
-                              className: `absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${heroVideoReady ? "opacity-0" : "opacity-100"}`,
+                              className: `absolute inset-0 h-full w-full object-cover transition-opacity duration-200 ${avatarVideoReady ? "opacity-0" : "opacity-100"}`,
                               loading: "eager",
                               decoding: "async",
                               fetchPriority: "high"
@@ -1709,6 +1731,7 @@ function LandingPageViewer({
                           enableMotionVideo ? /* @__PURE__ */ jsx10(
                             "video",
                             {
+                              ref: avatarVideoRef,
                               src: settings.header_video_url,
                               poster: heroPoster,
                               preload: "metadata",
@@ -1716,6 +1739,7 @@ function LandingPageViewer({
                               loop: !isPreview,
                               muted: true,
                               playsInline: true,
+                              onPlaying: () => setAvatarVideoReady(true),
                               className: "absolute inset-0 h-full w-full object-cover"
                             }
                           ) : null,
