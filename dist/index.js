@@ -1437,9 +1437,8 @@ function LandingPageViewer({
     ]
   );
   const heroHeightClass = (() => {
-    if (isVideoMode) return "h-[546px] md:h-[546px]";
-    if (isFullMode && settings.header_image_height) return "";
-    if (isFullMode) {
+    if ((isFullMode || isVideoMode) && settings.header_image_height) return "";
+    if (isFullMode || isVideoMode) {
       switch (settings.header_image_size || "large") {
         case "small":
           return "h-[390px] md:h-[390px]";
@@ -1452,7 +1451,7 @@ function LandingPageViewer({
     }
     return "h-[320px] md:h-[320px]";
   })();
-  const heroHeightStyle = isFullMode && settings.header_image_height ? { height: `${settings.header_image_height}px` } : void 0;
+  const heroHeightStyle = (isFullMode || isVideoMode) && settings.header_image_height ? { height: `${settings.header_image_height}px` } : void 0;
   return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
     "div",
     {

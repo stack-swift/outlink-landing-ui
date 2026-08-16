@@ -825,9 +825,8 @@ useEffect(() => {
 
   const heroHeightClass = (() => {
     // Align video and full-image headers to the same height for visual consistency
-    if (isVideoMode) return "h-[546px] md:h-[546px]";
-    if (isFullMode && settings.header_image_height) return "";
-    if (isFullMode) {
+    if ((isFullMode || isVideoMode) && settings.header_image_height) return "";
+    if (isFullMode || isVideoMode) {
       switch (settings.header_image_size || "large") {
         case "small":
           return "h-[390px] md:h-[390px]";
@@ -842,7 +841,7 @@ useEffect(() => {
     return "h-[320px] md:h-[320px]";
   })();
   const heroHeightStyle =
-    isFullMode && settings.header_image_height
+    (isFullMode || isVideoMode) && settings.header_image_height
       ? { height: `${settings.header_image_height}px` }
       : undefined;
 
