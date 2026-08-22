@@ -1511,6 +1511,11 @@ useEffect(() => {
 
                           const isBrandedNonPremium =
                             !!card.style.logo_icon && !isPremiumLogo;
+                          const brandedNonPremiumText =
+                            card.style.prefix_text?.trim() ||
+                            card.title?.trim() ||
+                            card.style.logo_name ||
+                            "";
 
                           const isSnapchatLogo =
                             (card.style.logo_icon || "")
@@ -1815,6 +1820,18 @@ useEffect(() => {
                                       {card.description}
                                     </p>
                                   )}
+                                  {isBrandedNonPremium &&
+                                    brandedNonPremiumText && (
+                                      <h3
+                                        className={`${sizeTitleClass} font-semibold text-white`}
+                                        style={{
+                                          textShadow:
+                                            "0 2px 8px rgba(0,0,0,0.5)",
+                                        }}
+                                      >
+                                        {brandedNonPremiumText}
+                                      </h3>
+                                    )}
                                 </div>
 
                                 {/* Brand overlay for non-premium branded buttons */}

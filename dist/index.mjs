@@ -1981,6 +1981,7 @@ function LandingPageViewer({
                         className: `w-full ${getSectionSpacingClass("cta_block")}`,
                         style: { order: getSectionOrder("cta_block") },
                         children: settings.cta_cards && settings.cta_cards.length > 0 ? /* @__PURE__ */ jsx10("div", { className: "w-full grid grid-cols-1 sm:grid-cols-2 gap-3", children: settings.cta_cards.sort((a, b) => a.order - b.order).map((card, index) => {
+                          var _a2, _b2;
                           const size = card.style.size || "standard";
                           let sizeBodyClasses = "p-5 min-h-[120px]";
                           let sizeTitleClass = "text-lg";
@@ -2018,6 +2019,7 @@ function LandingPageViewer({
                           const onlyFansContentAsset = card.style.brand_asset || "/c.svg";
                           const isPremiumLogo = isOnlyFansLogo || (card.style.logo_name || "").toLowerCase() === "icon";
                           const isBrandedNonPremium = !!card.style.logo_icon && !isPremiumLogo;
+                          const brandedNonPremiumText = ((_a2 = card.style.prefix_text) == null ? void 0 : _a2.trim()) || ((_b2 = card.title) == null ? void 0 : _b2.trim()) || card.style.logo_name || "";
                           const isSnapchatLogo = (card.style.logo_icon || "").toLowerCase().includes("snapchat");
                           const getCardStyle = () => {
                             switch (card.style.type) {
@@ -2235,6 +2237,16 @@ function LandingPageViewer({
                                         textShadow: card.style.type === "image" || card.style.type === "video" ? "0 1px 4px rgba(0,0,0,0.5)" : "none"
                                       },
                                       children: card.description
+                                    }
+                                  ),
+                                  isBrandedNonPremium && brandedNonPremiumText && /* @__PURE__ */ jsx10(
+                                    "h3",
+                                    {
+                                      className: `${sizeTitleClass} font-semibold text-white`,
+                                      style: {
+                                        textShadow: "0 2px 8px rgba(0,0,0,0.5)"
+                                      },
+                                      children: brandedNonPremiumText
                                     }
                                   )
                                 ] }),
